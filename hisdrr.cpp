@@ -346,7 +346,7 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
         for (int i = 0; i < hisList[index].hisDim; i++)
             length = length * hisList[index].scaled[i];
             
-        // Check if data exceedes size of unsigned int (unlikely but...)
+        // Check if data exceedes size of unsigned int 
         if ((unsigned short)(hisList[index].halfWords*2) > sizeof(unsigned int) ) {
             stringstream err;
             err << "Histograms with channel size " << hisList[index].halfWords*2
@@ -365,7 +365,7 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
         // It is a safe cast then.
         for (unsigned int i = 0; i < length; i++) {
             unsigned int u = 0;
-            his.read((char *)&u, hisList[index].halfWords*2);
+            his.read((char*)&u, hisList[index].halfWords*2);
             r.push_back(u);
         }
     }

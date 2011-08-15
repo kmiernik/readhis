@@ -40,10 +40,10 @@ struct Flags {
  */
 class ReadHis {
     Flags options; /// Command fine flags
-    void gx(long proj[], int sz, vector<unsigned int> &d, int g0, int g1);  /// Gate on X channels
-    void gy(long proj[], int sz, vector<unsigned int> &d, int g0, int g1);  /// Gate on Y channels
-    void gxbg(long proj[], unsigned int projErr[], int sz, vector<unsigned int> &d, int b0, int b1);/// Bg subtraction
-    void gybg(long proj[], unsigned int projErr[], int sz, vector<unsigned int> &d, int b0, int b1);/// Bg subtraction
+    void gx(long proj[], int sz, int sizeX, vector<unsigned int> &d, int g0, int g1);  /// Gate on X channels
+    void gy(long proj[], int sz, int sizeX, vector<unsigned int> &d, int g0, int g1);  /// Gate on Y channels
+    void gxbg(long proj[], unsigned int projErr[], int sz, int sizeX, vector<unsigned int> &d, int b0, int b1);/// Bg subtraction
+    void gybg(long proj[], unsigned int projErr[], int sz, int sizeX, vector<unsigned int> &d, int b0, int b1);/// Bg subtraction
     void process1D(vector<unsigned int> &d); /// Processing 1D histograms
     void process2D(vector<unsigned int> &d, DrrHisRecordExtended &info); ///Processing 2D histograms
     void bin2D(long proj[], vector<unsigned int> &d, int sX, int sY);/// 2D square bins

@@ -96,10 +96,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00038"></a>00038 
 <a name="l00041"></a><a class="code" href="classReadHis.html">00041</a> <span class="keyword">class </span><a class="code" href="classReadHis.html" title="Main class processing histogram.">ReadHis</a> {
 <a name="l00042"></a>00042     <a class="code" href="structFlags.html" title="Holds and loads run flags.">Flags</a> options; 
-<a name="l00043"></a>00043     <span class="keywordtype">void</span> gx(<span class="keywordtype">long</span> proj[], <span class="keywordtype">int</span> sz, vector&lt;unsigned int&gt; &amp;d, <span class="keywordtype">int</span> g0, <span class="keywordtype">int</span> g1);  
-<a name="l00044"></a>00044     <span class="keywordtype">void</span> gy(<span class="keywordtype">long</span> proj[], <span class="keywordtype">int</span> sz, vector&lt;unsigned int&gt; &amp;d, <span class="keywordtype">int</span> g0, <span class="keywordtype">int</span> g1);  
-<a name="l00045"></a>00045     <span class="keywordtype">void</span> gxbg(<span class="keywordtype">long</span> proj[], <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> projErr[], <span class="keywordtype">int</span> sz, vector&lt;unsigned int&gt; &amp;d, <span class="keywordtype">int</span> b0, <span class="keywordtype">int</span> b1);
-<a name="l00046"></a>00046     <span class="keywordtype">void</span> gybg(<span class="keywordtype">long</span> proj[], <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> projErr[], <span class="keywordtype">int</span> sz, vector&lt;unsigned int&gt; &amp;d, <span class="keywordtype">int</span> b0, <span class="keywordtype">int</span> b1);
+<a name="l00043"></a>00043     <span class="keywordtype">void</span> gx(<span class="keywordtype">long</span> proj[], <span class="keywordtype">int</span> sz, <span class="keywordtype">int</span> sizeX, vector&lt;unsigned int&gt; &amp;d, <span class="keywordtype">int</span> g0, <span class="keywordtype">int</span> g1);  
+<a name="l00044"></a>00044     <span class="keywordtype">void</span> gy(<span class="keywordtype">long</span> proj[], <span class="keywordtype">int</span> sz, <span class="keywordtype">int</span> sizeX, vector&lt;unsigned int&gt; &amp;d, <span class="keywordtype">int</span> g0, <span class="keywordtype">int</span> g1);  
+<a name="l00045"></a>00045     <span class="keywordtype">void</span> gxbg(<span class="keywordtype">long</span> proj[], <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> projErr[], <span class="keywordtype">int</span> sz, <span class="keywordtype">int</span> sizeX, vector&lt;unsigned int&gt; &amp;d, <span class="keywordtype">int</span> b0, <span class="keywordtype">int</span> b1);
+<a name="l00046"></a>00046     <span class="keywordtype">void</span> gybg(<span class="keywordtype">long</span> proj[], <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> projErr[], <span class="keywordtype">int</span> sz, <span class="keywordtype">int</span> sizeX, vector&lt;unsigned int&gt; &amp;d, <span class="keywordtype">int</span> b0, <span class="keywordtype">int</span> b1);
 <a name="l00047"></a>00047     <span class="keywordtype">void</span> process1D(vector&lt;unsigned int&gt; &amp;d); 
 <a name="l00048"></a>00048     <span class="keywordtype">void</span> process2D(vector&lt;unsigned int&gt; &amp;d, <a class="code" href="structDrrHisRecordExtended.html" title="Drr block on histogram plus hisID.">DrrHisRecordExtended</a> &amp;info); 
 <a name="l00049"></a>00049     <span class="keywordtype">void</span> bin2D(<span class="keywordtype">long</span> proj[], vector&lt;unsigned int&gt; &amp;d, <span class="keywordtype">int</span> sX, <span class="keywordtype">int</span> sY);
@@ -126,7 +126,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Mon Jul 25 2011 for hisdrr by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Aug 15 2011 for hisdrr by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

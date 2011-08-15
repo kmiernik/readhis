@@ -144,36 +144,36 @@ void ReadHis::process1D(vector<unsigned int> &d) {
     }
 }
 
-void ReadHis::gx(long proj[], int sz, vector<unsigned int> &d, int g0, int g1) {
+void ReadHis::gx(long proj[], int sz, int sizeX, vector<unsigned int> &d, int g0, int g1) {
     cout << "#Projection on Y axis, gate on X " << g0 << " to " << g1 << endl;
-    for (int x = g0; x < g1+1; x++)
+    for (int x = g0; x < g1+1; x++) 
         for (int y = 0; y < sz*options.bin; y++) 
-            proj[y/options.bin] += d[x+sz*options.bin*y];
+            proj[y/options.bin] += d[x+sizeX*y];
 }
 
-void ReadHis::gy(long proj[], int sz, vector<unsigned int> &d, int g0, int g1) {
+void ReadHis::gy(long proj[], int sz, int sizeX, vector<unsigned int> &d, int g0, int g1) {
     cout << "#Projection on X axis, gate on Y " << g0 << " to " << g1 << endl;
     for (int y = g0; y < g1+1; y++)
-        for (int x = 0; x < sz*options.bin; x++) 
-            proj[x/options.bin] += d[x+sz*options.bin*y];
+        for (int x = 0; x < sizeX; x++) 
+            proj[x/options.bin] += d[x+sizeX*y];
 }
 
 
-void ReadHis::gxbg(long proj[], unsigned int projErr[], int sz, vector<unsigned int> &d, int b0, int b1) {
+void ReadHis::gxbg(long proj[], unsigned int projErr[], int sz, int sizeX, vector<unsigned int> &d, int b0, int b1) {
     cout << "#Background substracted, gate on X " << b0 << " to " << b1 << endl;
     for (int x = b0; x < b1+1; x++)
         for (int y = 0; y < sz*options.bin; y++) {
-            proj[y/options.bin] -= d[x+sz*options.bin*y];
-            projErr[y/options.bin] += d[x+sz*options.bin*y];
+            proj[y/options.bin] -= d[x+sizeX*y];
+            projErr[y/options.bin] += d[x+sizeX*y];
         }
 }
 
-void ReadHis::gybg(long proj[], unsigned int projErr[], int sz, vector<unsigned int> &d, int b0, int b1) {
+void ReadHis::gybg(long proj[], unsigned int projErr[], int sz, int sizeX, vector<unsigned int> &d, int b0, int b1) {
     cout << "#Background substracted, gate on Y " << b0 << " to " << b1 << endl;
     for (int y = b0; y < b1+1; y++)
-        for (int x = 0; x < sz*options.bin; x++) {
-            proj[x/options.bin] -= d[x+sz*options.bin*y];
-            projErr[x/options.bin] += d[x+sz*options.bin*y];
+        for (int x = 0; x < sizeX; x++) {
+            proj[x/options.bin] -= d[x+sizeX*y];
+            projErr[x/options.bin] += d[x+sizeX*y];
         }
 }
 
@@ -193,6 +193,7 @@ void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
         sz = info.scaled[1]/options.bin;
     else
         sz = info.scaled[0]/options.bin*info.scaled[1]/options.bin;
+    cout << "# projection size : " << sz << endl;
     
     // Initialization of dynamic array to 0
     long *proj;
@@ -204,21 +205,21 @@ void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
     projErr = new unsigned int[sz]();
 
     if (options.gy) {
-        gy(proj, sz, d, options.g0, options.g1);
+        gy(proj, sz, info.scaled[0], d, options.g0, options.g1);
         for (int i = 0; i < sz; i++) // for "normal" gate errors are calc. on number of counts basis
             projErr[i] = proj[i];
         if (options.bg)
-            gybg(proj, projErr, sz, d, options.b0, options.b1); // errors are no logner simple number of counts
+            gybg(proj, projErr, sz, info.scaled[0], d, options.b0, options.b1); // errors are no logner simple number of counts
         cout << "#Channel Counts Err" << endl;
         for (int i = 0; i < sz; i++)
             cout << i << " " << proj[i] << " " << sqrt(projErr[i]) << endl;
     }       
     else if (options.gx) {
-        gx(proj, sz, d, options.g0, options.g1);
+        gx(proj, sz, info.scaled[0], d, options.g0, options.g1);
         for (int i = 0; i < sz; i++)
             projErr[i] = proj[i];
         if (options.bg)
-            gxbg(proj, projErr, sz, d, options.b0, options.b1);
+            gxbg(proj, projErr, sz, info.scaled[0], d, options.b0, options.b1);
         cout << "#Channel Counts" << endl;
         for (int i = 0; i < sz; i++)
             cout << i << " " << proj[i] << " " << sqrt(projErr[i]) << endl;
@@ -230,7 +231,7 @@ void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
                     cout << x <<" "<< y <<" "<< proj[x+(info.scaled[0]/options.bin)*y] << endl;
                 cout << endl;
             }
-        }
+     }
 
     delete []proj;
     delete []projErr;
