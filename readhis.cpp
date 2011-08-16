@@ -1,4 +1,4 @@
-/* Version 06/21/2011 */
+/* Version 08/16/2011 */
 #include "readHisClass.h"
 
 using namespace std;
@@ -14,19 +14,16 @@ void help() {
     cout << "  in case you want to save it to file." << endl;
     cout << "OPTIONS:" << endl;
     cout << "  file: name of input file with extension (his or drr)" << endl;
-    cout << "        or archive (.tar.gz or .tgz). In the latter case" << endl;
-    cout << "        program will unzip specified archive but will not" << endl;
-    cout << "        delete it after finishing execution." << endl;
     cout << "  id:   id (integer) of histogram to be extracted" << endl;
     cout << "  OPTIONAL: " << endl;
     cout << "  -gy:  flag for 2D histogram " << endl;
-    cout << "        makes projection on X axis of sum of spectra" << endl;
-    cout << "        gated at Y channel g0 (int) to channel g1 (int) " << endl;
-    cout << "  -gx:  as -gy exept that projection is made on Y axis" << endl;
+    cout << "        makes projection on X axis gated at " << endl;
+    cout << "        Y channel g0 (int) to channel g1 (int) " << endl;
+    cout << "  -gx:  as -gy exept that projection is on Y axis" << endl;
     cout << "  -bg:  sets gate for background (starting at channel b0 ending b1)" << endl; 
     cout << "        subtraction. Works only together with -gx or -gy option" << endl;
-    cout << "  -b:   sets binning mode where n is a number of channels per bin" << endl;
-    cout << "  -i:   displays detailed information on histogram" << endl;
+    cout << "  -b:   sets binning mode where 'n' is a number of channels per bin" << endl;
+    cout << "  -i:   displays detailed information about histogram" << endl;
     cout << "  -l:   displays list of histograms id present in a file" << endl;
 }
 
