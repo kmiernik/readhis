@@ -16,6 +16,7 @@ Flags::Flags() {
     info = false;
     list = false;
     bin = 1;
+    zero = false;
 }
 
 int Flags::flagPos(vector<string> &flags, const string &match) {
@@ -100,6 +101,11 @@ void Flags::loadFlags(vector<string> &flags) {
     else
         info = false;
 
+    int flagZ = flagPos(flags, "-z");
+    if (flagZ >= 1) 
+        zero = true;
+    else
+        zero = false;
 }
 
 void ReadHis::showInfo(DrrHisRecordExtended hisList) {
@@ -132,14 +138,16 @@ void ReadHis::process1D(vector<unsigned int> &d) {
     cout << "#Bin size: " << options.bin << endl;
     if (options.bin == 1) {
         for (unsigned int x = 0; x < d.size(); x++)
-            cout << x << " " << d[x] << endl;
+            if (!(options.zero && d[x] == 0))
+                cout << x << " " << d[x] << " " << sqrt(d[x]) << endl;
     }
     else {
         long *proj = new long[d.size()/options.bin]();
         for (unsigned int x = 0; x < d.size(); x++)
             proj[x/options.bin] += d[x];
         for (unsigned int x = 0; x < d.size()/options.bin; x++)
-            cout << x << " " << proj[x] << " " << sqrt(proj[x]) << endl;
+            if (!(options.zero && proj[x] == 0))
+                cout << x << " " << proj[x] << " " << sqrt(proj[x]) << endl;
         delete []proj;
     }
 }
@@ -212,7 +220,8 @@ void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
             gybg(proj, projErr, sz, info.scaled[0], d, options.b0, options.b1); // errors are no logner simple number of counts
         cout << "#Channel Counts Err" << endl;
         for (int i = 0; i < sz; i++)
-            cout << i << " " << proj[i] << " " << sqrt(projErr[i]) << endl;
+            if (!(options.zero && proj[i] == 0))
+                cout << i << " " << proj[i] << " " << sqrt(projErr[i]) << endl;
     }       
     else if (options.gx) {
         gx(proj, sz, info.scaled[0], d, options.g0, options.g1);
@@ -222,13 +231,14 @@ void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
             gxbg(proj, projErr, sz, info.scaled[0], d, options.b0, options.b1);
         cout << "#Channel Counts" << endl;
         for (int i = 0; i < sz; i++)
-            cout << i << " " << proj[i] << " " << sqrt(projErr[i]) << endl;
+            if (!(options.zero && proj[i] == 0))
+                cout << i << " " << proj[i] << " " << sqrt(projErr[i]) << endl;
     } else {
             cout << "#XCh YCh Counts" << endl;
             bin2D(proj, d, info.scaled[0], info.scaled[1]);
             for (int y = 0; y < info.scaled[1]/options.bin; y++) {
                 for (int x = 0; x < info.scaled[0]/options.bin; x++) 
-                    cout << x <<" "<< y <<" "<< proj[x+(info.scaled[0]/options.bin)*y] << endl;
+                        cout << x <<" "<< y <<" "<< proj[x+(info.scaled[0]/options.bin)*y] << endl;
                 cout << endl;
             }
      }

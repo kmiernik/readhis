@@ -5,7 +5,7 @@ using namespace std;
 
 void help() {
     cout << "SYNOPSIS:" << endl;
-    cout << "  readhis file [id] [-gx|-gy g0 g1 [-bg b0 b1]] [-b n] [-i] [-l]" << endl << endl;
+    cout << "  readhis file [id] [-gx|-gy g0 g1 [-bg b0 b1]] [-b n] [-i] [-l] [-z]" << endl << endl;
     cout << "DESCRIPTION:" << endl;
     cout << "  Program reads .his file using binary description from drr file." << endl;
     cout << "  Both files are required to be present in a current folder " << endl;
@@ -25,6 +25,7 @@ void help() {
     cout << "  -b:   sets binning mode where 'n' is a number of channels per bin" << endl;
     cout << "  -i:   displays detailed information about histogram" << endl;
     cout << "  -l:   displays list of histograms id present in a file" << endl;
+    cout << "  -z:   removes bins with 0 counts in output (except of 3D histograms)" << endl;
 }
 
 /*

@@ -28,6 +28,7 @@ struct Flags {
     bool info; /// information on histogram
     bool list; /// list of histograms
     int bin; /// bin size
+    bool zero; /// zero suppression
 
     int flagPos(vector<string> &flags, const string &match); /// flags position in vector
     void loadFlags(vector<string> &flags); /// flags processing
