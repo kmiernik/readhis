@@ -11,8 +11,11 @@ Flags::Flags() {
     g0 = 0;
     g1 = 0;
     bg = false;
+    sbg = false;
     b0 = 0;
     b1 = 0;
+    b2 = 0;
+    b3 = 0;
     info = false;
     list = false;
     bin = 1;
@@ -76,6 +79,21 @@ void Flags::loadFlags(vector<string> &flags) {
         bg = true;
         b0 = atoi(flags[flagBg+1].c_str());
         b1 = atoi(flags[flagBg+2].c_str());
+    }
+
+    int flagSbg = flagPos(flags, "-sbg");
+    if ( (flagGx||flagGy)&&(flagSbg > 1)) {
+        if (flagSbg+4 > (int)(flags.size()-1)) {
+            stringstream err;
+            err << "Not enough flags to process background subtraction";
+            string msg = err.str();
+            throw GenError(msg);
+        }
+        sbg = true;
+        b0 = atoi(flags[flagSbg+1].c_str());
+        b1 = atoi(flags[flagSbg+2].c_str());
+        b2 = atoi(flags[flagSbg+3].c_str());
+        b3 = atoi(flags[flagSbg+4].c_str());
     }
 
     int flagBin = flagPos(flags, "-b");
@@ -216,8 +234,12 @@ void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
         gy(proj, sz, info.scaled[0], d, options.g0, options.g1);
         for (int i = 0; i < sz; i++) // for "normal" gate errors are calc. on number of counts basis
             projErr[i] = proj[i];
-        if (options.bg)
+        if (options.bg || options.sbg)
             gybg(proj, projErr, sz, info.scaled[0], d, options.b0, options.b1); // errors are no logner simple number of counts
+        // if split background was set, first part was subtracted in previous step, now second part of bg
+        if (options.sbg)
+            gybg(proj, projErr, sz, info.scaled[0], d, options.b2, options.b3); // errors are no logner simple number of counts
+
         cout << "#Channel Counts Err" << endl;
         for (int i = 0; i < sz; i++)
             if (!(options.zero && proj[i] == 0))
@@ -227,8 +249,10 @@ void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
         gx(proj, sz, info.scaled[0], d, options.g0, options.g1);
         for (int i = 0; i < sz; i++)
             projErr[i] = proj[i];
-        if (options.bg)
+        if (options.bg || options.sbg)
             gxbg(proj, projErr, sz, info.scaled[0], d, options.b0, options.b1);
+        if (options.sbg)
+            gxbg(proj, projErr, sz, info.scaled[0], d, options.b2, options.b3);
         cout << "#Channel Counts" << endl;
         for (int i = 0; i < sz; i++)
             if (!(options.zero && proj[i] == 0))

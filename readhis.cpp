@@ -5,7 +5,7 @@ using namespace std;
 
 void help() {
     cout << "SYNOPSIS:" << endl;
-    cout << "  readhis file [id] [-gx|-gy g0 g1 [-bg b0 b1]] [-b n] [-i] [-l] [-z]" << endl << endl;
+    cout << "  readhis file [id] [-gx|-gy g0 g1 [-bg b0 b1] [-sbg b0 b1 b2 b3] [-b n] [-i] [-l] [-z]" << endl << endl;
     cout << "DESCRIPTION:" << endl;
     cout << "  Program reads .his file using binary description from drr file." << endl;
     cout << "  Both files are required to be present in a current folder " << endl;
@@ -19,9 +19,11 @@ void help() {
     cout << "  -gy:  flag for 2D histogram " << endl;
     cout << "        makes projection on X axis gated at " << endl;
     cout << "        Y channel g0 (int) to channel g1 (int) " << endl;
-    cout << "  -gx:  as -gy exept that projection is on Y axis" << endl;
+    cout << "  -gx:  as -gy except that projection is on Y axis" << endl;
     cout << "  -bg:  sets gate for background (starting at channel b0 ending b1)" << endl; 
     cout << "        subtraction. Works only together with -gx or -gy option" << endl;
+    cout << "  -sbg: sets split gates for background subtraction " << endl; 
+    cout << "        part I from b0 to b1, part II from b2 to b3 " << endl;
     cout << "  -b:   sets binning mode where 'n' is a number of channels per bin" << endl;
     cout << "  -i:   displays detailed information about histogram" << endl;
     cout << "  -l:   displays list of histograms id present in a file" << endl;

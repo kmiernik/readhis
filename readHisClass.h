@@ -23,8 +23,11 @@ struct Flags {
     int g0; /// gate start
     int g1; /// gate end
     bool bg; /// background subtraction
-    int b0; /// background start
-    int b1; /// background end
+    bool sbg;/// split background subtraction
+    int b0; /// background start (part 1 for split)
+    int b1; /// background end (part 1 for split)
+    int b2; /// background part 2 start
+    int b3; /// background part 2 end
     bool info; /// information on histogram
     bool list; /// list of histograms
     int bin; /// bin size
