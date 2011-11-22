@@ -19,6 +19,8 @@ Flags::Flags() {
     info = false;
     list = false;
     bin = 1;
+    binX = 1;
+    binY = 1;
     zero = false;
 }
 
@@ -113,6 +115,24 @@ void Flags::loadFlags(vector<string> &flags) {
         }
     }
 
+    int flagBin2d = flagPos(flags, "-B");
+    if (flagBin2d > 1) {
+        if (flagBin2d+2 > (int)(flags.size()-1)) {
+            stringstream err;
+            err << "Not enough flags to process binning";
+            string msg = err.str();
+            throw GenError(msg);
+        }
+        binX = atoi(flags[flagBin2d+1].c_str());
+        binY = atoi(flags[flagBin2d+2].c_str());
+        if (binX < 1 || binY < 1) {
+            stringstream err;
+            err << "Wrong bin size value";
+            string msg = err.str();
+            throw GenError(msg);
+        }
+    }
+
     int flagInf = flagPos(flags, "-i");
     if (flagInf > 1) 
         info = true;
@@ -165,7 +185,8 @@ void ReadHis::process1D(vector<unsigned int> &d) {
             proj[x/options.bin] += d[x];
         for (unsigned int x = 0; x < d.size()/options.bin; x++)
             if (!(options.zero && proj[x] == 0))
-                cout << x << " " << proj[x] << " " << sqrt(proj[x]) << endl;
+                cout << x * options.bin + 0.5 * (options.bin - 1) 
+                     << " " << proj[x] << " " << sqrt(proj[x]) << endl;
         delete []proj;
     }
 }
@@ -204,11 +225,12 @@ void ReadHis::gybg(long proj[], unsigned int projErr[], int sz, int sizeX, vecto
 }
 
 void ReadHis::bin2D(long proj[], vector<unsigned int> &d, int sX, int sY) {
-    for (int y = 0; y < sY/options.bin; y++)
-        for (int x = 0; x < sX/options.bin; x++)
-            for (int by = 0; by < options.bin; by++)
-                for (int bx = 0; bx < options.bin; bx++) 
-                        proj[x+y*(sX-sX%options.bin)/options.bin] += d[x*options.bin+bx + (y*options.bin+by)*(sX)];
+    for (int y = 0; y < sY/options.binY; y++)
+        for (int x = 0; x < sX/options.binX; x++)
+            for (int by = 0; by < options.binY; by++)
+                for (int bx = 0; bx < options.binX; bx++) {
+                        proj[x+y*(sX-sX%options.binX)/options.binX] += d[x*options.binX+bx + (y*options.binY+by)*(sX)];
+                        }
 }
 
 void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
@@ -218,7 +240,7 @@ void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
     else if (options.gx)
         sz = info.scaled[1]/options.bin;
     else
-        sz = info.scaled[0]/options.bin*info.scaled[1]/options.bin;
+        sz = info.scaled[0]/options.binX*info.scaled[1]/options.binY;
     cout << "# projection size : " << sz << endl;
     
     // Initialization of dynamic array to 0
@@ -260,9 +282,11 @@ void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
     } else {
             cout << "#XCh YCh Counts" << endl;
             bin2D(proj, d, info.scaled[0], info.scaled[1]);
-            for (int y = 0; y < info.scaled[1]/options.bin; y++) {
-                for (int x = 0; x < info.scaled[0]/options.bin; x++) 
-                        cout << x <<" "<< y <<" "<< proj[x+(info.scaled[0]/options.bin)*y] << endl;
+            for (int y = 0; y < info.scaled[1]/options.binY; y++) {
+                for (int x = 0; x < info.scaled[0]/options.binX; x++) 
+                        cout << x * options.binX + 0.5 * (options.binX - 1) << " "
+                             << y * options.binY + 0.5 * (options.binY - 1) << " "
+                             << proj[x+(info.scaled[0]/options.binX)*y] << endl;
                 cout << endl;
             }
      }

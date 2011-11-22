@@ -30,7 +30,9 @@ struct Flags {
     int b3; /// background part 2 end
     bool info; /// information on histogram
     bool list; /// list of histograms
-    int bin; /// bin size
+    int bin; /// bin size for 1D spectrum
+    int binX; /// bin size X for 2D spectrum
+    int binY; /// bin size Y for 2D spectrum
     bool zero; /// zero suppression
 
     int flagPos(vector<string> &flags, const string &match); /// flags position in vector
