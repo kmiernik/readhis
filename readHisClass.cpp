@@ -172,127 +172,124 @@ void ReadHis::showInfo(DrrHisRecordExtended hisList) {
 }
 
 void ReadHis::process1D(vector<unsigned int> &d) {
-    cout << "#Ch Counts Err" << endl;
-    cout << "#Bin size: " << options.bin << endl;
     if (options.bin == 1) {
-        for (unsigned int x = 0; x < d.size(); x++)
-            if (!(options.zero && d[x] == 0))
-                cout << x << " " << d[x] << " " << sqrt(d[x]) << endl;
+
+        cSpectrum.clear();
+        cSpectrum.reserve(d.size()/options.bin);
+        cSpectrum.resize(d.size()/options.bin, 0);
+
+        cError.clear();
+        cError.reserve(d.size()/options.bin);
+        cError.resize(d.size()/options.bin, 0);
+
+        unsigned sz = d.size();
+
+        for (unsigned int x = 0; x < sz; x++) {
+            cSpectrum[x] = d[x];
+            cError[x] = sqrt(d[x]);
+        }
     }
     else {
-        long *proj = new long[d.size()/options.bin]();
-        for (unsigned int x = 0; x < d.size(); x++)
-            proj[x/options.bin] += d[x];
-        for (unsigned int x = 0; x < d.size()/options.bin; x++)
-            if (!(options.zero && proj[x] == 0))
-                cout << x * options.bin + 0.5 * (options.bin - 1) 
-                     << " " << proj[x] << " " << sqrt(proj[x]) << endl;
-        delete []proj;
+
+        cSpectrum.clear();
+        cSpectrum.reserve(d.size());
+        cSpectrum.resize(d.size(), 0);
+
+        cError.clear();
+        cError.reserve(d.size());
+        cError.resize(d.size(), 0);
+
+        unsigned sz = d.size();
+
+        for (unsigned int x = 0; x < sz; x++)
+            cSpectrum[x/options.bin] += d[x];
+
+        for (unsigned int x = 0; x < sz; x++)
+            cError[x] = sqrt(cSpectrum[x]);
     }
 }
 
-void ReadHis::gx(long proj[], int sz, int sizeX, vector<unsigned int> &d, int g0, int g1) {
-    cout << "#Projection on Y axis, gate on X " << g0 << " to " << g1 << endl;
+void ReadHis::gx(vector<unsigned int> &d, int g0, int g1) {
+    int sz = cSpectrum.size();
     for (int x = g0; x < g1+1; x++) 
         for (int y = 0; y < sz*options.bin; y++) 
-            proj[y/options.bin] += d[x+sizeX*y];
+            cSpectrum[y/options.bin] += d[x+sizeX*y];
 }
 
-void ReadHis::gy(long proj[], int sz, int sizeX, vector<unsigned int> &d, int g0, int g1) {
-    cout << "#Projection on X axis, gate on Y " << g0 << " to " << g1 << endl;
+void ReadHis::gy(vector<unsigned int> &d, int g0, int g1) {
     for (int y = g0; y < g1+1; y++)
-        for (int x = 0; x < sizeX; x++) 
-            proj[x/options.bin] += d[x+sizeX*y];
+        for (unsigned x = 0; x < sizeX; x++) 
+            cSpectrum[x/options.bin] += d[x+sizeX*y];
 }
 
 
-void ReadHis::gxbg(long proj[], unsigned int projErr[], int sz, int sizeX, vector<unsigned int> &d, int b0, int b1) {
-    cout << "#Background substracted, gate on X " << b0 << " to " << b1 << endl;
+void ReadHis::gxbg(vector<unsigned int> &d, int b0, int b1) {
+    int sz = cSpectrum.size();
     for (int x = b0; x < b1+1; x++)
         for (int y = 0; y < sz*options.bin; y++) {
-            proj[y/options.bin] -= d[x+sizeX*y];
-            projErr[y/options.bin] += d[x+sizeX*y];
+            cSpectrum[y/options.bin] -= d[x+sizeX*y];
+            cError[y/options.bin] += d[x+sizeX*y];
         }
 }
 
-void ReadHis::gybg(long proj[], unsigned int projErr[], int sz, int sizeX, vector<unsigned int> &d, int b0, int b1) {
-    cout << "#Background substracted, gate on Y " << b0 << " to " << b1 << endl;
+void ReadHis::gybg(vector<unsigned int> &d, int b0, int b1) {
     for (int y = b0; y < b1+1; y++)
-        for (int x = 0; x < sizeX; x++) {
-            proj[x/options.bin] -= d[x+sizeX*y];
-            projErr[x/options.bin] += d[x+sizeX*y];
+        for (unsigned x = 0; x < sizeX; x++) {
+            cSpectrum[x/options.bin] -= d[x+sizeX*y];
+            cError[x/options.bin] += d[x+sizeX*y];
         }
 }
 
-void ReadHis::bin2D(long proj[], vector<unsigned int> &d, int sX, int sY) {
-    for (int y = 0; y < sY/options.binY; y++)
-        for (int x = 0; x < sX/options.binX; x++)
+void ReadHis::bin2D(vector<unsigned int> &d) {
+    for (unsigned y = 0; y < sizeX/options.binY; y++)
+        for (unsigned x = 0; x < sizeX/options.binX; x++)
             for (int by = 0; by < options.binY; by++)
                 for (int bx = 0; bx < options.binX; bx++) {
-                        proj[x+y*(sX-sX%options.binX)/options.binX] += d[x*options.binX+bx + (y*options.binY+by)*(sX)];
+                        cSpectrum[x+y*(sizeX-sizeX%options.binX)/options.binX] 
+                                    += d[x*options.binX+bx + (y*options.binY+by)*(sizeX)];
                         }
 }
 
 void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
     int sz;
     if (options.gy)
-        sz = info.scaled[0]/options.bin;
+        sz = sizeX/options.bin;
     else if (options.gx)
-        sz = info.scaled[1]/options.bin;
+        sz = sizeY/options.bin;
     else
-        sz = info.scaled[0]/options.binX*info.scaled[1]/options.binY;
-    cout << "# projection size : " << sz << endl;
+        sz = sizeX/options.binX*sizeY/options.binY;
     
-    // Initialization of dynamic array to 0
-    long *proj;
-    proj = new long[sz]();
-    // for the purpose of calculating projection error bars,
-    // since during background subtraction they are no more sqrt(N) but sum of N1 and N2
-    // where N1 is peak gate and N2 is background gate
-    unsigned int *projErr;
-    projErr = new unsigned int[sz]();
+    cSpectrum.clear();
+    cSpectrum.reserve(sz);
+    cSpectrum.resize(sz, 0);
+    cError.clear();
+    cError.reserve(sz);
+    cError.resize(sz, 0);
 
     if (options.gy) {
-        gy(proj, sz, info.scaled[0], d, options.g0, options.g1);
-        for (int i = 0; i < sz; i++) // for "normal" gate errors are calc. on number of counts basis
-            projErr[i] = proj[i];
+        gy(d, options.g0, options.g1);
+
         if (options.bg || options.sbg)
-            gybg(proj, projErr, sz, info.scaled[0], d, options.b0, options.b1); // errors are no logner simple number of counts
+            gybg(d, options.b0, options.b1); // errors are no logner simple number of counts
+        else
+            for (int i = 0; i < sz; i++) // for "normal" gate errors are calc. on number of counts basis
+                cError[i] = sqrt(cSpectrum[i]);
+
         // if split background was set, first part was subtracted in previous step, now second part of bg
         if (options.sbg)
-            gybg(proj, projErr, sz, info.scaled[0], d, options.b2, options.b3); // errors are no logner simple number of counts
-
-        cout << "#Channel Counts Err" << endl;
-        for (int i = 0; i < sz; i++)
-            if (!(options.zero && proj[i] == 0))
-                cout << i << " " << proj[i] << " " << sqrt(projErr[i]) << endl;
+            gybg(d, options.b2, options.b3); // errors are no logner simple number of counts
     }       
     else if (options.gx) {
-        gx(proj, sz, info.scaled[0], d, options.g0, options.g1);
-        for (int i = 0; i < sz; i++)
-            projErr[i] = proj[i];
+        gx(d, options.g0, options.g1);
+        for (int i = 0; i < sz; i++) // for "normal" gate errors are calc. on number of counts basis
+            cError[i] = sqrt(cSpectrum[i]);
         if (options.bg || options.sbg)
-            gxbg(proj, projErr, sz, info.scaled[0], d, options.b0, options.b1);
+            gxbg(d, options.b0, options.b1);
         if (options.sbg)
-            gxbg(proj, projErr, sz, info.scaled[0], d, options.b2, options.b3);
-        cout << "#Channel Counts" << endl;
-        for (int i = 0; i < sz; i++)
-            if (!(options.zero && proj[i] == 0))
-                cout << i << " " << proj[i] << " " << sqrt(projErr[i]) << endl;
+            gxbg(d, options.b2, options.b3);
     } else {
-            cout << "#XCh YCh Counts" << endl;
-            bin2D(proj, d, info.scaled[0], info.scaled[1]);
-            for (int y = 0; y < info.scaled[1]/options.binY; y++) {
-                for (int x = 0; x < info.scaled[0]/options.binX; x++) 
-                        cout << x * options.binX + 0.5 * (options.binX - 1) << " "
-                             << y * options.binY + 0.5 * (options.binY - 1) << " "
-                             << proj[x+(info.scaled[0]/options.binX)*y] << endl;
-                cout << endl;
-            }
-     }
-
-    delete []proj;
-    delete []projErr;
+            bin2D(d);
+    }
 }
 
 void ReadHis::process() {
@@ -310,20 +307,23 @@ void ReadHis::process() {
         }
         else { 
             DrrHisRecordExtended info = h->getHistogramInfo(options.hisID);
-            // Return by value version
-            // vector<unsigned int> d = h->getHistogram(options.hisID);
-            // Return by reference version
-            vector<unsigned int> d;
-            h->getHistogram(d, options.hisID);
-            cout << "#Histogram ID: " << info.hisID << ", " << info.hisDim << "D" << endl;
+
+            hisDim = info.hisDim;
 
             if (options.info)
                 showInfo(info);
             else {
+                vector<unsigned int> d;
+                h->getHistogram(d, options.hisID);
+                sizeX = info.scaled[0];
+                cout << "#Histogram ID: " << info.hisID << ", " << info.hisDim << "D" << endl;
+
                 if (info.hisDim == 1)
                     process1D(d);
-                else if (info.hisDim == 2)
+                else if (info.hisDim == 2) {
                     process2D(d, info);
+                    sizeY = info.scaled[1];
+                }
                 else {
                     stringstream err;
                     err << "Histograms of dimension larger then 2 not supported";

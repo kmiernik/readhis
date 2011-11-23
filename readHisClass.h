@@ -40,23 +40,33 @@ struct Flags {
     Flags();
 };
 
+
 ///Main class processing histogram
 /** 
  *
  */
 class ReadHis {
-    Flags options; /// Command fine flags
-    void gx(long proj[], int sz, int sizeX, vector<unsigned int> &d, int g0, int g1);  /// Gate on X channels
-    void gy(long proj[], int sz, int sizeX, vector<unsigned int> &d, int g0, int g1);  /// Gate on Y channels
-    void gxbg(long proj[], unsigned int projErr[], int sz, int sizeX, vector<unsigned int> &d, int b0, int b1);/// Bg subtraction
-    void gybg(long proj[], unsigned int projErr[], int sz, int sizeX, vector<unsigned int> &d, int b0, int b1);/// Bg subtraction
+    void gx(vector<unsigned int> &d, int g0, int g1);  /// Gate on X channels
+    void gy(vector<unsigned int> &d, int g0, int g1);  /// Gate on Y channels
+    void gxbg(vector<unsigned int> &d, int b0, int b1);/// Bg subtraction
+    void gybg(vector<unsigned int> &d, int b0, int b1);/// Bg subtraction
     void process1D(vector<unsigned int> &d); /// Processing 1D histograms
     void process2D(vector<unsigned int> &d, DrrHisRecordExtended &info); ///Processing 2D histograms
-    void bin2D(long proj[], vector<unsigned int> &d, int sX, int sY);/// 2D square bins
+    void bin2D(vector<unsigned int> &d);/// 2D square bins
     void showInfo(DrrHisRecordExtended hisList); /// Displays info on histogram
+
     public:
+
     void process(); /// main procedure for processing
-    ReadHis(vector<string> &flags){ options.loadFlags(flags);}
+    ReadHis(vector<string> &flags){ options.loadFlags(flags); sizeX = 0; sizeY = 0; hisDim = 0;}
+    ~ReadHis(){}
+    vector<unsigned int> cSpectrum; ///Current spectrum
+    vector<unsigned int> cError;    ///Current spectrum uncertainties
+    Flags options; /// Command fine flags
+    unsigned short hisDim;
+    unsigned sizeX;
+    unsigned sizeY;
+
 };
 
 #endif

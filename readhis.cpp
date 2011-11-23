@@ -47,6 +47,56 @@ int main(int argc, char* argv[]) {
     try {
         ReadHis *histo = new ReadHis(flags);
         histo->process();
+        
+        int sz = histo->cSpectrum.size();
+        if (histo->hisDim == 1) {
+            cout << "#Ch Counts Err" << endl;
+            cout << "#Bin size: " << histo->options.bin << endl;
+            for (int x = 0; x < sz; x++)
+                if (!(histo->options.zero && histo->cSpectrum[x] == 0))
+                    cout << x * histo->options.bin + 0.5 * ((histo->options.bin) - 1) 
+                         << " " << histo->cSpectrum[x] << " " << histo->cError[x] << endl;
+        }
+        else if (histo->hisDim == 2) {
+            if (histo->options.gy || histo->options.gx) {
+
+                if (histo->options.gx) {
+                    cout << "#Projection on Y axis, gate on X " << histo->options.g0 << " to " << histo->options.g1 << endl;
+                    if (histo->options.bg)
+                        cout << "#Background substracted, gate on X " << histo->options.b0 << " to " << histo->options.b1 << endl;
+                    if (histo->options.sbg)
+                        cout << "#Background substracted, gate on X " 
+                             << histo->options.b0 << " to " << histo->options.b1 << " and "
+                             << histo->options.b2 << " to " << histo->options.b3 << endl;
+                }
+                if (histo->options.gy) {
+                    cout << "#Projection on X axis, gate on Y " << histo->options.g0 << " to " << histo->options.g1 << endl;
+                    if (histo->options.bg)
+                        cout << "#Background substracted, gate on Y " << histo->options.b0 << " to " << histo->options.b1 << endl;
+                    if (histo->options.sbg)
+                        cout << "#Background substracted, gate on Y " 
+                             << histo->options.b0 << " to " << histo->options.b1 << " and "
+                             << histo->options.b2 << " to " << histo->options.b3 << endl;
+                }
+
+                cout << "#Channel Counts Err" << endl;
+                for (int i = 0; i < sz; i++)
+                    if (!(histo->options.zero && histo->cSpectrum[i] == 0))
+                        cout << i << " " << histo->cSpectrum[i] << " " << histo->cError[i] << endl;
+
+            } else {
+                    cout << "#XCh YCh Counts" << endl;
+                    int ySize = histo->sizeX/histo->options.binY;
+                    int xSize = histo->sizeY/histo->options.binX;
+                    for (int y = 0; y < ySize ; y++) {
+                        for (int x = 0; x < xSize; x++) 
+                                cout << x * histo->options.binX + 0.5 * (histo->options.binX - 1) << " "  // x position
+                                    << y * histo->options.binY + 0.5 * (histo->options.binY - 1) << " "   // y position
+                                    << histo->cSpectrum[x+(histo->sizeX/histo->options.binX)*y] << endl; // position in vector of (x,y) cell
+                        cout << endl;
+                    }
+            }
+        }
         delete histo;
     } catch (GenError &err) {
         cout << "Error: " << err.show() << endl;
