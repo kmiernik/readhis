@@ -59,7 +59,6 @@ int main(int argc, char* argv[]) {
         }
         else if (histo->hisDim == 2) {
             if (histo->options.gy || histo->options.gx) {
-
                 if (histo->options.gx) {
                     cout << "#Projection on Y axis, gate on X " << histo->options.g0 << " to " << histo->options.g1 << endl;
                     if (histo->options.bg)
@@ -80,14 +79,15 @@ int main(int argc, char* argv[]) {
                 }
 
                 cout << "#Channel Counts Err" << endl;
-                for (int i = 0; i < sz; i++)
-                    if (!(histo->options.zero && histo->cSpectrum[i] == 0))
-                        cout << i << " " << histo->cSpectrum[i] << " " << histo->cError[i] << endl;
+                for (int x = 0; x < sz; x++)
+                    if (!(histo->options.zero && histo->cSpectrum[x] == 0))
+                        cout << x * histo->options.bin + 0.5 * ((histo->options.bin) - 1) 
+                            << " " << histo->cSpectrum[x] << " " << histo->cError[x] << endl;
 
             } else {
                     cout << "#XCh YCh Counts" << endl;
-                    int ySize = histo->sizeX/histo->options.binY;
-                    int xSize = histo->sizeY/histo->options.binX;
+                    int ySize = histo->sizeY/histo->options.binY;
+                    int xSize = histo->sizeX/histo->options.binX;
                     for (int y = 0; y < ySize ; y++) {
                         for (int x = 0; x < xSize; x++) 
                                 cout << x * histo->options.binX + 0.5 * (histo->options.binX - 1) << " "  // x position

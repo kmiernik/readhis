@@ -60,8 +60,8 @@ class ReadHis {
     void process(); /// main procedure for processing
     ReadHis(vector<string> &flags){ options.loadFlags(flags); sizeX = 0; sizeY = 0; hisDim = 0;}
     ~ReadHis(){}
-    vector<unsigned int> cSpectrum; ///Current spectrum
-    vector<unsigned int> cError;    ///Current spectrum uncertainties
+    vector<int> cSpectrum; ///Current spectrum
+    vector<int> cError;    ///Current spectrum uncertainties
     Flags options; /// Command fine flags
     unsigned short hisDim;
     unsigned sizeX;

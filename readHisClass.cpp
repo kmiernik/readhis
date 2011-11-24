@@ -201,32 +201,37 @@ void ReadHis::process1D(vector<unsigned int> &d) {
 
         unsigned sz = d.size();
 
-        for (unsigned int x = 0; x < sz; x++)
+        for (unsigned int x = 0; x < sz; x++) {
             cSpectrum[x/options.bin] += d[x];
+            cError[x] += cSpectrum[x];
+        }
+        for (unsigned i = 0; i < sz; i++)
+            cError[i] = sqrt(cError[i]);
 
-        for (unsigned int x = 0; x < sz; x++)
-            cError[x] = sqrt(cSpectrum[x]);
     }
 }
 
 void ReadHis::gx(vector<unsigned int> &d, int g0, int g1) {
     int sz = cSpectrum.size();
     for (int x = g0; x < g1+1; x++) 
-        for (int y = 0; y < sz*options.bin; y++) 
+        for (int y = 0; y < sz*options.bin; y++) {
             cSpectrum[y/options.bin] += d[x+sizeX*y];
+            cError[y/options.bin] += d[x+sizeX*y];
+        }
 }
 
 void ReadHis::gy(vector<unsigned int> &d, int g0, int g1) {
     for (int y = g0; y < g1+1; y++)
-        for (unsigned x = 0; x < sizeX; x++) 
+        for (unsigned x = 0; x < sizeX; x++) {
             cSpectrum[x/options.bin] += d[x+sizeX*y];
+            cError[x/options.bin] += d[x+sizeX*y];
+        }
 }
 
 
 void ReadHis::gxbg(vector<unsigned int> &d, int b0, int b1) {
-    int sz = cSpectrum.size();
     for (int x = b0; x < b1+1; x++)
-        for (int y = 0; y < sz*options.bin; y++) {
+        for (unsigned y = 0; y < sizeY; y++) {
             cSpectrum[y/options.bin] -= d[x+sizeX*y];
             cError[y/options.bin] += d[x+sizeX*y];
         }
@@ -241,13 +246,15 @@ void ReadHis::gybg(vector<unsigned int> &d, int b0, int b1) {
 }
 
 void ReadHis::bin2D(vector<unsigned int> &d) {
-    for (unsigned y = 0; y < sizeX/options.binY; y++)
+    for (unsigned y = 0; y < sizeY/options.binY; y++)
         for (unsigned x = 0; x < sizeX/options.binX; x++)
             for (int by = 0; by < options.binY; by++)
                 for (int bx = 0; bx < options.binX; bx++) {
                         cSpectrum[x+y*(sizeX-sizeX%options.binX)/options.binX] 
                                     += d[x*options.binX+bx + (y*options.binY+by)*(sizeX)];
-                        }
+                        cError[x+y*(sizeX-sizeX%options.binX)/options.binX] 
+                                    += d[x*options.binX+bx + (y*options.binY+by)*(sizeX)];
+                }
 }
 
 void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
@@ -270,26 +277,22 @@ void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
         gy(d, options.g0, options.g1);
 
         if (options.bg || options.sbg)
-            gybg(d, options.b0, options.b1); // errors are no logner simple number of counts
-        else
-            for (int i = 0; i < sz; i++) // for "normal" gate errors are calc. on number of counts basis
-                cError[i] = sqrt(cSpectrum[i]);
-
+            gybg(d, options.b0, options.b1); 
         // if split background was set, first part was subtracted in previous step, now second part of bg
         if (options.sbg)
-            gybg(d, options.b2, options.b3); // errors are no logner simple number of counts
+            gybg(d, options.b2, options.b3);
     }       
     else if (options.gx) {
         gx(d, options.g0, options.g1);
-        for (int i = 0; i < sz; i++) // for "normal" gate errors are calc. on number of counts basis
-            cError[i] = sqrt(cSpectrum[i]);
         if (options.bg || options.sbg)
             gxbg(d, options.b0, options.b1);
         if (options.sbg)
             gxbg(d, options.b2, options.b3);
     } else {
-            bin2D(d);
+        bin2D(d);
     }
+    for (int i = 0; i < sz; i++)
+        cError[i] = sqrt(cError[i]);
 }
 
 void ReadHis::process() {
@@ -307,7 +310,6 @@ void ReadHis::process() {
         }
         else { 
             DrrHisRecordExtended info = h->getHistogramInfo(options.hisID);
-
             hisDim = info.hisDim;
 
             if (options.info)
@@ -315,14 +317,14 @@ void ReadHis::process() {
             else {
                 vector<unsigned int> d;
                 h->getHistogram(d, options.hisID);
+                //cout << "#Histogram ID: " << info.hisID << ", " << info.hisDim << "D" << endl;
                 sizeX = info.scaled[0];
-                cout << "#Histogram ID: " << info.hisID << ", " << info.hisDim << "D" << endl;
+                sizeY = info.scaled[1];
 
                 if (info.hisDim == 1)
                     process1D(d);
                 else if (info.hisDim == 2) {
                     process2D(d, info);
-                    sizeY = info.scaled[1];
                 }
                 else {
                     stringstream err;
