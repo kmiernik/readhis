@@ -30,6 +30,7 @@ void help() {
     cout << "        (works only for 2D spectrum)" << endl;
     cout << "  -i:   displays detailed information about histogram" << endl;
     cout << "  -l:   displays list of histograms id present in a file" << endl;
+    cout << "  -L:   displays list of histograms id present in a file and marks empty histograms" << endl;
     cout << "  -z:   removes bins with 0 counts in output (except of 3D histograms)" << endl;
 }
 

@@ -18,6 +18,7 @@ Flags::Flags() {
     b3 = 0;
     info = false;
     list = false;
+    listEmpty = false;
     bin = 1;
     binX = 1;
     binY = 1;
@@ -37,8 +38,12 @@ void Flags::loadFlags(vector<string> &flags) {
     baseName = flags[0].substr(0,dot);
 
     int flagL = flagPos(flags, "-l");
+    int flagLE = flagPos(flags, "-L");
     if (flagL >= 1) {
         list = true;
+    }
+    else if (flagLE >= 1) {
+        listEmpty = true;
     }
     else {
         hisID = atoi(flags[1].c_str());
@@ -304,9 +309,37 @@ void ReadHis::process() {
         if (options.list) {
             vector<int> list;
             h->getHisList(list);
-            for (unsigned int i = 0; i < list.size()-1; i++)
+            unsigned sz = list.size();
+            for (unsigned int i = 0; i < sz; i++) {
                 cout << list[i] << ", ";
-            cout << list[list.size()-1] << endl;
+                if ((i+1) % 10 == 0)
+                    cout << endl;
+
+            }
+            cout << endl;
+        } else if (options.listEmpty) {
+            vector<int> list;
+            vector<unsigned int> d;
+            h->getHisList(list);
+            for (unsigned int i = 0; i < list.size(); i++) {
+                h->getHistogram(d, list[i]);
+                unsigned int sz = d.size();
+                bool empty = true;
+                for (unsigned int j = 0; j < sz; j++)
+                    if (d[j] > 0) {
+                        empty = false;
+                        break;
+                    }
+                if (empty)
+                    cout << "E" << list[i];
+                else
+                    cout << "\033[1;34m" << list[i] << "\033[0m";
+                cout << ", ";
+                if ((i+1) % 10 == 0)
+                    cout << endl;
+
+            }
+            cout << "\033[0;30m\033[0m" << endl;
         }
         else { 
             DrrHisRecordExtended info = h->getHistogramInfo(options.hisID);
