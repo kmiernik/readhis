@@ -51,6 +51,7 @@ int main(int argc, char* argv[]) {
         
         int sz = histo->cSpectrum.size();
         if (histo->hisDim == 1) {
+            cout << "#1D spectrum " << histo->options.hisID  << endl;
             cout << "#Ch Counts Err" << endl;
             cout << "#Bin size: " << histo->options.bin << endl;
             for (int x = 0; x < sz; x++)
@@ -59,6 +60,7 @@ int main(int argc, char* argv[]) {
                          << " " << histo->cSpectrum[x] << " " << histo->cError[x] << endl;
         }
         else if (histo->hisDim == 2) {
+            cout << "#2D spectrum " << histo->options.hisID  << endl;
             if (histo->options.gy || histo->options.gx) {
                 if (histo->options.gx) {
                     cout << "#Projection on Y axis, gate on X " << histo->options.g0 << " to " << histo->options.g1 << endl;
