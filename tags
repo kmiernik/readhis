@@ -1,0 +1,96 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+DrrHeader	drrblock.h	/^struct DrrHeader {$/;"	s
+DrrHisRecord	drrblock.h	/^struct DrrHisRecord {$/;"	s
+DrrHisRecordExtended	drrblock.h	/^struct DrrHisRecordExtended : DrrHisRecord {$/;"	s
+Flags	readHisClass.cpp	/^Flags::Flags() {$/;"	f	class:Flags
+Flags	readHisClass.h	/^struct Flags {$/;"	s
+GenError	hisdrr.h	/^    GenError(const string msg = 0) : message(msg) {}$/;"	f	class:GenError
+GenError	hisdrr.h	/^class GenError {$/;"	c
+HDRRBLOCK	drrblock.h	8;"	d
+HHISDRR	hisdrr.h	8;"	d
+HREADHIS2	readHisClass.h	2;"	d
+HisDrr	hisdrr.cpp	/^HisDrr::HisDrr(string &drr, string &his) {$/;"	f	class:HisDrr
+HisDrr	hisdrr.cpp	/^HisDrr::HisDrr(string &drr, string &his, string &input) {$/;"	f	class:HisDrr
+HisDrr	hisdrr.h	/^class HisDrr {$/;"	c
+IOError	hisdrr.h	/^    IOError(const string msg = 0) : GenError(msg) {} \/\/! Constructor calling base class constructor in initializer list$/;"	f	class:IOError
+IOError	hisdrr.h	/^class IOError : public GenError {$/;"	c
+ReadHis	readHisClass.h	/^    ReadHis(vector<string> &flags){ options.loadFlags(flags);}$/;"	f	class:ReadHis
+ReadHis	readHisClass.h	/^class ReadHis {$/;"	c
+SimpleDrrBlock	hisdrr.h	/^struct SimpleDrrBlock {$/;"	s
+b0	readHisClass.h	/^    int b0; \/\/\/ background start$/;"	m	struct:Flags
+b1	readHisClass.h	/^    int b1; \/\/\/ background end$/;"	m	struct:Flags
+baseName	readHisClass.h	/^    string baseName; \/\/\/ file name without extension$/;"	m	struct:Flags
+bg	readHisClass.h	/^    bool bg; \/\/\/ background subtraction$/;"	m	struct:Flags
+bin	readHisClass.h	/^    int bin; \/\/\/ bin size$/;"	m	struct:Flags
+bin2D	readHisClass.cpp	/^void ReadHis::bin2D(long proj[], vector<unsigned int> &d, int sX, int sY) {$/;"	f	class:ReadHis
+calcon	drrblock.h	/^    float calcon[4];$/;"	m	struct:DrrHisRecord
+date	drrblock.h	/^    int date[6];$/;"	m	struct:DrrHeader
+description	drrblock.h	/^    char description[40];$/;"	m	struct:DrrHeader
+drrBlock	drrblock.h	/^union drrBlock {$/;"	u
+drrFile	hisdrr.h	/^    string drrFile;$/;"	m	class:HisDrr
+flagPos	readHisClass.cpp	/^int Flags::flagPos(vector<string> &flags, const string &match) {$/;"	f	class:Flags
+g0	readHisClass.h	/^    int g0; \/\/\/ gate start$/;"	m	struct:Flags
+g1	readHisClass.h	/^    int g1; \/\/\/ gate end$/;"	m	struct:Flags
+getHisList	hisdrr.cpp	/^void HisDrr::getHisList(vector<int> &r) {$/;"	f	class:HisDrr
+getHistogram	hisdrr.cpp	/^void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {$/;"	f	class:HisDrr
+getHistogramInfo	hisdrr.cpp	/^DrrHisRecordExtended HisDrr::getHistogramInfo(int id) {$/;"	f	class:HisDrr
+gx	readHisClass.cpp	/^void ReadHis::gx(long proj[], int sz, vector<unsigned int> &d, int g0, int g1) {$/;"	f	class:ReadHis
+gx	readHisClass.h	/^    bool gx; \/\/\/ gating on X axis$/;"	m	struct:Flags
+gxbg	readHisClass.cpp	/^void ReadHis::gxbg(long proj[], unsigned int projErr[], int sz, vector<unsigned int> &d, int b0, int b1) {$/;"	f	class:ReadHis
+gy	readHisClass.cpp	/^void ReadHis::gy(long proj[], int sz, vector<unsigned int> &d, int g0, int g1) {$/;"	f	class:ReadHis
+gy	readHisClass.h	/^    bool gy; \/\/\/ gating on Y axis$/;"	m	struct:Flags
+gybg	readHisClass.cpp	/^void ReadHis::gybg(long proj[], unsigned int projErr[], int sz, vector<unsigned int> &d, int b0, int b1) {$/;"	f	class:ReadHis
+halfWords	drrblock.h	/^    short halfWords;$/;"	m	struct:DrrHisRecord
+halfWords	hisdrr.h	/^    short halfWords;$/;"	m	struct:SimpleDrrBlock
+header	drrblock.h	/^    DrrHeader header;$/;"	m	union:drrBlock
+help	readhis.cpp	/^void help() {$/;"	f
+help	zerotest.cpp	/^void help() {$/;"	f
+hisDim	drrblock.h	/^    short hisDim;$/;"	m	struct:DrrHisRecord
+hisFile	hisdrr.h	/^    string hisFile;$/;"	m	class:HisDrr
+hisID	drrblock.h	/^    int hisID;$/;"	m	struct:DrrHisRecordExtended
+hisID	hisdrr.h	/^    int hisID;$/;"	m	struct:SimpleDrrBlock
+hisID	readHisClass.h	/^    int hisID; \/\/\/ histogram ID$/;"	m	struct:Flags
+hisList	hisdrr.h	/^    vector<DrrHisRecordExtended> hisList;$/;"	m	class:HisDrr
+info	readHisClass.h	/^    bool info; \/\/\/ information on histogram$/;"	m	struct:Flags
+initial	drrblock.h	/^    char initial[12];$/;"	m	struct:DrrHeader
+list	readHisClass.h	/^    bool list; \/\/\/ list of histograms$/;"	m	struct:Flags
+loadDrr	hisdrr.cpp	/^void HisDrr::loadDrr() {$/;"	f	class:HisDrr
+loadFlags	readHisClass.cpp	/^void Flags::loadFlags(vector<string> &flags) {$/;"	f	class:Flags
+main	createhis.cpp	/^int main(int argc, char* argv[]) {$/;"	f
+main	readhis.cpp	/^int main(int argc, char* argv[]) {$/;"	f
+main	testDrr.cpp	/^int main(int argc, char* argv[]) {$/;"	f
+main	zerotest.cpp	/^int main(int argc, char* argv[]) {$/;"	f
+maxc	drrblock.h	/^    short maxc[4];$/;"	m	struct:DrrHisRecord
+message	hisdrr.h	/^    const string message; \/\/! Error Message$/;"	m	class:GenError
+minc	drrblock.h	/^    short minc[4];$/;"	m	struct:DrrHisRecord
+nHWords	drrblock.h	/^    int nHWords;$/;"	m	struct:DrrHeader
+nHis	drrblock.h	/^    int nHis;$/;"	m	struct:DrrHeader
+offset	drrblock.h	/^    int offset;$/;"	m	struct:DrrHisRecord
+operator =	drrblock.h	/^    DrrHisRecordExtended& operator=(const DrrHisRecord& right) {$/;"	f	struct:DrrHisRecordExtended
+options	readHisClass.h	/^    Flags options; \/\/\/ Command fine flags$/;"	m	class:ReadHis
+params	drrblock.h	/^    short params[4];$/;"	m	struct:DrrHisRecord
+process	readHisClass.cpp	/^void ReadHis::process() {$/;"	f	class:ReadHis
+process1D	readHisClass.cpp	/^void ReadHis::process1D(vector<unsigned int> &d) {$/;"	f	class:ReadHis
+process2D	readHisClass.cpp	/^void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {$/;"	f	class:ReadHis
+raw	drrblock.h	/^    short raw[4];$/;"	m	struct:DrrHisRecord
+readBlock	hisdrr.cpp	/^void HisDrr::readBlock(ifstream& file, drrBlock *block) {$/;"	f	class:HisDrr
+readBlock	testDrr.cpp	/^void readBlock(ifstream& file, drrBlock *block) {$/;"	f
+record	drrblock.h	/^    DrrHisRecord record; $/;"	m	union:drrBlock
+scaled	drrblock.h	/^    short scaled[4];$/;"	m	struct:DrrHisRecord
+scaled	hisdrr.h	/^    short scaled[2];$/;"	m	struct:SimpleDrrBlock
+setValue	hisdrr.cpp	/^void HisDrr::setValue(const int id, unsigned int pos, unsigned int value){$/;"	f	class:HisDrr
+setValue	hisdrr.cpp	/^void HisDrr::setValue(const int id, unsigned int pos, unsigned short value){$/;"	f	class:HisDrr
+setValue	hisdrr.cpp	/^void HisDrr::setValue(const int id, vector<unsigned int> &value){$/;"	f	class:HisDrr
+setValue	hisdrr.cpp	/^void HisDrr::setValue(const int id, vector<unsigned short> &value){$/;"	f	class:HisDrr
+show	hisdrr.h	/^    string show() { return message;}$/;"	f	class:GenError
+showInfo	readHisClass.cpp	/^void ReadHis::showInfo(DrrHisRecordExtended hisList) {$/;"	f	class:ReadHis
+title	drrblock.h	/^    char title[40];$/;"	m	struct:DrrHisRecord
+title	hisdrr.h	/^    string title;$/;"	m	struct:SimpleDrrBlock
+xlabel	drrblock.h	/^    char xlabel[12];$/;"	m	struct:DrrHisRecord
+ylabel	drrblock.h	/^    char ylabel[12];$/;"	m	struct:DrrHisRecord
+zeroHistogram	hisdrr.cpp	/^void HisDrr::zeroHistogram(int id) {$/;"	f	class:HisDrr
