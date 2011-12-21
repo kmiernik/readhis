@@ -5,8 +5,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
-#include "hisdrr.h"
-#include "drrblock.h"
+#include "HisDrr.h"
+#include "DrrBlock.h"
+#include "ExceptionHandlers.h"
 
 using namespace std;
 
@@ -15,40 +16,81 @@ using namespace std;
  *
  */
 class Histogram {
-    private:
-        unsigned hisDim_;
-        unsigned hisId_;
-
-        unsigned binX_;
-        unsigned binY_;
-        unsigned sizeX_;
-        unsigned sizeY_;
-
     public:
-        bool valid;
+        unsigned getNX();
 
-        vector<unsigned> x;
-        vector<unsigned long> y;
-        vector<double> dy;
-        vector<unsigned long> z;
-        vector<double> dz;
+        double   getXmin();
+        void     setXmin (const double xMin);
+        
+        double   getStepX();
+        void     setStepX (const double stepX);
+        
+        unsigned getBinX();
 
-        void checkSanity();
+        double  getX (const unsigned ix);
 
-        void setBinX(const unsigned binX);
-        const unsigned getBinX();
+        void getArray (vector<double>& values);
+        void setArray (vector<double>& values);
 
-        void setBinY(const unsigned binY);
-        const unsigned getBinY();
+        void getErrorsArray (vector<double>& values);
+        void setErrorsArray (vector<double>& values);
 
-        void setSizeX(const unsigned sizeX);
-        const unsigned getSizeX();
+    private:
+        const unsigned hisId_;
 
-        void setSizeY(const unsigned sizeY);
-        const unsigned getSizeY();
-
-        const unsigned getHisDim();
-        const unsigned getHisId();
+        unsigned nX_;
+        double   xMin_;
+        double   stepX_;
+        unsigned binX_;
+        
+        vector<unsigned long> values_;
+        vector<double>        errors_;
 };
 
+class Histogram1D : public Histogram {
+    public:
+        void     setBinX (const unsigned binX);
+
+        unsigned long getPoint (const unsigned long x);
+        void setPoint (const unsigned long x, const unsigned long value);
+
+        void getArray (vector<double>& values);
+        void setArray (vector<double>& values);
+
+        double getError (const unsigned long x);
+        void setError (const unsigned long x, const double value);
+
+};
+
+class Histogram2D : public Histogram {
+    public:
+        void     setBinXY (const unsigned binX, const unsigned binY);
+        
+        unsigned long getPoint (const unsigned x, const unsigned y);
+        void setPoint (const unsigned x, const unsigned y, const unsigned long value);
+
+        double  getY (const unsigned iy);
+
+        double getError (const unsigned x, const unsigned y);
+        void setError (const unsigned x, const unsigned y, const double value);
+
+        void gateX (const unsigned x0, const unsigned x1,
+                    vector<unsigned logn>& result);
+        void gateY (const unsigned y0, const unsigned y1,
+                    vector<unsigned logn>& result);
+
+        void gateXbackground (const unsigned x0, const unsigned x1,
+                              const unsigned b0, const unsigned b1,
+                              vector<unsigned logn>& result);
+        void gateYbackground (const unsigned y0, const unsigned y1,
+                              const unsigned b0, const unsigned b1,
+                              vector<unsigned logn>& result);
+
+    private:
+        unsigned nY_;
+        double   yMin_;
+        double   stepY_;
+        unsigned binY_;
+
+};
 #endif

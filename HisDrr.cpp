@@ -8,8 +8,8 @@
 #include <cstdlib>
 #include <sstream>
 #include <ctime>
-#include "hisdrr.h"
-#include "drrblock.h"
+#include "HisDrr.h"
+#include "DrrBlock.h"
 using namespace std;
 
 HisDrr::HisDrr(string &drr, string &his) {
