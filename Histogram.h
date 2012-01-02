@@ -18,29 +18,25 @@ using namespace std;
 class Histogram {
     public:
         unsigned getNX();
-
         double   getXmin();
-        void     setXmin (const double xMin);
-        
         double   getStepX();
-        void     setStepX (const double stepX);
-        
         unsigned getBinX();
 
-        double  getX (const unsigned ix);
+        virtual unsigned long getValue() = 0;
+        virtual void setValue() = 0;
 
-        void getArray (vector<double>& values);
-        void setArray (vector<double>& values);
+        void getDataRaw (vector<double>& values);
+        void setDataRaw (vector<double>& values);
 
-        void getErrorsArray (vector<double>& values);
-        void setErrorsArray (vector<double>& values);
+        void getErrorsRaw (vector<double>& values);
+        void setErrorsRaw (vector<double>& values);
 
     private:
         const unsigned hisId_;
 
-        unsigned nX_;
-        double   xMin_;
-        double   stepX_;
+        const unsigned nX_;
+        const double   xMin_;
+        const double   stepX_;
         unsigned binX_;
         
         vector<unsigned long> values_;
@@ -49,27 +45,29 @@ class Histogram {
 
 class Histogram1D : public Histogram {
     public:
-        void     setBinX (const unsigned binX);
+        Histogram1D (const unsigned nX, const double xMin, const double stepX)
+                    : nX_(nX), xMin_(xMin), stepX_(stepX) {}
 
-        unsigned long getPoint (const unsigned long x);
-        void setPoint (const unsigned long x, const unsigned long value);
+        void setBinX (const unsigned binX);
 
-        void getArray (vector<double>& values);
-        void setArray (vector<double>& values);
+        virtual unsigned long getValue (const unsigned x);
+        virtual void setValue (const unsigned x, const unsigned value);
 
-        double getError (const unsigned long x);
-        void setError (const unsigned long x, const double value);
-
+        double getError (const unsigned x);
+        void setError (const unsigned x, const double value);
 };
 
 class Histogram2D : public Histogram {
     public:
+        Histogram2D (const unsigned nX, const double xMin, const double stepX,
+                     const unsigned nY, const double yMin, const double stepY)
+                    : nX_(nX), xMin_(xMin), stepX_(stepX),
+                      nY_(nY), yMin_(yMin), stepY_(stepY) {}
+
         void     setBinXY (const unsigned binX, const unsigned binY);
         
-        unsigned long getPoint (const unsigned x, const unsigned y);
-        void setPoint (const unsigned x, const unsigned y, const unsigned long value);
-
-        double  getY (const unsigned iy);
+        virtual unsigned long getValue (const unsigned x, const unsinged y);
+        virtual void setValue (const unsigned x, const unsinged y, const unsigned long value);
 
         double getError (const unsigned x, const unsigned y);
         void setError (const unsigned x, const unsigned y, const double value);
@@ -87,9 +85,9 @@ class Histogram2D : public Histogram {
                               vector<unsigned logn>& result);
 
     private:
-        unsigned nY_;
-        double   yMin_;
-        double   stepY_;
+        const unsigned nY_;
+        const double   yMin_;
+        const double   stepY_;
         unsigned binY_;
 
 };
