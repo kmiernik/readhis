@@ -34,7 +34,7 @@ int Flags::flagPos(vector<string> &flags, const string &match) {
 
 
 void Flags::loadFlags(vector<string> &flags) {
-    unsigned int dot = flags[0].find_first_of(".");
+    unsigned int dot = flags[0].find_last_of(".");
     baseName = flags[0].substr(0,dot);
 
     int flagL = flagPos(flags, "-l");
