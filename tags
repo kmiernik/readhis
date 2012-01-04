@@ -9,20 +9,23 @@ DrrHisRecord	DrrBlock.h	/^struct DrrHisRecord {$/;"	s
 DrrHisRecordExtended	DrrBlock.h	/^struct DrrHisRecordExtended : DrrHisRecord {$/;"	s
 Flags	readHisClass.cpp	/^Flags::Flags() {$/;"	f	class:Flags
 Flags	readHisClass.h	/^struct Flags {$/;"	s
-GenError	HisDrr.h	/^    GenError(const string msg = 0) : message(msg) {}$/;"	f	class:GenError
-GenError	HisDrr.h	/^class GenError {$/;"	c
+GenError	ExceptionHandlers.h	/^    GenError(const string msg = 0) : message(msg) {}$/;"	f	class:GenError
+GenError	ExceptionHandlers.h	/^class GenError {$/;"	c
 HDRRBLOCK	DrrBlock.h	8;"	d
+HEXCEPTIONHANDLERS	ExceptionHandlers.h	2;"	d
 HHISDRR	HisDrr.h	8;"	d
-HHISINTERPRETER	HisInterpreter.h	2;"	d
 HHISTOGRAM	Histogram.h	2;"	d
 HREADHIS2	readHisClass.h	2;"	d
 HisDrr	HisDrr.cpp	/^HisDrr::HisDrr(string &drr, string &his) {$/;"	f	class:HisDrr
 HisDrr	HisDrr.cpp	/^HisDrr::HisDrr(string &drr, string &his, string &input) {$/;"	f	class:HisDrr
 HisDrr	HisDrr.h	/^class HisDrr {$/;"	c
-HisInterpreter	HisInterpreter.h	/^class HisInterpreter {$/;"	c
 Histogram	Histogram.h	/^class Histogram {$/;"	c
-IOError	HisDrr.h	/^    IOError(const string msg = 0) : GenError(msg) {} \/\/! Constructor calling base class constructor in initializer list$/;"	f	class:IOError
-IOError	HisDrr.h	/^class IOError : public GenError {$/;"	c
+Histogram1D	Histogram.h	/^        Histogram1D (const unsigned nX, const double xMin, const double stepX)$/;"	f	class:Histogram1D
+Histogram1D	Histogram.h	/^class Histogram1D : public Histogram {$/;"	c
+Histogram2D	Histogram.h	/^        Histogram2D (const unsigned nX, const double xMin, const double stepX,$/;"	f	class:Histogram2D
+Histogram2D	Histogram.h	/^class Histogram2D : public Histogram {$/;"	c
+IOError	ExceptionHandlers.h	/^    IOError(const string msg = 0) : GenError(msg) {} \/\/! Constructor calling base class constructor in initializer list$/;"	f	class:IOError
+IOError	ExceptionHandlers.h	/^class IOError : public GenError {$/;"	c
 ReadHis	readHisClass.h	/^    ReadHis(vector<string> &flags){ options.loadFlags(flags); sizeX = 0; sizeY = 0; hisDim = 0;}$/;"	f	class:ReadHis
 ReadHis	readHisClass.h	/^class ReadHis {$/;"	c
 SimpleDrrBlock	HisDrr.h	/^struct SimpleDrrBlock {$/;"	s
@@ -37,16 +40,15 @@ bin2D	readHisClass.cpp	/^void ReadHis::bin2D(vector<unsigned int> &d) {$/;"	f	cl
 binX	readHisClass.h	/^    int binX; \/\/\/ bin size X for 2D spectrum$/;"	m	struct:Flags
 binX_	Histogram.h	/^        unsigned binX_;$/;"	m	class:Histogram
 binY	readHisClass.h	/^    int binY; \/\/\/ bin size Y for 2D spectrum$/;"	m	struct:Flags
-binY_	Histogram.h	/^        unsigned binY_;$/;"	m	class:Histogram
+binY_	Histogram.h	/^        unsigned binY_;$/;"	m	class:Histogram2D
 cError	readHisClass.h	/^    vector<int> cError;    \/\/\/Current spectrum uncertainties$/;"	m	class:ReadHis
 cSpectrum	readHisClass.h	/^    vector<int> cSpectrum; \/\/\/Current spectrum$/;"	m	class:ReadHis
 calcon	DrrBlock.h	/^    float calcon[4];$/;"	m	struct:DrrHisRecord
 date	DrrBlock.h	/^    int date[6];$/;"	m	struct:DrrHeader
 description	DrrBlock.h	/^    char description[40];$/;"	m	struct:DrrHeader
 drrBlock	DrrBlock.h	/^union drrBlock {$/;"	u
-drrFile	HisDrr.h	/^    string drrFile;$/;"	m	class:HisDrr
-dy	Histogram.h	/^        vector<double> dy;$/;"	m	class:Histogram
-dz	Histogram.h	/^        vector<double> dz;$/;"	m	class:Histogram
+drrFile	HisDrr.h	/^        string drrFile;$/;"	m	class:HisDrr
+errors_	Histogram.h	/^        vector<double>        errors_;$/;"	m	class:Histogram
 flagPos	readHisClass.cpp	/^int Flags::flagPos(vector<string> &flags, const string &match) {$/;"	f	class:Flags
 g0	readHisClass.h	/^    int g0; \/\/\/ gate start$/;"	m	struct:Flags
 g1	readHisClass.h	/^    int g1; \/\/\/ gate end$/;"	m	struct:Flags
@@ -66,14 +68,12 @@ help	readhis.cpp	/^void help() {$/;"	f
 help	zerotest.cpp	/^void help() {$/;"	f
 hisDim	DrrBlock.h	/^    short hisDim;$/;"	m	struct:DrrHisRecord
 hisDim	readHisClass.h	/^    unsigned short hisDim;$/;"	m	class:ReadHis
-hisDim_	Histogram.h	/^        unsigned hisDim_;$/;"	m	class:Histogram
-hisFile	HisDrr.h	/^    string hisFile;$/;"	m	class:HisDrr
-hisFile	HisInterpreter.h	/^    HisDrr &hisFile; $/;"	m	class:HisInterpreter
+hisFile	HisDrr.h	/^        string hisFile;$/;"	m	class:HisDrr
 hisID	DrrBlock.h	/^    int hisID;$/;"	m	struct:DrrHisRecordExtended
-hisID	HisDrr.h	/^    int hisID;$/;"	m	struct:SimpleDrrBlock
 hisID	readHisClass.h	/^    int hisID; \/\/\/ histogram ID$/;"	m	struct:Flags
-hisId_	Histogram.h	/^        unsigned hisId_;$/;"	m	class:Histogram
-hisList	HisDrr.h	/^    vector<DrrHisRecordExtended> hisList;$/;"	m	class:HisDrr
+hisId	HisDrr.h	/^    int hisId;$/;"	m	struct:SimpleDrrBlock
+hisId_	Histogram.h	/^        const unsigned hisId_;$/;"	m	class:Histogram
+hisList	HisDrr.h	/^        vector<DrrHisRecordExtended> hisList;$/;"	m	class:HisDrr
 info	readHisClass.h	/^    bool info; \/\/\/ information on histogram$/;"	m	struct:Flags
 initial	DrrBlock.h	/^    char initial[12];$/;"	m	struct:DrrHeader
 list	readHisClass.h	/^    bool list; \/\/\/ list of histograms$/;"	m	struct:Flags
@@ -84,13 +84,14 @@ main	readhis.cpp	/^int main(int argc, char* argv[]) {$/;"	f
 main	testDrr.cpp	/^int main(int argc, char* argv[]) {$/;"	f
 main	zerotest.cpp	/^int main(int argc, char* argv[]) {$/;"	f
 maxc	DrrBlock.h	/^    short maxc[4];$/;"	m	struct:DrrHisRecord
-message	HisDrr.h	/^    const string message; \/\/! Error Message$/;"	m	class:GenError
+message	ExceptionHandlers.h	/^    const string message; \/\/! Error Message$/;"	m	class:GenError
 minc	DrrBlock.h	/^    short minc[4];$/;"	m	struct:DrrHisRecord
 nHWords	DrrBlock.h	/^    int nHWords;$/;"	m	struct:DrrHeader
 nHis	DrrBlock.h	/^    int nHis;$/;"	m	struct:DrrHeader
+nX_	Histogram.h	/^        const unsigned nX_;$/;"	m	class:Histogram
+nY_	Histogram.h	/^        const unsigned nY_;$/;"	m	class:Histogram2D
 offset	DrrBlock.h	/^    int offset;$/;"	m	struct:DrrHisRecord
 operator =	DrrBlock.h	/^    DrrHisRecordExtended& operator=(const DrrHisRecord& right) {$/;"	f	struct:DrrHisRecordExtended
-options	HisInterpreter.h	/^    Flags &options;$/;"	m	class:HisInterpreter
 options	readHisClass.h	/^    Flags options; \/\/\/ Command fine flags$/;"	m	class:ReadHis
 params	DrrBlock.h	/^    short params[4];$/;"	m	struct:DrrHisRecord
 process	readHisClass.cpp	/^void ReadHis::process() {$/;"	f	class:ReadHis
@@ -107,20 +108,19 @@ setValue	HisDrr.cpp	/^void HisDrr::setValue(const int id, unsigned int pos, unsi
 setValue	HisDrr.cpp	/^void HisDrr::setValue(const int id, unsigned int pos, unsigned short value){$/;"	f	class:HisDrr
 setValue	HisDrr.cpp	/^void HisDrr::setValue(const int id, vector<unsigned int> &value){$/;"	f	class:HisDrr
 setValue	HisDrr.cpp	/^void HisDrr::setValue(const int id, vector<unsigned short> &value){$/;"	f	class:HisDrr
-show	HisDrr.h	/^    string show() { return message;}$/;"	f	class:GenError
+show	ExceptionHandlers.h	/^    string show() { return message;}$/;"	f	class:GenError
 showInfo	readHisClass.cpp	/^void ReadHis::showInfo(DrrHisRecordExtended hisList) {$/;"	f	class:ReadHis
 sizeX	readHisClass.h	/^    unsigned sizeX;$/;"	m	class:ReadHis
-sizeX_	Histogram.h	/^        unsigned sizeX_;$/;"	m	class:Histogram
 sizeY	readHisClass.h	/^    unsigned sizeY;$/;"	m	class:ReadHis
-sizeY_	Histogram.h	/^        unsigned sizeY_;$/;"	m	class:Histogram
+stepX_	Histogram.h	/^        const double   stepX_;$/;"	m	class:Histogram
+stepY_	Histogram.h	/^        const double   stepY_;$/;"	m	class:Histogram2D
 title	DrrBlock.h	/^    char title[40];$/;"	m	struct:DrrHisRecord
 title	HisDrr.h	/^    string title;$/;"	m	struct:SimpleDrrBlock
-valid	Histogram.h	/^        bool valid;$/;"	m	class:Histogram
-x	Histogram.h	/^        vector<unsigned> x;$/;"	m	class:Histogram
+values_	Histogram.h	/^        vector<unsigned long> values_;$/;"	m	class:Histogram
+xMin_	Histogram.h	/^        const double   xMin_;$/;"	m	class:Histogram
 xlabel	DrrBlock.h	/^    char xlabel[12];$/;"	m	struct:DrrHisRecord
-y	Histogram.h	/^        vector<unsigned long> y;$/;"	m	class:Histogram
+yMin_	Histogram.h	/^        const double   yMin_;$/;"	m	class:Histogram2D
 ylabel	DrrBlock.h	/^    char ylabel[12];$/;"	m	struct:DrrHisRecord
-z	Histogram.h	/^        vector<unsigned long> z;$/;"	m	class:Histogram
 zero	readHisClass.h	/^    bool zero; \/\/\/ zero suppression$/;"	m	struct:Flags
 zeroHistogram	HisDrr.cpp	/^void HisDrr::zeroHistogram(int id) {$/;"	f	class:HisDrr
 ~ReadHis	readHisClass.h	/^    ~ReadHis(){}$/;"	f	class:ReadHis
