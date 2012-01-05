@@ -1,23 +1,3 @@
-#ifndef HHISTOGRAM
-#define HHISTOGRAM
-
-#include <vector>
-#include <iostream>
-#include <cstdlib>
-#include <sstream>
-#include "HisDrr.h"
-#include "DrrBlock.h"
-#include "ExceptionHandlers.h"
-
-using namespace std;
-
-/**
- *  General purpose base Histogram class.
- *  No instance of base class is intended to be created. 
- *  Look for inheriting classes.
- *  @see Histogram1D
- *  @see Histogram2D
- */
 class Histogram {
     public:
         /**
@@ -210,4 +190,3 @@ class Histogram2D : public Histogram {
         const unsigned nBinY_;
 
 };
-#endif
