@@ -78,10 +78,11 @@ class Histogram {
         void getDataRaw (vector<long>& values);
 
         /**
-         * Pure virtual function. Must be included in daugther classes but 
-         * implementation depends on interpretation of values vector.
+         * Sets whole vector of data. Data are 'raw' so user must
+         * take care of under and overshooted bins.
+         *
          */
-        virtual void setDataRaw (vector<long>& values) = 0;
+        virtual void setDataRaw (vector<long>& values);
 
         /**
          * Returns by value raw errors (uncertainities) stored in histogram.
@@ -90,16 +91,18 @@ class Histogram {
         void getErrorsRaw (vector<double>& errors);
 
         /**
-         * Pure virtual function. @see setDataRaw()
+         * Sets whole vector of errors. Data are 'raw' so user must
+         * take care of under and overshooted bins.
+         *
          */
-        virtual void setErrorsRaw (vector<double>& errors) = 0;
+        virtual void setErrorsRaw (vector<double>& errors);
 
-    private:
-        /**
-         * hisId is histogram identifier/name.
-         */
-        const char* hisId_;
+        Histogram  (const double xMin,  const double xMax,
+                    const unsigned nBinX, const char* hisId)
+                    : xMin_(xMin), xMax_(xMax),
+                      nBinX_(nBinX), hisId_(hisId) {}
 
+    protected:
         /**
          * Value of lower edge of first bin.
          */
@@ -114,6 +117,11 @@ class Histogram {
          * Number of bins in X direction.
          */
         const unsigned nBinX_;
+
+        /**
+         * hisId is histogram identifier/name.
+         */
+        const char* hisId_;
 
         /**
          * Vector storing raw data. Element [0] stores undershoots, 
@@ -141,9 +149,12 @@ class Histogram {
 class Histogram1D : public Histogram {
     public:
         Histogram1D (const double xMin,  const double xMax,
-                     const double nBinX, const char* hisId)
-                    : xMin_(xMin), xMax_(xMax),
-                      nBinX_(nBinX), hisId_(hisId) {}
+                     const unsigned nBinX, const char* hisId)
+                    : Histogram(xMin, xMax, nBinX, hisId) 
+                    { 
+                        values_.resize( nBinX_ + 2, 0);
+                        errors_.resize( nBinX_ + 2, 0.0);
+                    }
 
         virtual void setDataRaw (vector<long>& values);
         virtual void setErrorsRaw (vector<long>& values);
@@ -154,6 +165,8 @@ class Histogram1D : public Histogram {
         
         double getError (const unsigned ix);
         void setError (const unsigned ix, const double error);
+
+        void rebin1D (Histogram1D* rebinned);
 };
 
 class Histogram2D : public Histogram {
@@ -162,10 +175,12 @@ class Histogram2D : public Histogram {
                      const double yMin,    const double yMax,
                      const unsigned nBinX, const unsigned nBinY,
                      const char* hisId)
-                    : xMin_(xMin), xMax_(xMax),
-                      yMin_(yMin), yMax_(yMax),
-                      nBinX_(nBinX), nBinY_(nBinY),
-                      hisId_(hisId) {}
+                    : Histogram(xMin, xMax, nBinX, hisId),
+                      yMin_(yMin), yMax_(yMax), nBinY_(nBinY)
+                    { 
+                        values_.resize( (nBinX_ + 2) * (nBinY_ + 2), 0);
+                        errors_.resize( (nBinX_ + 2) * (nBinY_ + 2), 0.0 );
+                    }
 
         double   getYmin()  { return yMin_; }
         double   getYmax()  { return yMax_; }
@@ -189,20 +204,20 @@ class Histogram2D : public Histogram {
             return ( double(iy) - 0.5 ) * getBinWidthY() + yMin_;
         }
 
-        double getError (const unsigned x, const unsigned y);
-        void setError (const unsigned x, const unsigned y, const double value);
-
         void gateX (const unsigned x0, const unsigned x1,
-                    vector<unsigned logn>& result);
+                    vector<long>& result);
         void gateY (const unsigned y0, const unsigned y1,
-                    vector<unsigned logn>& result);
+                    vector<long>& result);
 
         void gateXbackground (const unsigned x0, const unsigned x1,
                               const unsigned b0, const unsigned b1,
-                              vector<unsigned logn>& result);
+                              vector<long>& result,
+                              vector<double>& resultErrors);
         void gateYbackground (const unsigned y0, const unsigned y1,
                               const unsigned b0, const unsigned b1,
-                              vector<unsigned logn>& result);
+                              vector<long>& result,
+                              vector<double>& resultErrors);
+        void rebin2D (Histogram2D* rebinned);
 
     private:
         const double   yMin_;

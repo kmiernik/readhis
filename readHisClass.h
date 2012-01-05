@@ -5,8 +5,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
-#include "hisdrr.h"
-#include "drrblock.h"
+#include "Exceptions.h"
+#include "HisDrr.h"
+#include "DrrBlock.h"
 
 using namespace std;
 
