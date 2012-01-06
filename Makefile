@@ -9,14 +9,14 @@ SDIR =
 		
 all: readhis zerotest createhis
 
-readhis: readhis.o hisdrr.o readHisClass.o
-	$(CPP) $(CPPFLAGS) -o $@ readhis.o hisdrr.o readHisClass.o
+readhis: readhis.o HisDrr.o readHisClass.o
+	$(CPP) $(CPPFLAGS) -o $@ readhis.o HisDrr.o readHisClass.o
 
-zerotest: zerotest.o hisdrr.o
-	$(CPP) $(CPPFLAGS) -o $@ zerotest.o hisdrr.o 
+zerotest: zerotest.o HisDrr.o
+	$(CPP) $(CPPFLAGS) -o $@ zerotest.o HisDrr.o 
 
-createhis: createhis.o hisdrr.o
-	$(CPP) $(CPPFLAGS) -o $@ createhis.o hisdrr.o
+createhis: createhis.o HisDrr.o
+	$(CPP) $(CPPFLAGS) -o $@ createhis.o HisDrr.o
 
 clean: 
 	rm -f *.o *~ 
