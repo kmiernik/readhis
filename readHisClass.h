@@ -5,9 +5,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
-#include "Exceptions.h"
-#include "HisDrr.h"
-#include "DrrBlock.h"
+#include "hisdrr.h"
+#include "drrblock.h"
 
 using namespace std;
 
@@ -31,6 +30,7 @@ struct Flags {
     int b3; /// background part 2 end
     bool info; /// information on histogram
     bool list; /// list of histograms
+    bool listEmpty; /// list of histograms empty histograms marked
     int bin; /// bin size for 1D spectrum
     int binX; /// bin size X for 2D spectrum
     int binY; /// bin size Y for 2D spectrum

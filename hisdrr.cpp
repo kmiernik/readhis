@@ -8,9 +8,8 @@
 #include <cstdlib>
 #include <sstream>
 #include <ctime>
-#include "HisDrr.h"
-#include "DrrBlock.h"
-#include "Exceptions.h"
+#include "hisdrr.h"
+#include "drrblock.h"
 using namespace std;
 
 HisDrr::HisDrr(string &drr, string &his) {
@@ -81,7 +80,7 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
             if (line[0] != '#') {
                 string token;
                 SimpleDrrBlock block;
-                iss >> block.hisId >> block.halfWords >> block.scaled[0] >> block.scaled[1];
+                iss >> block.hisID >> block.halfWords >> block.scaled[0] >> block.scaled[1];
                 if ((block.halfWords != 1)&&(block.halfWords != 2)) {
                     stringstream err;
                     err << "Only 2 or 4 bytes long histograms supported";
@@ -233,7 +232,7 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
         int hisList[32] = {0};
         unsigned int j = 0;
         while ((j < drrData.size())&&(j < 32)) {
-            hisList[j%32] = drrData[i*32+j].hisId;
+            hisList[j%32] = drrData[i*32+j].hisID;
             j++;
         }
         drrOut.write((char *)hisList, 128);
@@ -243,7 +242,7 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
     
     cout << "# Created files " << drr << " and " << his << " with following histograms: " << endl;
     for (unsigned int i = 0; i < drrData.size(); i++) {
-        cout << "# " << drrData[i].hisId << " " << drrData[i].halfWords << " " << drrData[i].scaled[0] << " " << drrData[i].scaled[1] << " \"" << drrData[i].title << "\"" << endl; 
+        cout << "# " << drrData[i].hisID << " " << drrData[i].halfWords << " " << drrData[i].scaled[0] << " " << drrData[i].scaled[1] << " \"" << drrData[i].title << "\"" << endl; 
     }
 
     // And now constructors loads freshly created files

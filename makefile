@@ -9,8 +9,8 @@ SDIR =
 		
 all: readhis
 
-readhis: readhis.o HisDrr.o readHisClass.o
-	$(CPP) $(CPPFLAGS) -o $@ readhis.o HisDrr.o readHisClass.o
+readhis: readhis.o hisdrr.o readHisClass.o
+	$(CPP) $(CPPFLAGS) -o $@ readhis.o hisdrr.o readHisClass.o
 
 clean: 
 	rm -f *.o *~ readhis
