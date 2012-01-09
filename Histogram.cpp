@@ -1,8 +1,9 @@
 #include <cmath>
 #include <vector>
 #include "Histogram.h"
+#include "Exceptions.h"
 
-void Histogram::getDataRaw (vector<long>& values) {
+void Histogram::getDataRaw (vector<long>& values) const  {
     unsigned sz = values_.size();
     values.clear();
     values.reserve(sz);
@@ -11,7 +12,7 @@ void Histogram::getDataRaw (vector<long>& values) {
 }
 
 
-void Histogram::getErrorsRaw (vector<double>& errors) {
+void Histogram::getErrorsRaw (vector<double>& errors) const  {
     unsigned sz = errors_.size();
     errors.clear();
     errors.reserve(sz);
@@ -47,7 +48,7 @@ void Histogram::setErrorsRaw (vector<double>& errors) {
     
 //************************ Histogram1D
 
-void Histogram1D::add (const double x, const long n /* = 1*/) {
+void Histogram1D::add (double x, long n /* = 1*/) {
     unsigned ix = 0;
     if ( x > xMin_ )
         ix = static_cast<unsigned>( (x - xMin_) / getBinWidthX() + 1 );
@@ -57,7 +58,7 @@ void Histogram1D::add (const double x, const long n /* = 1*/) {
     values_[ix] += n;
 }
 
-long Histogram1D::get (const unsigned ix) {
+long Histogram1D::get (unsigned ix) {
     if (ix < nBinX_ + 1)
         return values_[ix];
     else
@@ -65,7 +66,7 @@ long Histogram1D::get (const unsigned ix) {
         return 0;
 }
 
-void Histogram1D::set (const unsigned ix, const long value) {
+void Histogram1D::set (unsigned ix, long value) {
     if (ix < nBinX_ + 1)
         values_[ix] = value;
     else
@@ -73,7 +74,7 @@ void Histogram1D::set (const unsigned ix, const long value) {
         ;
 }
         
-double Histogram1D::getError (const unsigned ix) {
+double Histogram1D::getError (unsigned ix) {
     if (ix < nBinX_ + 1)
         return errors_[ix];
     else
@@ -81,7 +82,7 @@ double Histogram1D::getError (const unsigned ix) {
         return 0;
 }
 
-void Histogram1D::setError (const unsigned ix, const double error) {
+void Histogram1D::setError (unsigned ix, double error) {
     if (ix < nBinX_ + 1)
         errors_[ix] = error;
     else
@@ -89,10 +90,56 @@ void Histogram1D::setError (const unsigned ix, const double error) {
         ;
 }
 
+const Histogram1D operator*(const Histogram1D& left,
+                            const int right) {
+    Histogram1D multi(left.xMin_, left.xMax_, left.nBinX_, left.hisId_);
+    unsigned sz = left.values_.size();
+    vector<long> values;
+    left.getDataRaw(values);
+    for (unsigned i = 0; i < sz; i++)
+        values[i] *= right;
+    multi.setDataRaw(values);
+    return multi;
+}
+
+const Histogram1D operator+(const Histogram1D& left,
+                            const Histogram1D& right) {
+
+    Histogram1D sum(left.xMin_, left.xMax_, left.nBinX_, left.hisId_);
+    if (left.xMin_ == right.xMin_ &&
+        left.xMax_ == right.xMax_ &&
+        left.nBinX_ == right.nBinX_) {
+    
+        unsigned sz = left.values_.size();
+        vector<long> values(sz, 0);
+        for (unsigned i = 0; i < sz; i++)
+            values[i] = left.values_[i] + right.values_[i];
+
+        sum.setDataRaw(values);
+        return sum;
+    } else {
+        return left;
+    }
+}
+//const Histogram1D operator-(const Histogram1D& left,
+//                            const Histogram1D& right) {
+//}
+
+long& Histogram1D::operator[](unsigned ix) {
+   if (ix >= nBinX_ )
+     throw BadIndex("Matrix subscript out of bounds");
+   return values_[ix];
+}
+ 
+long Histogram1D::operator[](unsigned ix) const {
+   if (ix >= nBinX_ )
+     throw BadIndex("Matrix subscript out of bounds");
+   return values_[ix];
+}
+
 //***************************          Histogram2D
 
-void Histogram2D::add (const double x, const double y,
-                                const long n /* = 1*/) {
+void Histogram2D::add (double x, double y, long n /* = 1*/) {
     unsigned ix = 0;
     unsigned iy = 0;
 
@@ -109,12 +156,11 @@ void Histogram2D::add (const double x, const double y,
     values_[iy * (nBinX_ + 2) + ix] += n;
 }
 
-long Histogram2D::get (const unsigned ix, const unsigned iy){
+long Histogram2D::get (unsigned ix, unsigned iy){
     return values_[iy * (nBinX_ + 2) + ix];
 }
 
-void Histogram2D::set (const unsigned ix, const unsigned iy,
-                                const long value) {
+void Histogram2D::set (unsigned ix, unsigned iy, long value) {
     if (ix < nBinX_ + 1 && iy < nBinY_ + 1)
         values_[iy * (nBinX_ + 2) + ix] = value;
     else
@@ -122,12 +168,11 @@ void Histogram2D::set (const unsigned ix, const unsigned iy,
         ;
 }
 
-double Histogram2D::getError (const unsigned ix, const unsigned iy){
+double Histogram2D::getError (unsigned ix, unsigned iy){
     return errors_[iy * (nBinX_ + 2) + ix];
 }
 
-void Histogram2D::setError (const unsigned ix, const unsigned iy,
-                const double error) {
+void Histogram2D::setError (unsigned ix, unsigned iy, double error) {
     if (ix < nBinX_ + 1 && iy < nBinY_ + 1)
         errors_[iy * (nBinX_ + 2) + ix] = error;
     else
@@ -139,7 +184,7 @@ void Histogram2D::setError (const unsigned ix, const unsigned iy,
     * Gate includes over and undershoots (0 and nbinX+1 respectively). 
     * Gate includes both x0 and x1 bins.
     */
-void Histogram2D::gateX (const unsigned x0, const unsigned x1, vector<long>& result) {
+void Histogram2D::gateX (unsigned x0, unsigned x1, vector<long>& result) {
 
     result.clear();
     result.resize(nBinY_ + 2, 0);
@@ -150,7 +195,7 @@ void Histogram2D::gateX (const unsigned x0, const unsigned x1, vector<long>& res
 
 }
 
-void Histogram2D::gateY (const unsigned y0, const unsigned y1, vector<long>& result) {
+void Histogram2D::gateY (unsigned y0, unsigned y1, vector<long>& result) {
 
     result.clear();
     result.resize(nBinX_ + 2, 0);
@@ -161,8 +206,8 @@ void Histogram2D::gateY (const unsigned y0, const unsigned y1, vector<long>& res
 
 }
 
-void Histogram2D::gateXbackground (const unsigned x0, const unsigned x1,
-                        const unsigned b0, const unsigned b1,
+void Histogram2D::gateXbackground (unsigned x0, unsigned x1,
+                                   unsigned b0, unsigned b1,
                         vector<long>& result,
                         vector<double>& resultErrors) {
 
@@ -188,10 +233,10 @@ void Histogram2D::gateXbackground (const unsigned x0, const unsigned x1,
 
 }
 
-void Histogram2D::gateYbackground (const unsigned y0, const unsigned y1,
-                        const unsigned b0, const unsigned b1,
-                        vector<long>& result,
-                        vector<double>& resultErrors) {
+void Histogram2D::gateYbackground (unsigned y0, unsigned y1,
+                                   unsigned b0, unsigned b1,
+                                   vector<long>& result,
+                                   vector<double>& resultErrors) {
 
     result.clear();
     result.resize(nBinX_ + 2, 0);

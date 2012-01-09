@@ -24,4 +24,8 @@ public:
     IOError(const string msg = 0) : GenError(msg) {} //! Constructor calling base class constructor in initializer list
 };
 
+class BadIndex : public GenError {
+public:
+    BadIndex(const string msg = 0) : GenError(msg) {} //! Constructor calling base class constructor in initializer list
+};
 #endif
