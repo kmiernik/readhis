@@ -159,6 +159,8 @@ class Histogram1D : public Histogram {
                                            const Histogram1D& right); 
         long& operator[] (unsigned ix);
         long  operator[] (unsigned ix) const;
+        long& operator() (unsigned ix);
+        long  operator() (unsigned ix) const;
 };
 
 class Histogram2D : public Histogram {
@@ -210,6 +212,8 @@ class Histogram2D : public Histogram {
                                            const Histogram2D& right); 
         friend const Histogram2D operator-(const Histogram2D& left,
                                            const Histogram2D& right); 
+        long& operator() (unsigned ix, unsigned iy);
+        long  operator() (unsigned ix, unsigned iy) const;
 
     private:
         double   yMin_;

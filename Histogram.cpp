@@ -62,7 +62,7 @@ long Histogram1D::get (unsigned ix) {
     if (ix < nBinX_ + 1)
         return values_[ix];
     else
-        // exception
+        throw GenError("Outside of histogram range"); 
         return 0;
 }
 
@@ -70,15 +70,14 @@ void Histogram1D::set (unsigned ix, long value) {
     if (ix < nBinX_ + 1)
         values_[ix] = value;
     else
-        // exception
-        ;
+        throw GenError("Outside of histogram range"); 
 }
         
 double Histogram1D::getError (unsigned ix) {
     if (ix < nBinX_ + 1)
         return errors_[ix];
     else
-        // exception
+        throw GenError("Outside of histogram range"); 
         return 0;
 }
 
@@ -86,8 +85,7 @@ void Histogram1D::setError (unsigned ix, double error) {
     if (ix < nBinX_ + 1)
         errors_[ix] = error;
     else
-        // exception
-        ;
+        throw GenError("Outside of histogram range"); 
 }
 
 const Histogram1D operator*(const Histogram1D& left,
@@ -118,6 +116,7 @@ const Histogram1D operator+(const Histogram1D& left,
         sum.setDataRaw(values);
         return sum;
     } else {
+        throw GenError("Operator +, but histogram of different sizes"); 
         return left;
     }
 }
@@ -126,13 +125,25 @@ const Histogram1D operator+(const Histogram1D& left,
 //}
 
 long& Histogram1D::operator[](unsigned ix) {
-   if (ix >= nBinX_ )
+   if (ix > nBinX_ )
      throw BadIndex("Matrix subscript out of bounds");
    return values_[ix];
 }
  
 long Histogram1D::operator[](unsigned ix) const {
-   if (ix >= nBinX_ )
+   if (ix > nBinX_ + 1)
+     throw BadIndex("Matrix subscript out of bounds");
+   return values_[ix];
+}
+
+long& Histogram1D::operator()(unsigned ix) {
+   if (ix > nBinX_ + 1)
+     throw BadIndex("Matrix subscript out of bounds");
+   return values_[ix];
+}
+ 
+long Histogram1D::operator()(unsigned ix) const {
+   if (ix > nBinX_ + 1)
      throw BadIndex("Matrix subscript out of bounds");
    return values_[ix];
 }
@@ -258,4 +269,16 @@ void Histogram2D::gateYbackground (unsigned y0, unsigned y1,
     for (unsigned ix = 0; ix < nBinY_ + 2; ix++)
         resultErrors[ix] = sqrt(resultErrors[ix]);
 
+}
+
+long& Histogram2D::operator()(unsigned ix, unsigned iy) {
+   if (ix > nBinX_ + 1 || iy > nBinY_ + 1)
+    throw BadIndex("Matrix subscript out of bounds");
+   return values_[iy * (nBinX_ + 2) + ix];
+}
+ 
+long Histogram2D::operator()(unsigned ix, unsigned iy) const {
+   if (ix > nBinX_ + 1 || iy > nBinY_ + 1)
+     throw BadIndex("Matrix subscript out of bounds");
+   return values_[iy * (nBinX_ + 2) + ix];
 }

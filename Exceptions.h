@@ -1,7 +1,8 @@
-#ifndef HEXCEPTIONHANDLERS
-#define HEXCEPTIONHANDLERS
+#ifndef HEXCEPTIONS
+#define HEXCEPTIONS
 
 #include <string>
+#include <cstdio>
 /// Exception handler
 /**
 * Basic class for error handling
@@ -28,4 +29,13 @@ class BadIndex : public GenError {
 public:
     BadIndex(const string msg = 0) : GenError(msg) {} //! Constructor calling base class constructor in initializer list
 };
+
+inline void require(bool requirement, const std::string& msg = "Requirement failed"){
+    using namespace std;
+    if (!requirement) {
+        fputs(msg.c_str(), stderr);
+        fputs("\n", stderr);
+        throw GenError(msg);
+    }
+}
 #endif
