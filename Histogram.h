@@ -153,10 +153,15 @@ class Histogram1D : public Histogram {
 
         friend const Histogram1D operator*(const Histogram1D& left,
                                            int right);
-        friend const Histogram1D operator+(const Histogram1D& left,
+//        friend const Histogram1D operator+(const Histogram1D& left, 
+//                                           const Histogram1D& right); 
+        Histogram1D operator+(const Histogram1D& right); 
+        friend const Histogram1D operator-(const Histogram1D& left, 
                                            const Histogram1D& right); 
-        friend const Histogram1D operator-(const Histogram1D& left,
-                                           const Histogram1D& right); 
+
+        Histogram1D& operator+=(const Histogram1D& right); 
+        Histogram1D& operator-=(const Histogram1D& right); 
+
         long& operator[] (unsigned ix);
         long  operator[] (unsigned ix) const;
         long& operator() (unsigned ix);
@@ -209,6 +214,10 @@ class Histogram2D : public Histogram {
         friend const Histogram2D operator*(const Histogram2D& left,
                                   int right);
         friend const Histogram2D operator+(const Histogram2D& left,
+                                           const Histogram2D& right); 
+        friend const Histogram2D operator+=(Histogram2D& left,
+                                           const Histogram2D& right); 
+        friend const Histogram2D operator-=(Histogram2D& left,
                                            const Histogram2D& right); 
         friend const Histogram2D operator-(const Histogram2D& left,
                                            const Histogram2D& right); 

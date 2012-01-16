@@ -100,9 +100,48 @@ const Histogram1D operator*(const Histogram1D& left,
     return multi;
 }
 
-const Histogram1D operator+(const Histogram1D& left,
-                            const Histogram1D& right) {
+//const Histogram1D operator+(const Histogram1D& left,
+//                            const Histogram1D& right) {
+//
+//    Histogram1D sum(left.xMin_, left.xMax_, left.nBinX_, left.hisId_);
+//    if (left.xMin_ == right.xMin_ &&
+//        left.xMax_ == right.xMax_ &&
+//        left.nBinX_ == right.nBinX_) {
+//    
+//        unsigned sz = left.values_.size();
+//        vector<long> values(sz, 0);
+//        for (unsigned i = 0; i < sz; i++)
+//            values[i] = left.values_[i] + right.values_[i];
+//
+//        sum.setDataRaw(values);
+//        return sum;
+//    } else {
+//        throw GenError("Operator +, but histogram of different sizes"); 
+//        return left;
+//    }
+//}
 
+Histogram1D Histogram1D::operator+(const Histogram1D& right) {
+
+    Histogram1D sum(this->xMin_, this->xMax_, this->nBinX_, this->hisId_);
+    if (this->xMin_ == right.xMin_ &&
+        this->xMax_ == right.xMax_ &&
+        this->nBinX_ == right.nBinX_) {
+    
+        unsigned sz = this->values_.size();
+        vector<long> values(sz, 0);
+        for (unsigned i = 0; i < sz; i++)
+            values[i] = this->values_[i] + right.values_[i];
+
+        sum.setDataRaw(values);
+        return sum;
+    } else {
+        throw GenError("Operator +, but histogram of different sizes"); 
+    }
+}
+
+const Histogram1D operator-(const Histogram1D& left,
+                            const Histogram1D& right) {
     Histogram1D sum(left.xMin_, left.xMax_, left.nBinX_, left.hisId_);
     if (left.xMin_ == right.xMin_ &&
         left.xMax_ == right.xMax_ &&
@@ -111,7 +150,7 @@ const Histogram1D operator+(const Histogram1D& left,
         unsigned sz = left.values_.size();
         vector<long> values(sz, 0);
         for (unsigned i = 0; i < sz; i++)
-            values[i] = left.values_[i] + right.values_[i];
+            values[i] = left.values_[i] - right.values_[i];
 
         sum.setDataRaw(values);
         return sum;
@@ -120,9 +159,10 @@ const Histogram1D operator+(const Histogram1D& left,
         return left;
     }
 }
-//const Histogram1D operator-(const Histogram1D& left,
-//                            const Histogram1D& right) {
-//}
+
+Histogram1D& Histogram1D::operator+=(const Histogram1D& right) {
+    return *this;
+}
 
 long& Histogram1D::operator[](unsigned ix) {
    if (ix > nBinX_ )

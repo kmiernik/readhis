@@ -14,8 +14,10 @@ int main() {
 
     require(h1->getnBinX() == h2->getnBinX());
 
-    for (int i = 0; i < 11; i++)
+    for (int i = 0; i < 11; i++) {
         h1->set(i, i);
+        (*h2)[i] = (12 - i) * 5;
+    }
 
 //    *h2 = *h1 * 10;
 //    for (int i = 0; i < 10; i++)
@@ -23,10 +25,8 @@ int main() {
 
     *h3 = *h1 + *h2;
 
-    (*h3)[0] = 15;
-    (*h3)(1) = 25;
     for (int i = 0; i < 10; i++) {
-        cout << (*h3)[i] << " " << (*h1)(i) << endl;
+        cout << (*h1)[i] << " + " << (*h2)[i] << " = " << (*h3)(i) << endl;
     }
 
     delete h1;
