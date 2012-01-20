@@ -16,25 +16,25 @@ HisDrr::HisDrr(string &drr, string &his) {
     /* test of size of int and short */
     if ( sizeof(unsigned short) != 2 || sizeof(unsigned int) != 4 ) {
         stringstream err;
-        err << "This program is intended to run with 'unsigned short' size 2 bytes and"
+        err << "HisDrr:1: This program is intended to run with 'unsigned short' size 2 bytes and"
             << " and 'unsigned int' size 4 bytes. Your machine uses " << sizeof(unsigned short)
             << " and " << sizeof(unsigned int) << " respectively." << endl;
         string msg = err.str();
         throw IOError(msg);
     }
-
-    drrFile.open(drr.c_str(), fstream::in | fstream::out);
-    if (!drrFile.good()) {
+    
+    drrFile = new fstream(drr.c_str(), fstream::binary | fstream::in | fstream::out);
+    if (!drrFile->good()) {
         stringstream err;
-        err << "Could not open file " << drr;
+        err << "HisDrr:2: Could not open file " << drr;
         string msg = err.str();
         throw IOError(msg);
     }
 
-    hisFile.open(his.c_str(), fstream::in | fstream::out);
-    if (!hisFile.good()) {
+    hisFile = new fstream(his.c_str(), fstream::binary | fstream::in | fstream::out);
+    if (!hisFile->good()) {
         stringstream err;
-        err << "Could not open file " << his;
+        err << "HisDrr:3: Could not open file " << his;
         string msg = err.str();
         throw IOError(msg);
     }
@@ -46,7 +46,7 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
     /* test of size of int and short */
     if ( sizeof(unsigned short) != 2 || sizeof(unsigned int) != 4 ) {
         stringstream err;
-        err << "This program is intended to run with 'unsigned short' size 2 bytes and"
+        err << "HisDrr:4: This program is intended to run with 'unsigned short' size 2 bytes and"
             << " and 'unsigned int' size 4 bytes. Your machine uses " << sizeof(unsigned short)
             << " and " << sizeof(unsigned int) << " respectively." << endl;
         string msg = err.str();
@@ -56,7 +56,7 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
     ifstream fileInput(input.c_str());
     if (!fileInput.good()) {
         stringstream err;
-        err << "Could not open file " << input;
+        err << "HisDrr:5: Could not open file " << input;
         string msg = err.str();
         fileInput.close();
         throw IOError(msg);
@@ -75,7 +75,7 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
                 iss >> block.hisID >> block.halfWords >> block.scaled[0] >> block.scaled[1];
                 if ((block.halfWords != 1)&&(block.halfWords != 2)) {
                     stringstream err;
-                    err << "Only 2 or 4 bytes long histograms supported";
+                    err << "HisDrr:6: Only 2 or 4 bytes long histograms supported";
                     string msg = err.str();
                     fileInput.close();
                     throw GenError(msg);
@@ -94,22 +94,22 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
         fileInput.close();
     }
 
-    drrFile.open(drr.c_str(), fstream::in | fstream::out);
-    hisFile.open(his.c_str(), fstream::in | fstream::out);
+    drrFile = new fstream(drr.c_str(), fstream::binary | fstream::in | fstream::out | fstream::trunc);
+    hisFile = new fstream(his.c_str(), fstream::binary | fstream::in | fstream::out | fstream::trunc);
 
-    if (!drrFile.good()) {
+    if (!drrFile->good()) {
         stringstream err;
-        err << "Could not create file " << drrFile;
+        err << "HisDrr:7: Could not create file " << drr;
         string msg = err.str();
-        drrFile.close();
+        drrFile->close();
         throw IOError(msg);
     }
 
-    if (!hisFile.good()) {
+    if (!hisFile->good()) {
         stringstream err;
-        err << "Could not create file " << hisFile;
+        err << "HisDrr:8: Could not create file " << his;
         string msg = err.str();
-        hisFile.close();
+        hisFile->close();
         throw IOError(msg);
     }
 
@@ -137,9 +137,9 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
     for (int i = 0; i < 40; i++)
         head.description[i] = description[i];
     // Header is followed by 44 empty bytes to reach 128 bytes long block
-    drrFile.write((char *)&head, sizeof(head));
+    drrFile->write((char *)&head, sizeof(head));
     char garbage[44] = {0};
-    drrFile.write(garbage, 44);
+    drrFile->write(garbage, 44);
 
     DrrHisRecord record;
 
@@ -196,7 +196,7 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
         for (; k < 40; k++)
             record.title[k] = 0; 
 
-        drrFile.write((char *)&record, sizeof(record));
+        drrFile->write((char *)&record, sizeof(record));
     
         unsigned size = 0;
         if (dim == 1)
@@ -206,13 +206,13 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
 
         if (drrData[i].halfWords == 1) {
             unsigned short *his = new unsigned short[size]();
-            hisFile.write((char *)his, size*sizeof(unsigned short));
+            hisFile->write((char *)his, size*sizeof(unsigned short));
             offset += size*drrData[i].halfWords;
             delete []his;
         }
         if (drrData[i].halfWords == 2) {
             unsigned int *his = new unsigned int[size]();
-            hisFile.write((char *)his, size*sizeof(unsigned int));
+            hisFile->write((char *)his, size*sizeof(unsigned int));
             offset += size*drrData[i].halfWords;
             delete []his;
         }
@@ -228,25 +228,25 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
             hisList[j%32] = drrData[i*32+j].hisID;
             j++;
         }
-        drrFile.write((char *)hisList, 128);
+        drrFile->write((char *)hisList, 128);
     }
     
-    cout << "# Created files " << drr << " and " << his << " with following histograms: " << endl;
-    for (unsigned int i = 0; i < drrData.size(); i++) {
-        cout << "# " << drrData[i].hisID << " " << drrData[i].halfWords << " " << drrData[i].scaled[0] << " " << drrData[i].scaled[1] << " \"" << drrData[i].title << "\"" << endl; 
-    }
+//    cout << "# Created files " << drr << " and " << his << " with following histograms: " << endl;
+//    for (unsigned int i = 0; i < drrData.size(); i++) {
+//        cout << "# " << drrData[i].hisID << " " << drrData[i].halfWords << " " << drrData[i].scaled[0] << " " << drrData[i].scaled[1] << " \"" << drrData[i].title << "\"" << endl; 
+//    }
 
     // And now constructors loads freshly created files
     // so it follows a logic scheme of constructor(drr, his)
     loadDrr();
 }
 
-void HisDrr::readBlock(fstream& file, drrBlock *block) {
-    if (file.good())
-        file.read((char*)block, sizeof(*block));
+void HisDrr::readBlock(drrBlock *block) {
+    if (drrFile->good())
+        drrFile->read((char*)block, sizeof(*block));
     else {
         stringstream err;
-        err << "Could not read data from " << file;
+        err << "HisDrr:9: Could not read data from drr file";
         string msg = err.str();
         throw IOError(msg);
     }
@@ -256,8 +256,10 @@ void HisDrr::loadDrr() {
     // Block of data 128 lenght stored in union
     drrBlock block;
 
-    if (drrFile.good()) 
-        readBlock(drrFile, &block);
+    if (drrFile->good()) {
+        drrFile->seekg(0, ios::beg);
+        readBlock(&block);
+    }
 
     // Header contains number of histograms in a file
     int nHis = block.header.nHis;
@@ -276,22 +278,22 @@ void HisDrr::loadDrr() {
     DrrHisRecordExtended drrRecExt;
     hisList.reserve(nHis);
     for (int i = 0; i < nHis; i++) {
-        if (drrFile.good()) {
-            readBlock(drrFile, &block);
-            int currentPos = drrFile.tellg();
+        if (drrFile->good()) {
+            readBlock(&block);
+            int currentPos = drrFile->tellg();
             //jump for ID
-            drrFile.seekg( (nHis+1)*sizeof(block)+i*sizeof(hId) );
+            drrFile->seekg( (nHis+1)*sizeof(block)+i*sizeof(hId) );
             //check if we are still in the file
-            if (drrFile.good())
-                drrFile.read((char*)&hId, sizeof(hId));
+            if (drrFile->good())
+                drrFile->read((char*)&hId, sizeof(hId));
             else {
                 stringstream err;
-                err << "Error reading " << drrFile << " at " << drrFile.tellg();
+                err << "HisDrr:10: Error reading drr file at " << drrFile->tellg();
                 string msg = err.str();
                 throw IOError(msg);
             }
             //...and jump back
-            drrFile.seekg(currentPos);
+            drrFile->seekg(currentPos);
 
             drrRecExt.hisID = hId;
             drrRecExt = block.record;
@@ -299,7 +301,7 @@ void HisDrr::loadDrr() {
         }
         else {
             stringstream err;
-            err << "Error reading " << drrFile << " at " << drrFile.tellg();
+            err << "HisDrr:11: Error reading drr file at " << drrFile->tellg();
             string msg = err.str();
             throw IOError(msg);
         }
@@ -320,15 +322,17 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
 
     if (index < 0) {
         stringstream err;
-        err << "Could not find spectrum id = " << id << " in file " << drrFile;
+        err << "HisDrr:12: Could not find spectrum id = " << id << " in drr file";
         string msg = err.str();
         throw GenError(msg);
     }
     
     vector<unsigned int> r;
-    if (hisFile.good()) {
+    if (hisFile->good()) {
+        // Set position of pointer in file to the beginning
+        hisFile->seekg(0, ios::beg);
         // We jump to location specified by offset (given in units of 2 bytes)
-        hisFile.seekg(hisList[index].offset*2);
+        hisFile->seekg(hisList[index].offset*2);
         // Lenght of data is equal to product of all histogram dimensions lengths
         unsigned int length = 1;
         for (int i = 0; i < hisList[index].hisDim; i++)
@@ -337,7 +341,7 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
         // Check if data exceedes size of unsigned int 
         if ((unsigned short)(hisList[index].halfWords*2) > sizeof(unsigned int) ) {
             stringstream err;
-            err << "Histograms with channel size " << hisList[index].halfWords*2
+            err << "HisDrr:13: Histograms with channel size " << hisList[index].halfWords*2
                 << " bytes long are not supported ";
             string msg = err.str();
             throw GenError(msg);
@@ -353,7 +357,7 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
         // It is a safe cast then.
         for (unsigned int i = 0; i < length; i++) {
             unsigned int u = 0;
-            hisFile.read((char*)&u, hisList[index].halfWords*2);
+            hisFile->read((char*)&u, hisList[index].halfWords*2);
             r.push_back(u);
         }
     }
@@ -375,7 +379,7 @@ DrrHisRecordExtended HisDrr::getHistogramInfo(int id) {
 
     if (index < 0) {
         stringstream err;
-        err << "Could not find spectrum id = " << id << " in file " << drrFile;
+        err << "HisDrr:14: Could not find spectrum id = " << id << " in drr file";
         string msg = err.str();
         throw GenError(msg);
     }
@@ -399,14 +403,16 @@ void HisDrr::zeroHistogram(int id) {
 
     if (index < 0) {
         stringstream err;
-        err << "Could not find spectrum id = " << id << " in file " << drrFile;
+        err << "HisDrr:15: Could not find spectrum id = " << id << " in drr file";
         string msg = err.str();
         throw GenError(msg);
     }
     
-    if (hisFile.good()) {
+    if (hisFile->good()) {
+        // Set position of pointer in file to the beginning
+        hisFile->seekg(0, ios::beg);
         // We jump to location specified by offset (given in units of 2 bytes)
-        hisFile.seekp(hisList[index].offset*2);
+        hisFile->seekp(hisList[index].offset*2);
         // Lenght of data is equal to product of all histogram dimensions lengths
         unsigned int length = 1;
         for (int i = 0; i < hisList[index].hisDim; i++)
@@ -416,9 +422,9 @@ void HisDrr::zeroHistogram(int id) {
         unsigned int size = hisList[index].halfWords*2*length;
         //Initialization of array to 0
         char *zeroarray = new char[size]();
-        cout << "# 0 put from " << hisFile.tellp();
-        hisFile.write(zeroarray,size);
-        cout << " to " << hisFile.tellp() << ", size = " << size << " bytes" << endl;
+//        cout << "# 0 put from " << hisFile->tellp();
+        hisFile->write(zeroarray,size);
+//        cout << " to " << hisFile->tellp() << ", size = " << size << " bytes" << endl;
         delete []zeroarray;
     }
 }
@@ -434,33 +440,35 @@ void HisDrr::setValue(const int id, unsigned int pos, unsigned int value){
 
     if (index < 0) {
         stringstream err;
-        err << "Could not find spectrum id = " << id << " in file " << drrFile;
+        err << "HisDrr:16: Could not find spectrum id = " << id << " in drr file";
         string msg = err.str();
         throw GenError(msg);
     }
     
-    if (hisFile.good()) {
+    if (hisFile->good()) {
         if (hisList[index].halfWords*2 != sizeof(value)) {
             stringstream err;
-            err << "Channel size " << hisList[index].halfWords*2 << " bytes, mismatches value to put size" << sizeof(value);
+            err << "HisDrr:17: Channel size " << hisList[index].halfWords*2 << " bytes, mismatches value to put size" << sizeof(value);
             string msg = err.str();
             throw GenError(msg);
         }
 
+        // Set position of pointer in file to the beginning
+        hisFile->seekg(0, ios::beg);
         // We jump to location specified by offset (given in units of 2 bytes) plus i
-        hisFile.seekp(hisList[index].offset*2 + pos*hisList[index].halfWords*2);
+        hisFile->seekp(hisList[index].offset*2 + pos*hisList[index].halfWords*2);
         // Lenght of data is equal to product of all histogram dimensions lengths
         unsigned int length = 1;
         for (int i = 0; i < hisList[index].hisDim; i++)
             length = length * hisList[index].scaled[i];
         if (pos > length) {
             stringstream err;
-            err << "X channel " << pos << " exceedes size of histogram id " << id ;
+            err << "HisDrr:18: X channel " << pos << " exceedes size of histogram id " << id ;
             string msg = err.str();
             throw GenError(msg);
         }
         // Write value 
-        hisFile.write((char *)&value, sizeof(value));
+        hisFile->write((char *)&value, sizeof(value));
     }
 
 }
@@ -476,33 +484,35 @@ void HisDrr::setValue(const int id, unsigned int pos, unsigned short value){
 
     if (index < 0) {
         stringstream err;
-        err << "Could not find spectrum id = " << id << " in file " << drrFile;
+        err << "HisDrr:18: Could not find spectrum id = " << id << " in drr file";
         string msg = err.str();
         throw GenError(msg);
     }
     
-    if (hisFile.good()) {
+    if (hisFile->good()) {
         if (hisList[index].halfWords*2 != sizeof(value)) {
             stringstream err;
-            err << "Channel size " << hisList[index].halfWords*2 << " bytes, mismatches value to put size" << sizeof(value);
+            err << "HisDrr:19: Channel size " << hisList[index].halfWords*2 << " bytes, mismatches value to put size" << sizeof(value);
             string msg = err.str();
             throw GenError(msg);
         }
 
+        // Set position of pointer in file to the beginning
+        hisFile->seekg(0, ios::beg);
         // We jump to location specified by offset (given in units of 2 bytes) plus i
-        hisFile.seekp(hisList[index].offset*2 + pos*hisList[index].halfWords*2);
+        hisFile->seekp(hisList[index].offset*2 + pos*hisList[index].halfWords*2);
         // Lenght of data is equal to product of all histogram dimensions lengths
         unsigned int length = 1;
         for (int i = 0; i < hisList[index].hisDim; i++)
             length = length * hisList[index].scaled[i];
         if (pos > length) {
             stringstream err;
-            err << "X channel " << pos << " exceedes size of histogram id " << id ;
+            err << "HisDrr:20: X channel " << pos << " exceedes size of histogram id " << id ;
             string msg = err.str();
             throw GenError(msg);
         }
         // Write value 
-        hisFile.write((char *)&value, sizeof(value));
+        hisFile->write((char *)&value, sizeof(value));
     }
 }
 
@@ -517,28 +527,30 @@ void HisDrr::setValue(const int id, vector<unsigned int> &value){
 
     if (index < 0) {
         stringstream err;
-        err << "Could not find spectrum id = " << id << " in file " << drrFile;
+        err << "HisDrr:21: Could not find spectrum id = " << id << " in drr file";
         string msg = err.str();
         throw GenError(msg);
     }
     
-    if (hisFile.good()) {
+    if (hisFile->good()) {
         if (hisList[index].halfWords*2 != sizeof(unsigned int)) {
             stringstream err;
-            err << "Channel size " << hisList[index].halfWords*2 << " bytes, mismatches requested to put variables of size " << sizeof(unsigned int) << " bytes ";
+            err << "HisDrr:22: Channel size " << hisList[index].halfWords*2 << " bytes, mismatches requested to put variables of size " << sizeof(unsigned int) << " bytes ";
             string msg = err.str();
             throw GenError(msg);
         }
+        // Set position of pointer in file to the beginning
+        hisFile->seekg(0, ios::beg);
         // We jump to location specified by offset (given in units of 2 bytes) plus pos
-        hisFile.seekp(hisList[index].offset*2);
+        hisFile->seekp(hisList[index].offset*2);
         // Lenght of data is equal to product of all histogram dimensions lengths
         unsigned int length = 1;
         for (int i = 0; i < hisList[index].hisDim; i++)
             length = length * hisList[index].scaled[i];
-        cout << "length: " << length << " put size: " << value.size() << endl;
+//        cout << "length: " << length << " put size: " << value.size() << endl;
         if (value.size() != length) {
             stringstream err;
-            err << "Vector length " << value.size() <<" is different than histogram id " << id << " size " << length << endl ;
+            err << "HisDrr:23: Vector length " << value.size() <<" is different than histogram id " << id << " size " << length << endl ;
             string msg = err.str();
             throw GenError(msg);
         }
@@ -551,7 +563,7 @@ void HisDrr::setValue(const int id, vector<unsigned int> &value){
 
         // Now put array into the file
         unsigned int size = hisList[index].halfWords*2*length;
-        hisFile.write((char *)newvalue, size);
+        hisFile->write((char *)newvalue, size);
 
         delete []newvalue;
     }
@@ -569,27 +581,29 @@ void HisDrr::setValue(const int id, vector<unsigned short> &value){
 
     if (index < 0) {
         stringstream err;
-        err << "Could not find spectrum id = " << id << " in file " << drrFile;
+        err << "HisDrr:24: Could not find spectrum id = " << id << " in drr file";
         string msg = err.str();
         throw GenError(msg);
     }
     
-    if (hisFile.good()) {
+    if (hisFile->good()) {
         if (hisList[index].halfWords*2 != sizeof(unsigned short)) {
             stringstream err;
-            err << "Channel size " << hisList[index].halfWords*2 << " bytes, mismatches requested to put variables of size " << sizeof(unsigned short) << " bytes ";
+            err << "HisDrr:25: Channel size " << hisList[index].halfWords*2 << " bytes, mismatches requested to put variables of size " << sizeof(unsigned short) << " bytes ";
             string msg = err.str();
             throw GenError(msg);
         }
+        // Set position of pointer in file to the beginning
+        hisFile->seekg(0, ios::beg);
         // We jump to location specified by offset (given in units of 2 bytes) plus pos
-        hisFile.seekp(hisList[index].offset*2);
+        hisFile->seekp(hisList[index].offset*2);
         // Lenght of data is equal to product of all histogram dimensions lengths
         unsigned int length = 1;
         for (int i = 0; i < hisList[index].hisDim; i++)
             length = length * hisList[index].scaled[i];
         if (value.size() != length) {
             stringstream err;
-            err << "Vector length " << value.size() <<" is different than histogram id " << id << " size " << length << endl ;
+            err << "HisDrr:25: Vector length " << value.size() <<" is different than histogram id " << id << " size " << length << endl ;
             string msg = err.str();
             throw GenError(msg);
         }
@@ -602,7 +616,7 @@ void HisDrr::setValue(const int id, vector<unsigned short> &value){
 
         // Now put array into the file
         unsigned int size = hisList[index].halfWords*2*length;
-        hisFile.write((char *)newvalue, size);
+        hisFile->write((char *)newvalue, size);
         delete []newvalue;
     }
 

@@ -13,19 +13,22 @@
 #include "drrblock.h" 
 using namespace std;
 
-/// Error handler
+/// Exception handler
 /**
 * Basic class for error handling
 * it consist of only one field (message) created with inlined
 * constructor
 */
+#include <string>
+using namespace std;
+
 class GenError {
     const string message; //! Error Message
 public:
     GenError(const string msg = 0) : message(msg) {}
     string show() { return message;}
 };
-/// I/O error handler
+/// I/O Exception handler
 /**
 * class for IO error handling
 */
@@ -50,11 +53,11 @@ class HisDrr {
     //! Vector holding all the histogram info read from drr file
     vector<DrrHisRecordExtended> hisList;
     //! .drr file containing information about .his structure
-    fstream drrFile;
+    fstream* drrFile;
     //! .his containg data
-    fstream hisFile;
+    fstream* hisFile;
     //! reads block of data from drr file
-    void readBlock(fstream& file, drrBlock *block);
+    void readBlock(drrBlock *block);
     //! function loading .drr file and filling in spectrum vector
     void loadDrr();
 
@@ -65,8 +68,10 @@ class HisDrr {
     HisDrr(string &drr, string &his, string &input);
 
     ~HisDrr() {
-        drrFile.close();
-        hisFile.close();
+        drrFile->close();
+        hisFile->close();
+        delete drrFile;
+        delete hisFile;
     }
     //! returns specified histogram data
       // Return by value version
