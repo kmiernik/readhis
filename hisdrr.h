@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 #include "drrblock.h" 
 using namespace std;
 
@@ -49,11 +50,11 @@ class HisDrr {
     //! Vector holding all the histogram info read from drr file
     vector<DrrHisRecordExtended> hisList;
     //! .drr file containing information about .his structure
-    string drrFile;
+    fstream drrFile;
     //! .his containg data
-    string hisFile;
+    fstream hisFile;
     //! reads block of data from drr file
-    void readBlock(ifstream& file, drrBlock *block);
+    void readBlock(fstream& file, drrBlock *block);
     //! function loading .drr file and filling in spectrum vector
     void loadDrr();
 
@@ -62,6 +63,11 @@ class HisDrr {
     HisDrr(string &drr, string &his);
     //! Constructor creating and opening new his and drr using definition from input file,
     HisDrr(string &drr, string &his, string &input);
+
+    ~HisDrr() {
+        drrFile.close();
+        hisFile.close();
+    }
     //! returns specified histogram data
       // Return by value version
     //vector<unsigned int> getHistogram(int id);
