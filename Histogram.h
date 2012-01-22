@@ -20,67 +20,22 @@ using namespace std;
  */
 class Histogram {
     public:
-        /**
-         * Retruns Histogram ID.
-         * @see hisId_
-         */
         const char* getHisId() const { return hisId_; }
-
-        /**
-         * Retruns Xmin.
-         * @see xMin_
-         */
         double   getXmin() const  { return xMin_; }
-
-        /**
-         * Retruns Xmax.
-         * @see xMin_
-         */
         double   getXmax() const { return xMax_; }
-
-        /**
-         * Returns number of bins in x direction.
-         */
         unsigned getnBinX() const  { return nBinX_; }
-
-        /**
-         * Retruns bin width.
-         * @see stepX_
-         */
         double getBinWidthX() const { return xMin_ - xMax_ / double(nBinX_) ; }
 
-        /**
-         * Returns the center of the bin numbered ix.
-         */
         double getX (unsigned ix) const { 
             return ( double(ix) - 0.5 ) * getBinWidthX() + xMin_;
         }
-
-        /**
-         * Returns by value raw data stored in histogram.
-         * @param values a vector of returned values
-         */
         virtual void getDataRaw (vector<long>& values) const;
-
-        /**
-         * Sets whole vector of data. Data are 'raw' so user must
-         * take care of under and overshooted bins.
-         *
-         */
         virtual void setDataRaw (vector<long>& values);
 
-        /**
-         * Returns by value raw errors (uncertainities) stored in histogram.
-         * @param values a vector of returned values
-         */
         virtual void getErrorsRaw (vector<double>& errors) const;
-
-        /**
-         * Sets whole vector of errors. Data are 'raw' so user must
-         * take care of under and overshooted bins.
-         *
-         */
         virtual void setErrorsRaw (vector<double>& errors);
+
+        virtual void pureVirtual () = 0;
 
         Histogram  (double xMin,  double xMax,
                     unsigned nBinX, const char* hisId)
@@ -89,26 +44,10 @@ class Histogram {
         virtual ~Histogram () {  }
 
     protected:
-        /**
-         * Value of lower edge of first bin.
-         */
         double   xMin_;
-        
-        /**
-         * Value of upper edge of last bin.
-         */
         double   xMax_;
-
-        /**
-         * Number of bins in X direction.
-         */
         unsigned nBinX_;
-
-        /**
-         * hisId is histogram identifier/name.
-         */
         const char* hisId_;
-
         /**
          * Vector storing raw data. Element [0] stores undershoots, 
          * element [nBinX+1] stores overshoots, elements [1-nBinX] store
@@ -125,10 +64,6 @@ class Histogram {
          * real data is in frame, the rest are overshoot/undershoots bins
          */
         vector<long>   values_;
-
-        /**
-         * Vector storing raw data errors (uncertainities).
-         */
         vector<double> errors_;
 };
 
@@ -142,6 +77,8 @@ class Histogram1D : public Histogram {
                         errors_.resize( nBinX_ + 2, 0.0);
                     }
 
+        void pureVirtual() { } // Nothing here but no longer pure virtual
+
         virtual void add (double x, long n = 1);
         virtual long get (unsigned ix);
         virtual void set (unsigned ix, long value);
@@ -151,15 +88,15 @@ class Histogram1D : public Histogram {
 
         void rebin1D (Histogram1D* rebinned);
 
-        friend const Histogram1D operator*(const Histogram1D& left,
-                                           int right);
-//        friend const Histogram1D operator+(const Histogram1D& left, 
-//                                           const Histogram1D& right); 
-        Histogram1D operator+(const Histogram1D& right) const; 
-        Histogram1D operator-(const Histogram1D& right) const; 
 //        friend const Histogram1D operator-(const Histogram1D& left, 
 //                                           const Histogram1D& right); 
+//        friend const Histogram1D operator+(const Histogram1D& left, 
+//                                           const Histogram1D& right); 
+        Histogram1D operator*(int right) const;
+        Histogram1D operator+(const Histogram1D& right) const; 
+        Histogram1D operator-(const Histogram1D& right) const; 
 
+        Histogram1D& operator*=(int right); 
         Histogram1D& operator+=(const Histogram1D& right); 
         Histogram1D& operator-=(const Histogram1D& right); 
 
@@ -181,6 +118,8 @@ class Histogram2D : public Histogram {
                         values_.resize( (nBinX_ + 2) * (nBinY_ + 2), 0);
                         errors_.resize( (nBinX_ + 2) * (nBinY_ + 2), 0.0 );
                     }
+
+        void pureVirtual() { } // Nothing here but no longer pure virtual
 
         double   getYmin()  { return yMin_; }
         double   getYmax()  { return yMax_; }
@@ -222,6 +161,15 @@ class Histogram2D : public Histogram {
                                            const Histogram2D& right); 
         friend const Histogram2D operator-(const Histogram2D& left,
                                            const Histogram2D& right); 
+
+        Histogram2D operator*(int right) const;
+        Histogram2D operator+(const Histogram2D& right) const; 
+        Histogram2D operator-(const Histogram2D& right) const; 
+
+        Histogram2D& operator*=(int right); 
+        Histogram2D& operator+=(const Histogram2D& right); 
+        Histogram2D& operator-=(const Histogram2D& right); 
+
         long& operator() (unsigned ix, unsigned iy);
         long  operator() (unsigned ix, unsigned iy) const;
 

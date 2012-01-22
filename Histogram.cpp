@@ -88,12 +88,11 @@ void Histogram1D::setError (unsigned ix, double error) {
         throw GenError("Outside of histogram range"); 
 }
 
-const Histogram1D operator*(const Histogram1D& left,
-                            const int right) {
-    Histogram1D multi(left.xMin_, left.xMax_, left.nBinX_, left.hisId_);
-    unsigned sz = left.values_.size();
+Histogram1D Histogram1D::operator*(int right) const {
+    Histogram1D multi(this->xMin_, this->xMax_, this->nBinX_, this->hisId_);
+    unsigned sz = this->values_.size();
     vector<long> values;
-    left.getDataRaw(values);
+    this->getDataRaw(values);
     for (unsigned i = 0; i < sz; i++)
         values[i] *= right;
     multi.setDataRaw(values);
@@ -158,6 +157,13 @@ Histogram1D Histogram1D::operator-(const Histogram1D& right) const {
     } else {
         throw GenError("Histogram1D::operator -: histograms of different sizes"); 
     }
+}
+
+Histogram1D& Histogram1D::operator*=(int right) {
+    unsigned sz = this->values_.size();
+    for (unsigned i = 0; i < sz; i++)
+        this->values_[i] *= right;
+    return *this;
 }
 
 
@@ -322,6 +328,85 @@ void Histogram2D::gateYbackground (unsigned y0, unsigned y1,
 
 }
 
+Histogram2D Histogram2D::operator*(int right) const {
+    Histogram2D multi(this->xMin_, this->xMax_, this->yMin_, this->yMax_, this->nBinX_, this->nBinY_, this->hisId_);
+    unsigned sz = this->values_.size();
+    vector<long> values;
+    this->getDataRaw(values);
+    for (unsigned i = 0; i < sz; i++)
+        values[i] *= right;
+    multi.setDataRaw(values);
+    return multi;
+}
+
+Histogram2D Histogram2D::operator+(const Histogram2D& right) const {
+
+    Histogram2D sum(this->xMin_, this->xMax_, this->yMin_, this->yMax_, this->nBinX_, this->nBinY_, this->hisId_);
+    if (this->xMin_ == right.xMin_ &&
+        this->xMax_ == right.xMax_ &&
+        this->yMin_ == right.yMin_ &&
+        this->yMax_ == right.yMax_ &&
+        this->nBinX_ == right.nBinX_&&
+        this->nBinY_ == right.nBinY_) {
+    
+        unsigned sz = this->values_.size();
+        vector<long> values(sz, 0);
+        for (unsigned i = 0; i < sz; i++)
+            values[i] = this->values_[i] + right.values_[i];
+
+        sum.setDataRaw(values);
+        return sum;
+    } else {
+        throw GenError("Histogram2D::operator +: histograms of different sizes"); 
+    }
+}
+
+Histogram2D Histogram2D::operator-(const Histogram2D& right) const {
+
+    Histogram2D sum(this->xMin_, this->xMax_, this->yMin_, this->yMax_, this->nBinX_, this->nBinY_, this->hisId_);
+    if (this->xMin_ == right.xMin_ &&
+        this->xMax_ == right.xMax_ &&
+        this->yMin_ == right.yMin_ &&
+        this->yMax_ == right.yMax_ &&
+        this->nBinX_ == right.nBinX_&&
+        this->nBinY_ == right.nBinY_) {
+    
+        unsigned sz = this->values_.size();
+        vector<long> values(sz, 0);
+        for (unsigned i = 0; i < sz; i++)
+            values[i] = this->values_[i] - right.values_[i];
+
+        sum.setDataRaw(values);
+        return sum;
+    } else {
+        throw GenError("Histogram2D::operator -: histograms of different sizes"); 
+    }
+}
+
+Histogram2D& Histogram2D::operator*=(int right) {
+    unsigned sz = this->values_.size();
+    for (unsigned i = 0; i < sz; i++)
+        this->values_[i] *= right;
+    return *this;
+}
+
+Histogram2D& Histogram2D::operator+=(const Histogram2D& right) {
+    if (this->xMin_ == right.xMin_ &&
+        this->xMax_ == right.xMax_ &&
+        this->yMin_ == right.yMin_ &&
+        this->yMax_ == right.yMax_ &&
+        this->nBinX_ == right.nBinX_&&
+        this->nBinY_ == right.nBinY_) {
+       
+        unsigned sz = this->values_.size();
+        for (unsigned i = 0; i < sz; i++)
+            this->values_[i] += right.values_[i];
+        return *this;
+    } else {
+        throw GenError("Histogram2D::operator +=: histograms of different sizes"); 
+    }
+}
+
 long& Histogram2D::operator()(unsigned ix, unsigned iy) {
    if (ix > nBinX_ + 1 || iy > nBinY_ + 1)
      throw ArrayError("&Histogram2D::operator(): Matrix subscript out of bounds");
@@ -333,3 +418,4 @@ long Histogram2D::operator()(unsigned ix, unsigned iy) const {
      throw ArrayError("Histogram2D::operator(): Matrix subscript out of bounds");
    return values_[iy * (nBinX_ + 2) + ix];
 }
+
