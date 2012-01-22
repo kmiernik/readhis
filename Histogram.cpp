@@ -100,6 +100,7 @@ const Histogram1D operator*(const Histogram1D& left,
     return multi;
 }
 
+//Friend version:
 //const Histogram1D operator+(const Histogram1D& left,
 //                            const Histogram1D& right) {
 //
@@ -121,7 +122,7 @@ const Histogram1D operator*(const Histogram1D& left,
 //    }
 //}
 
-Histogram1D Histogram1D::operator+(const Histogram1D& right) {
+Histogram1D Histogram1D::operator+(const Histogram1D& right) const {
 
     Histogram1D sum(this->xMin_, this->xMax_, this->nBinX_, this->hisId_);
     if (this->xMin_ == right.xMin_ &&
@@ -136,55 +137,65 @@ Histogram1D Histogram1D::operator+(const Histogram1D& right) {
         sum.setDataRaw(values);
         return sum;
     } else {
-        throw GenError("Operator +, but histogram of different sizes"); 
+        throw GenError("Histogram1D::operator +: histograms of different sizes"); 
     }
 }
 
-const Histogram1D operator-(const Histogram1D& left,
-                            const Histogram1D& right) {
-    Histogram1D sum(left.xMin_, left.xMax_, left.nBinX_, left.hisId_);
-    if (left.xMin_ == right.xMin_ &&
-        left.xMax_ == right.xMax_ &&
-        left.nBinX_ == right.nBinX_) {
+Histogram1D Histogram1D::operator-(const Histogram1D& right) const {
+
+    Histogram1D sum(this->xMin_, this->xMax_, this->nBinX_, this->hisId_);
+    if (this->xMin_ == right.xMin_ &&
+        this->xMax_ == right.xMax_ &&
+        this->nBinX_ == right.nBinX_) {
     
-        unsigned sz = left.values_.size();
+        unsigned sz = this->values_.size();
         vector<long> values(sz, 0);
         for (unsigned i = 0; i < sz; i++)
-            values[i] = left.values_[i] - right.values_[i];
+            values[i] = this->values_[i] - right.values_[i];
 
         sum.setDataRaw(values);
         return sum;
     } else {
-        throw GenError("Operator +, but histogram of different sizes"); 
-        return left;
+        throw GenError("Histogram1D::operator -: histograms of different sizes"); 
     }
 }
 
+
 Histogram1D& Histogram1D::operator+=(const Histogram1D& right) {
-    return *this;
+    if (this->xMin_ == right.xMin_ &&
+        this->xMax_ == right.xMax_ &&
+        this->nBinX_ == right.nBinX_) {
+       
+        unsigned sz = this->values_.size();
+        for (unsigned i = 0; i < sz; i++)
+            this->values_[i] += right.values_[i];
+        return *this;
+    } else {
+        throw GenError("Histogram1D::operator +=: histograms of different sizes"); 
+    }
 }
 
 long& Histogram1D::operator[](unsigned ix) {
    if (ix > nBinX_ )
-     throw BadIndex("Matrix subscript out of bounds");
+     throw ArrayError("&Histogram1D::operator[]: Matrix subscript out of bounds");
    return values_[ix];
 }
  
 long Histogram1D::operator[](unsigned ix) const {
    if (ix > nBinX_ + 1)
-     throw BadIndex("Matrix subscript out of bounds");
+     throw ArrayError("Histogram1D::operator[]: Matrix subscript out of bounds");
    return values_[ix];
 }
 
 long& Histogram1D::operator()(unsigned ix) {
    if (ix > nBinX_ + 1)
-     throw BadIndex("Matrix subscript out of bounds");
+     throw ArrayError("&Histogram1D::operator(): Matrix subscript out of bounds");
    return values_[ix];
 }
  
 long Histogram1D::operator()(unsigned ix) const {
    if (ix > nBinX_ + 1)
-     throw BadIndex("Matrix subscript out of bounds");
+     throw ArrayError("Histogram1D::operator(): Matrix subscript out of bounds");
    return values_[ix];
 }
 
@@ -313,12 +324,12 @@ void Histogram2D::gateYbackground (unsigned y0, unsigned y1,
 
 long& Histogram2D::operator()(unsigned ix, unsigned iy) {
    if (ix > nBinX_ + 1 || iy > nBinY_ + 1)
-    throw BadIndex("Matrix subscript out of bounds");
+     throw ArrayError("&Histogram2D::operator(): Matrix subscript out of bounds");
    return values_[iy * (nBinX_ + 2) + ix];
 }
  
 long Histogram2D::operator()(unsigned ix, unsigned iy) const {
    if (ix > nBinX_ + 1 || iy > nBinY_ + 1)
-     throw BadIndex("Matrix subscript out of bounds");
+     throw ArrayError("Histogram2D::operator(): Matrix subscript out of bounds");
    return values_[iy * (nBinX_ + 2) + ix];
 }

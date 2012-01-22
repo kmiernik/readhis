@@ -25,16 +25,16 @@ public:
     IOError(const string msg = 0) : GenError(msg) {} //! Constructor calling base class constructor in initializer list
 };
 
-class BadIndex : public GenError {
+class ArrayError : public GenError {
 public:
-    BadIndex(const string msg = 0) : GenError(msg) {} //! Constructor calling base class constructor in initializer list
+    ArrayError(const string msg = 0) : GenError(msg) {} //! Constructor calling base class constructor in initializer list
 };
 
 inline void require(bool requirement, const std::string& msg = "Requirement failed"){
     using namespace std;
     if (!requirement) {
-        fputs(msg.c_str(), stderr);
-        fputs("\n", stderr);
+//        fputs(msg.c_str(), stderr);
+//        fputs("\n", stderr);
         throw GenError(msg);
     }
 }

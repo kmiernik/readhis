@@ -155,9 +155,10 @@ class Histogram1D : public Histogram {
                                            int right);
 //        friend const Histogram1D operator+(const Histogram1D& left, 
 //                                           const Histogram1D& right); 
-        Histogram1D operator+(const Histogram1D& right); 
-        friend const Histogram1D operator-(const Histogram1D& left, 
-                                           const Histogram1D& right); 
+        Histogram1D operator+(const Histogram1D& right) const; 
+        Histogram1D operator-(const Histogram1D& right) const; 
+//        friend const Histogram1D operator-(const Histogram1D& left, 
+//                                           const Histogram1D& right); 
 
         Histogram1D& operator+=(const Histogram1D& right); 
         Histogram1D& operator-=(const Histogram1D& right); 
