@@ -7,7 +7,7 @@ SDIR =
 %.o: $(SDIR)/%.cpp
 	$(CPP) $(CPPFLAGS) -c $< -o $(SDIR)/$@
 		
-all: readhis test
+all: readhis
 
 readhis: readhis.o HisDrr.o Histogram.o HisDrrHisto.o
 	$(CPP) $(CPPFLAGS) -o $@ readhis.o HisDrr.o Histogram.o HisDrrHisto.o

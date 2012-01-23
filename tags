@@ -4,9 +4,9 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-BadIndex	Exceptions.h	/^    BadIndex(const string msg = 0) : GenError(msg) {} \/\/! Constructor calling base class constructor in initializer list$/;"	f	class:BadIndex	access:public	signature:(const string msg = 0)
-BadIndex	Exceptions.h	/^class BadIndex : public GenError {$/;"	c	inherits:GenError
-BadIndex::BadIndex	Exceptions.h	/^    BadIndex(const string msg = 0) : GenError(msg) {} \/\/! Constructor calling base class constructor in initializer list$/;"	f	class:BadIndex	access:public	signature:(const string msg = 0)
+ArrayError	Exceptions.h	/^    ArrayError(const string msg = 0) : GenError(msg) {} \/\/! Constructor calling base class constructor in initializer list$/;"	f	class:ArrayError	access:public	signature:(const string msg = 0)
+ArrayError	Exceptions.h	/^class ArrayError : public GenError {$/;"	c	inherits:GenError
+ArrayError::ArrayError	Exceptions.h	/^    ArrayError(const string msg = 0) : GenError(msg) {} \/\/! Constructor calling base class constructor in initializer list$/;"	f	class:ArrayError	access:public	signature:(const string msg = 0)
 CPP	makefile	/^CPP = g++$/;"	m
 CPPFLAGS	makefile	/^CPPFLAGS = -Wall$/;"	m
 DrrHeader	DrrBlock.h	/^struct DrrHeader {$/;"	s
@@ -66,40 +66,50 @@ GenError::show	Exceptions.h	/^    string show() { return message;}$/;"	f	class:G
 HDRRBLOCK	DrrBlock.h	8;"	d
 HEXCEPTIONS	Exceptions.h	2;"	d
 HHISDRR	HisDrr.h	8;"	d
+HHISDRRHISTO	HisDrrHisto.h	2;"	d
 HHISTOGRAM	Histogram.h	2;"	d
 HREADHIS2	readHisClass.h	2;"	d
 HisDrr	HisDrr.cpp	/^HisDrr::HisDrr(string &drr, string &his) {$/;"	f	class:HisDrr	signature:(string &drr, string &his)
 HisDrr	HisDrr.cpp	/^HisDrr::HisDrr(string &drr, string &his, string &input) {$/;"	f	class:HisDrr	signature:(string &drr, string &his, string &input)
-HisDrr	HisDrr.h	/^        HisDrr(string& drr, string& his);$/;"	p	class:HisDrr	access:public	signature:(string& drr, string& his)
-HisDrr	HisDrr.h	/^        HisDrr(string& drr, string& his, string& input);$/;"	p	class:HisDrr	access:public	signature:(string& drr, string& his, string& input)
+HisDrr	HisDrr.h	/^    HisDrr(string &drr, string &his);$/;"	p	class:HisDrr	access:public	signature:(string &drr, string &his)
+HisDrr	HisDrr.h	/^    HisDrr(string &drr, string &his, string &input);$/;"	p	class:HisDrr	access:public	signature:(string &drr, string &his, string &input)
 HisDrr	HisDrr.h	/^class HisDrr {$/;"	c
 HisDrr::HisDrr	HisDrr.cpp	/^HisDrr::HisDrr(string &drr, string &his) {$/;"	f	class:HisDrr	signature:(string &drr, string &his)
 HisDrr::HisDrr	HisDrr.cpp	/^HisDrr::HisDrr(string &drr, string &his, string &input) {$/;"	f	class:HisDrr	signature:(string &drr, string &his, string &input)
-HisDrr::HisDrr	HisDrr.h	/^        HisDrr(string& drr, string& his);$/;"	p	class:HisDrr	access:public	signature:(string& drr, string& his)
-HisDrr::HisDrr	HisDrr.h	/^        HisDrr(string& drr, string& his, string& input);$/;"	p	class:HisDrr	access:public	signature:(string& drr, string& his, string& input)
-HisDrr::drrFile	HisDrr.h	/^        string drrFile;$/;"	m	class:HisDrr	access:private
+HisDrr::HisDrr	HisDrr.h	/^    HisDrr(string &drr, string &his);$/;"	p	class:HisDrr	access:public	signature:(string &drr, string &his)
+HisDrr::HisDrr	HisDrr.h	/^    HisDrr(string &drr, string &his, string &input);$/;"	p	class:HisDrr	access:public	signature:(string &drr, string &his, string &input)
+HisDrr::drrFile	HisDrr.h	/^    fstream* drrFile;$/;"	m	class:HisDrr	access:private
 HisDrr::getHisList	HisDrr.cpp	/^void HisDrr::getHisList(vector<int> &r) {$/;"	f	class:HisDrr	signature:(vector<int> &r)
-HisDrr::getHisList	HisDrr.h	/^        void getHisList(vector<int>& hisList);$/;"	p	class:HisDrr	access:public	signature:(vector<int>& hisList)
+HisDrr::getHisList	HisDrr.h	/^    void getHisList(vector<int> &r);$/;"	p	class:HisDrr	access:public	signature:(vector<int> &r)
 HisDrr::getHistogram	HisDrr.cpp	/^void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {$/;"	f	class:HisDrr	signature:(vector<unsigned int> &rtn, int id)
-HisDrr::getHistogram	HisDrr.h	/^        void getHistogram(vector<unsigned int>& data, int id);$/;"	p	class:HisDrr	access:public	signature:(vector<unsigned int>& data, int id)
+HisDrr::getHistogram	HisDrr.h	/^    void getHistogram(vector<unsigned int> &rtn, int id);$/;"	p	class:HisDrr	access:public	signature:(vector<unsigned int> &rtn, int id)
 HisDrr::getHistogramInfo	HisDrr.cpp	/^DrrHisRecordExtended HisDrr::getHistogramInfo(int id) {$/;"	f	class:HisDrr	signature:(int id)
-HisDrr::getHistogramInfo	HisDrr.h	/^        DrrHisRecordExtended getHistogramInfo(int id);$/;"	p	class:HisDrr	access:public	signature:(int id)
-HisDrr::hisFile	HisDrr.h	/^        string hisFile;$/;"	m	class:HisDrr	access:private
-HisDrr::hisList	HisDrr.h	/^        vector<DrrHisRecordExtended> hisList;$/;"	m	class:HisDrr	access:private
+HisDrr::getHistogramInfo	HisDrr.h	/^    DrrHisRecordExtended getHistogramInfo(int id);$/;"	p	class:HisDrr	access:public	signature:(int id)
+HisDrr::hisFile	HisDrr.h	/^    fstream* hisFile;$/;"	m	class:HisDrr	access:private
+HisDrr::hisList	HisDrr.h	/^    vector<DrrHisRecordExtended> hisList;$/;"	m	class:HisDrr	access:private
 HisDrr::loadDrr	HisDrr.cpp	/^void HisDrr::loadDrr() {$/;"	f	class:HisDrr	signature:()
-HisDrr::loadDrr	HisDrr.h	/^        void loadDrr();$/;"	p	class:HisDrr	access:private	signature:()
-HisDrr::readBlock	HisDrr.cpp	/^void HisDrr::readBlock(ifstream& file, drrBlock *block) {$/;"	f	class:HisDrr	signature:(ifstream& file, drrBlock *block)
-HisDrr::readBlock	HisDrr.h	/^        void readBlock(ifstream& file, drrBlock* block);$/;"	p	class:HisDrr	access:private	signature:(ifstream& file, drrBlock* block)
+HisDrr::loadDrr	HisDrr.h	/^    void loadDrr();$/;"	p	class:HisDrr	access:private	signature:()
+HisDrr::readBlock	HisDrr.cpp	/^void HisDrr::readBlock(drrBlock *block) {$/;"	f	class:HisDrr	signature:(drrBlock *block)
+HisDrr::readBlock	HisDrr.h	/^    void readBlock(drrBlock *block);$/;"	p	class:HisDrr	access:private	signature:(drrBlock *block)
 HisDrr::setValue	HisDrr.cpp	/^void HisDrr::setValue(const int id, unsigned int pos, unsigned int value){$/;"	f	class:HisDrr	signature:(const int id, unsigned int pos, unsigned int value)
 HisDrr::setValue	HisDrr.cpp	/^void HisDrr::setValue(const int id, unsigned int pos, unsigned short value){$/;"	f	class:HisDrr	signature:(const int id, unsigned int pos, unsigned short value)
 HisDrr::setValue	HisDrr.cpp	/^void HisDrr::setValue(const int id, vector<unsigned int> &value){$/;"	f	class:HisDrr	signature:(const int id, vector<unsigned int> &value)
 HisDrr::setValue	HisDrr.cpp	/^void HisDrr::setValue(const int id, vector<unsigned short> &value){$/;"	f	class:HisDrr	signature:(const int id, vector<unsigned short> &value)
-HisDrr::setValue	HisDrr.h	/^        void setValue(const int id, unsigned int pos, unsigned short value);$/;"	p	class:HisDrr	access:public	signature:(const int id, unsigned int pos, unsigned short value)
-HisDrr::setValue	HisDrr.h	/^        void setValue(const int id, unsigned int pos, unsigned value);$/;"	p	class:HisDrr	access:public	signature:(const int id, unsigned int pos, unsigned value)
-HisDrr::setValue	HisDrr.h	/^        void setValue(const int id, vector<unsigned short>& value);$/;"	p	class:HisDrr	access:public	signature:(const int id, vector<unsigned short>& value)
-HisDrr::setValue	HisDrr.h	/^        void setValue(const int id, vector<unsigned>& value);$/;"	p	class:HisDrr	access:public	signature:(const int id, vector<unsigned>& value)
+HisDrr::setValue	HisDrr.h	/^    void setValue(const int id, unsigned int pos, unsigned int value);$/;"	p	class:HisDrr	access:public	signature:(const int id, unsigned int pos, unsigned int value)
+HisDrr::setValue	HisDrr.h	/^    void setValue(const int id, unsigned int pos, unsigned short value);$/;"	p	class:HisDrr	access:public	signature:(const int id, unsigned int pos, unsigned short value)
+HisDrr::setValue	HisDrr.h	/^    void setValue(const int id, vector<unsigned int> &value);$/;"	p	class:HisDrr	access:public	signature:(const int id, vector<unsigned int> &value)
+HisDrr::setValue	HisDrr.h	/^    void setValue(const int id, vector<unsigned short> &value);$/;"	p	class:HisDrr	access:public	signature:(const int id, vector<unsigned short> &value)
 HisDrr::zeroHistogram	HisDrr.cpp	/^void HisDrr::zeroHistogram(int id) {$/;"	f	class:HisDrr	signature:(int id)
-HisDrr::zeroHistogram	HisDrr.h	/^        void zeroHistogram(int id);$/;"	p	class:HisDrr	access:public	signature:(int id)
+HisDrr::zeroHistogram	HisDrr.h	/^    void zeroHistogram(int id);$/;"	p	class:HisDrr	access:public	signature:(int id)
+HisDrr::~HisDrr	HisDrr.h	/^    ~HisDrr() {$/;"	f	class:HisDrr	access:public	signature:()
+HisDrrHisto1D	HisDrrHisto.h	/^        HisDrrHisto1D(DrrHisRecordExtended& info) : Histogram1D(info.minc[0], info.maxc[0], info.scaled[0], "" )$/;"	f	class:HisDrrHisto1D	access:public	signature:(DrrHisRecordExtended& info)
+HisDrrHisto1D	HisDrrHisto.h	/^class HisDrrHisto1D : public Histogram1D {$/;"	c	inherits:Histogram1D
+HisDrrHisto1D::HisDrrHisto1D	HisDrrHisto.h	/^        HisDrrHisto1D(DrrHisRecordExtended& info) : Histogram1D(info.minc[0], info.maxc[0], info.scaled[0], "" )$/;"	f	class:HisDrrHisto1D	access:public	signature:(DrrHisRecordExtended& info)
+HisDrrHisto1D::info_	HisDrrHisto.h	/^        DrrHisRecordExtended info_;$/;"	m	class:HisDrrHisto1D	access:private
+HisDrrHisto2D	HisDrrHisto.h	/^        HisDrrHisto2D(DrrHisRecordExtended& info) : Histogram2D(info.minc[0], info.maxc[0], info.scaled[0],$/;"	f	class:HisDrrHisto2D	access:public	signature:(DrrHisRecordExtended& info)
+HisDrrHisto2D	HisDrrHisto.h	/^class HisDrrHisto2D : public Histogram2D {$/;"	c	inherits:Histogram2D
+HisDrrHisto2D::HisDrrHisto2D	HisDrrHisto.h	/^        HisDrrHisto2D(DrrHisRecordExtended& info) : Histogram2D(info.minc[0], info.maxc[0], info.scaled[0],$/;"	f	class:HisDrrHisto2D	access:public	signature:(DrrHisRecordExtended& info)
+HisDrrHisto2D::info_	HisDrrHisto.h	/^        DrrHisRecordExtended info_;$/;"	m	class:HisDrrHisto2D	access:private
 Histogram	Histogram.h	/^        Histogram  (double xMin,  double xMax,$/;"	f	class:Histogram	access:public	signature:(double xMin, double xMax, unsigned nBinX, const char* hisId)
 Histogram	Histogram.h	/^class Histogram {$/;"	c
 Histogram1D	Histogram.h	/^        Histogram1D (double xMin,  double xMax,$/;"	f	class:Histogram1D	access:public	signature:(double xMin, double xMax, unsigned nBinX, const char* hisId)
@@ -115,15 +125,23 @@ Histogram1D::operator ()	Histogram.cpp	/^long Histogram1D::operator()(unsigned i
 Histogram1D::operator ()	Histogram.cpp	/^long& Histogram1D::operator()(unsigned ix) {$/;"	f	class:Histogram1D	signature:(unsigned ix)
 Histogram1D::operator ()	Histogram.h	/^        long  operator() (unsigned ix) const;$/;"	p	class:Histogram1D	access:public	signature:(unsigned ix) const
 Histogram1D::operator ()	Histogram.h	/^        long& operator() (unsigned ix);$/;"	p	class:Histogram1D	access:public	signature:(unsigned ix)
-Histogram1D::operator *	Histogram.h	/^        friend const Histogram1D operator*(const Histogram1D& left,$/;"	p	class:Histogram1D	access:friend	signature:(const Histogram1D& left, int right)
-Histogram1D::operator +	Histogram.h	/^        friend const Histogram1D operator+(const Histogram1D& left,$/;"	p	class:Histogram1D	access:friend	signature:(const Histogram1D& left, const Histogram1D& right)
-Histogram1D::operator +=	Histogram.h	/^        friend const Histogram1D operator+=(Histogram1D& left,$/;"	p	class:Histogram1D	access:friend	signature:(Histogram1D& left, const Histogram1D& right)
-Histogram1D::operator -	Histogram.h	/^        friend const Histogram1D operator-(const Histogram1D& left,$/;"	p	class:Histogram1D	access:friend	signature:(const Histogram1D& left, const Histogram1D& right)
-Histogram1D::operator -=	Histogram.h	/^        friend const Histogram1D operator-=(Histogram1D& left,$/;"	p	class:Histogram1D	access:friend	signature:(Histogram1D& left, const Histogram1D& right)
+Histogram1D::operator *	Histogram.cpp	/^Histogram1D Histogram1D::operator*(int right) const {$/;"	f	class:Histogram1D	signature:(int right) const
+Histogram1D::operator *	Histogram.h	/^        Histogram1D operator*(int right) const;$/;"	p	class:Histogram1D	access:public	signature:(int right) const
+Histogram1D::operator *=	Histogram.cpp	/^Histogram1D& Histogram1D::operator*=(int right) {$/;"	f	class:Histogram1D	signature:(int right)
+Histogram1D::operator *=	Histogram.h	/^        Histogram1D& operator*=(int right); $/;"	p	class:Histogram1D	access:public	signature:(int right)
+Histogram1D::operator +	Histogram.cpp	/^Histogram1D Histogram1D::operator+(const Histogram1D& right) const {$/;"	f	class:Histogram1D	signature:(const Histogram1D& right) const
+Histogram1D::operator +	Histogram.h	/^        Histogram1D operator+(const Histogram1D& right) const; $/;"	p	class:Histogram1D	access:public	signature:(const Histogram1D& right) const
+Histogram1D::operator +=	Histogram.cpp	/^Histogram1D& Histogram1D::operator+=(const Histogram1D& right) {$/;"	f	class:Histogram1D	signature:(const Histogram1D& right)
+Histogram1D::operator +=	Histogram.h	/^        Histogram1D& operator+=(const Histogram1D& right); $/;"	p	class:Histogram1D	access:public	signature:(const Histogram1D& right)
+Histogram1D::operator -	Histogram.cpp	/^Histogram1D Histogram1D::operator-(const Histogram1D& right) const {$/;"	f	class:Histogram1D	signature:(const Histogram1D& right) const
+Histogram1D::operator -	Histogram.h	/^        Histogram1D operator-(const Histogram1D& right) const; $/;"	p	class:Histogram1D	access:public	signature:(const Histogram1D& right) const
+Histogram1D::operator -=	Histogram.h	/^        Histogram1D& operator-=(const Histogram1D& right); $/;"	p	class:Histogram1D	access:public	signature:(const Histogram1D& right)
+Histogram1D::operator =	Histogram.h	/^        Histogram1D& operator=(const Histogram1D&);$/;"	p	class:Histogram1D	access:public	signature:(const Histogram1D&)
 Histogram1D::operator []	Histogram.cpp	/^long Histogram1D::operator[](unsigned ix) const {$/;"	f	class:Histogram1D	signature:(unsigned ix) const
 Histogram1D::operator []	Histogram.cpp	/^long& Histogram1D::operator[](unsigned ix) {$/;"	f	class:Histogram1D	signature:(unsigned ix)
 Histogram1D::operator []	Histogram.h	/^        long  operator[] (unsigned ix) const;$/;"	p	class:Histogram1D	access:public	signature:(unsigned ix) const
 Histogram1D::operator []	Histogram.h	/^        long& operator[] (unsigned ix);$/;"	p	class:Histogram1D	access:public	signature:(unsigned ix)
+Histogram1D::pureVirtual	Histogram.h	/^        void pureVirtual() { } \/\/ Nothing here but no longer pure virtual$/;"	f	class:Histogram1D	access:public	signature:()
 Histogram1D::rebin1D	Histogram.h	/^        void rebin1D (Histogram1D* rebinned);$/;"	p	class:Histogram1D	access:public	signature:(Histogram1D* rebinned)
 Histogram1D::set	Histogram.cpp	/^void Histogram1D::set (unsigned ix, long value) {$/;"	f	class:Histogram1D	signature:(unsigned ix, long value)
 Histogram1D::set	Histogram.h	/^        virtual void set (unsigned ix, long value);$/;"	p	class:Histogram1D	access:public	signature:(unsigned ix, long value)
@@ -156,11 +174,18 @@ Histogram2D::operator ()	Histogram.cpp	/^long Histogram2D::operator()(unsigned i
 Histogram2D::operator ()	Histogram.cpp	/^long& Histogram2D::operator()(unsigned ix, unsigned iy) {$/;"	f	class:Histogram2D	signature:(unsigned ix, unsigned iy)
 Histogram2D::operator ()	Histogram.h	/^        long  operator() (unsigned ix, unsigned iy) const;$/;"	p	class:Histogram2D	access:public	signature:(unsigned ix, unsigned iy) const
 Histogram2D::operator ()	Histogram.h	/^        long& operator() (unsigned ix, unsigned iy);$/;"	p	class:Histogram2D	access:public	signature:(unsigned ix, unsigned iy)
-Histogram2D::operator *	Histogram.h	/^        friend const Histogram2D operator*(const Histogram2D& left,$/;"	p	class:Histogram2D	access:friend	signature:(const Histogram2D& left, int right)
-Histogram2D::operator +	Histogram.h	/^        friend const Histogram2D operator+(const Histogram2D& left,$/;"	p	class:Histogram2D	access:friend	signature:(const Histogram2D& left, const Histogram2D& right)
-Histogram2D::operator +=	Histogram.h	/^        friend const Histogram2D operator+=(Histogram2D& left,$/;"	p	class:Histogram2D	access:friend	signature:(Histogram2D& left, const Histogram2D& right)
-Histogram2D::operator -	Histogram.h	/^        friend const Histogram2D operator-(const Histogram2D& left,$/;"	p	class:Histogram2D	access:friend	signature:(const Histogram2D& left, const Histogram2D& right)
-Histogram2D::operator -=	Histogram.h	/^        friend const Histogram2D operator-=(Histogram2D& left,$/;"	p	class:Histogram2D	access:friend	signature:(Histogram2D& left, const Histogram2D& right)
+Histogram2D::operator *	Histogram.cpp	/^Histogram2D Histogram2D::operator*(int right) const {$/;"	f	class:Histogram2D	signature:(int right) const
+Histogram2D::operator *	Histogram.h	/^        Histogram2D operator*(int right) const;$/;"	p	class:Histogram2D	access:public	signature:(int right) const
+Histogram2D::operator *=	Histogram.cpp	/^Histogram2D& Histogram2D::operator*=(int right) {$/;"	f	class:Histogram2D	signature:(int right)
+Histogram2D::operator *=	Histogram.h	/^        Histogram2D& operator*=(int right); $/;"	p	class:Histogram2D	access:public	signature:(int right)
+Histogram2D::operator +	Histogram.cpp	/^Histogram2D Histogram2D::operator+(const Histogram2D& right) const {$/;"	f	class:Histogram2D	signature:(const Histogram2D& right) const
+Histogram2D::operator +	Histogram.h	/^        Histogram2D operator+(const Histogram2D& right) const; $/;"	p	class:Histogram2D	access:public	signature:(const Histogram2D& right) const
+Histogram2D::operator +=	Histogram.cpp	/^Histogram2D& Histogram2D::operator+=(const Histogram2D& right) {$/;"	f	class:Histogram2D	signature:(const Histogram2D& right)
+Histogram2D::operator +=	Histogram.h	/^        Histogram2D& operator+=(const Histogram2D& right); $/;"	p	class:Histogram2D	access:public	signature:(const Histogram2D& right)
+Histogram2D::operator -	Histogram.cpp	/^Histogram2D Histogram2D::operator-(const Histogram2D& right) const {$/;"	f	class:Histogram2D	signature:(const Histogram2D& right) const
+Histogram2D::operator -	Histogram.h	/^        Histogram2D operator-(const Histogram2D& right) const; $/;"	p	class:Histogram2D	access:public	signature:(const Histogram2D& right) const
+Histogram2D::operator -=	Histogram.h	/^        Histogram2D& operator-=(const Histogram2D& right); $/;"	p	class:Histogram2D	access:public	signature:(const Histogram2D& right)
+Histogram2D::pureVirtual	Histogram.h	/^        void pureVirtual() { } \/\/ Nothing here but no longer pure virtual$/;"	f	class:Histogram2D	access:public	signature:()
 Histogram2D::rebin2D	Histogram.h	/^        void rebin2D (Histogram2D* rebinned);$/;"	p	class:Histogram2D	access:public	signature:(Histogram2D* rebinned)
 Histogram2D::set	Histogram.cpp	/^void Histogram2D::set (unsigned ix, unsigned iy, long value) {$/;"	f	class:Histogram2D	signature:(unsigned ix, unsigned iy, long value)
 Histogram2D::set	Histogram.h	/^        virtual void set (unsigned ix, unsigned iy, long value);$/;"	p	class:Histogram2D	access:public	signature:(unsigned ix, unsigned iy, long value)
@@ -182,6 +207,7 @@ Histogram::getXmin	Histogram.h	/^        double   getXmin() const  { return xMin
 Histogram::getnBinX	Histogram.h	/^        unsigned getnBinX() const  { return nBinX_; }$/;"	f	class:Histogram	access:public	signature:() const
 Histogram::hisId_	Histogram.h	/^        const char* hisId_;$/;"	m	class:Histogram	access:protected
 Histogram::nBinX_	Histogram.h	/^        unsigned nBinX_;$/;"	m	class:Histogram	access:protected
+Histogram::pureVirtual	Histogram.h	/^        virtual void pureVirtual () = 0;$/;"	p	class:Histogram	access:public	signature:()
 Histogram::setDataRaw	Histogram.cpp	/^void Histogram::setDataRaw (vector<long>& values) {$/;"	f	class:Histogram	signature:(vector<long>& values)
 Histogram::setDataRaw	Histogram.h	/^        virtual void setDataRaw (vector<long>& values);$/;"	p	class:Histogram	access:public	signature:(vector<long>& values)
 Histogram::setErrorsRaw	Histogram.cpp	/^void Histogram::setErrorsRaw (vector<double>& errors) {$/;"	f	class:Histogram	signature:(vector<double>& errors)
@@ -262,7 +288,7 @@ ReadHis::~ReadHis	readHisClass.h	/^    ~ReadHis(){}$/;"	f	class:ReadHis	access:p
 SDIR	makefile	/^SDIR = $/;"	m
 SimpleDrrBlock	HisDrr.h	/^struct SimpleDrrBlock {$/;"	s
 SimpleDrrBlock::halfWords	HisDrr.h	/^    short halfWords;$/;"	m	struct:SimpleDrrBlock	access:public
-SimpleDrrBlock::hisId	HisDrr.h	/^    int hisId;$/;"	m	struct:SimpleDrrBlock	access:public
+SimpleDrrBlock::hisID	HisDrr.h	/^    int hisID;$/;"	m	struct:SimpleDrrBlock	access:public
 SimpleDrrBlock::scaled	HisDrr.h	/^    short scaled[2];$/;"	m	struct:SimpleDrrBlock	access:public
 SimpleDrrBlock::title	HisDrr.h	/^    string title;$/;"	m	struct:SimpleDrrBlock	access:public
 Status	readhis.cpp	/^enum Status {$/;"	g	file:
@@ -293,7 +319,7 @@ description	DrrBlock.h	/^    char description[40];$/;"	m	struct:DrrHeader	access
 drrBlock	DrrBlock.h	/^union drrBlock {$/;"	u
 drrBlock::header	DrrBlock.h	/^    DrrHeader header;$/;"	m	union:drrBlock	access:public
 drrBlock::record	DrrBlock.h	/^    DrrHisRecord record; $/;"	m	union:drrBlock	access:public
-drrFile	HisDrr.h	/^        string drrFile;$/;"	m	class:HisDrr	access:private
+drrFile	HisDrr.h	/^    fstream* drrFile;$/;"	m	class:HisDrr	access:private
 error	readhis.cpp	/^    error$/;"	e	enum:Status	file:
 errors_	Histogram.h	/^        vector<double> errors_;$/;"	m	class:Histogram	access:protected
 flagPos	readHisClass.cpp	/^int Flags::flagPos(vector<string> &flags, const string &match) {$/;"	f	class:Flags	signature:(vector<string> &flags, const string &match)
@@ -330,11 +356,11 @@ getGy	readhis.cpp	/^        bool getGy() { return isGy_; }$/;"	f	class:Options	a
 getHisId	Histogram.h	/^        const char* getHisId() const { return hisId_; }$/;"	f	class:Histogram	access:public	signature:() const
 getHisId	readhis.cpp	/^        unsigned getHisId () { return hisId_; }$/;"	f	class:Options	access:public	signature:()
 getHisList	HisDrr.cpp	/^void HisDrr::getHisList(vector<int> &r) {$/;"	f	class:HisDrr	signature:(vector<int> &r)
-getHisList	HisDrr.h	/^        void getHisList(vector<int>& hisList);$/;"	p	class:HisDrr	access:public	signature:(vector<int>& hisList)
+getHisList	HisDrr.h	/^    void getHisList(vector<int> &r);$/;"	p	class:HisDrr	access:public	signature:(vector<int> &r)
 getHistogram	HisDrr.cpp	/^void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {$/;"	f	class:HisDrr	signature:(vector<unsigned int> &rtn, int id)
-getHistogram	HisDrr.h	/^        void getHistogram(vector<unsigned int>& data, int id);$/;"	p	class:HisDrr	access:public	signature:(vector<unsigned int>& data, int id)
+getHistogram	HisDrr.h	/^    void getHistogram(vector<unsigned int> &rtn, int id);$/;"	p	class:HisDrr	access:public	signature:(vector<unsigned int> &rtn, int id)
 getHistogramInfo	HisDrr.cpp	/^DrrHisRecordExtended HisDrr::getHistogramInfo(int id) {$/;"	f	class:HisDrr	signature:(int id)
-getHistogramInfo	HisDrr.h	/^        DrrHisRecordExtended getHistogramInfo(int id);$/;"	p	class:HisDrr	access:public	signature:(int id)
+getHistogramInfo	HisDrr.h	/^    DrrHisRecordExtended getHistogramInfo(int id);$/;"	p	class:HisDrr	access:public	signature:(int id)
 getInfoMode	readhis.cpp	/^        bool getInfoMode() { return isInfoMode_; }$/;"	f	class:Options	access:public	signature:()
 getListMode	readhis.cpp	/^        bool getListMode() { return isListMode_; }$/;"	f	class:Options	access:public	signature:()
 getListModeZ	readhis.cpp	/^        bool getListModeZ() { return isListModeZ_; }$/;"	f	class:Options	access:public	signature:()
@@ -362,18 +388,20 @@ gybg	readHisClass.h	/^    void gybg(vector<unsigned int> &d, int b0, int b1);\/\
 halfWords	DrrBlock.h	/^    short halfWords;$/;"	m	struct:DrrHisRecord	access:public
 halfWords	HisDrr.h	/^    short halfWords;$/;"	m	struct:SimpleDrrBlock	access:public
 header	DrrBlock.h	/^    DrrHeader header;$/;"	m	union:drrBlock	access:public
+help	examples/zerotest.cpp	/^void help() {$/;"	f	signature:()
 help	readhis.cpp	/^void help() {$/;"	f	signature:()
-help	zerotest.cpp	/^void help() {$/;"	f	signature:()
 hisDim	DrrBlock.h	/^    short hisDim;$/;"	m	struct:DrrHisRecord	access:public
 hisDim	readHisClass.h	/^    unsigned short hisDim;$/;"	m	class:ReadHis	access:public
-hisFile	HisDrr.h	/^        string hisFile;$/;"	m	class:HisDrr	access:private
+hisFile	HisDrr.h	/^    fstream* hisFile;$/;"	m	class:HisDrr	access:private
 hisID	DrrBlock.h	/^    int hisID;$/;"	m	struct:DrrHisRecordExtended	access:public
+hisID	HisDrr.h	/^    int hisID;$/;"	m	struct:SimpleDrrBlock	access:public
 hisID	readHisClass.h	/^    int hisID; \/\/\/ histogram ID$/;"	m	struct:Flags	access:public
-hisId	HisDrr.h	/^    int hisId;$/;"	m	struct:SimpleDrrBlock	access:public
 hisId_	Histogram.h	/^        const char* hisId_;$/;"	m	class:Histogram	access:protected
 hisId_	readhis.cpp	/^        unsigned hisId_;$/;"	m	class:Options	file:	access:private
-hisList	HisDrr.h	/^        vector<DrrHisRecordExtended> hisList;$/;"	m	class:HisDrr	access:private
+hisList	HisDrr.h	/^    vector<DrrHisRecordExtended> hisList;$/;"	m	class:HisDrr	access:private
 info	readHisClass.h	/^    bool info; \/\/\/ information on histogram$/;"	m	struct:Flags	access:public
+info_	HisDrrHisto.h	/^        DrrHisRecordExtended info_;$/;"	m	class:HisDrrHisto1D	access:private
+info_	HisDrrHisto.h	/^        DrrHisRecordExtended info_;$/;"	m	class:HisDrrHisto2D	access:private
 initial	DrrBlock.h	/^    char initial[12];$/;"	m	struct:DrrHeader	access:public
 isBg_	readhis.cpp	/^        bool isBg_;$/;"	m	class:Options	file:	access:private
 isGx_	readhis.cpp	/^        bool isGx_;$/;"	m	class:Options	file:	access:private
@@ -386,14 +414,14 @@ isSBg_	readhis.cpp	/^        bool isSBg_;$/;"	m	class:Options	file:	access:priva
 isZeroSup_	readhis.cpp	/^        bool isZeroSup_;$/;"	m	class:Options	file:	access:private
 list	readHisClass.h	/^    bool list; \/\/\/ list of histograms$/;"	m	struct:Flags	access:public
 loadDrr	HisDrr.cpp	/^void HisDrr::loadDrr() {$/;"	f	class:HisDrr	signature:()
-loadDrr	HisDrr.h	/^        void loadDrr();$/;"	p	class:HisDrr	access:private	signature:()
+loadDrr	HisDrr.h	/^    void loadDrr();$/;"	p	class:HisDrr	access:private	signature:()
 loadFlags	readHisClass.cpp	/^void Flags::loadFlags(vector<string> &flags) {$/;"	f	class:Flags	signature:(vector<string> &flags)
 loadFlags	readHisClass.h	/^    void loadFlags(vector<string> &flags); \/\/\/ flags processing$/;"	p	struct:Flags	access:public	signature:(vector<string> &flags)
 long_options	readhis.cpp	/^static struct option long_options[] = {$/;"	v	typeref:struct:option	file:
-main	createhis.cpp	/^int main(int argc, char* argv[]) {$/;"	f	signature:(int argc, char* argv[])
+main	examples/createhis.cpp	/^int main(int argc, char* argv[]) {$/;"	f	signature:(int argc, char* argv[])
+main	examples/zerotest.cpp	/^int main(int argc, char* argv[]) {$/;"	f	signature:(int argc, char* argv[])
 main	readhis.cpp	/^int main (int argc, char* argv[]) {$/;"	f	signature:(int argc, char* argv[])
 main	test.cpp	/^int main() {$/;"	f	signature:()
-main	zerotest.cpp	/^int main(int argc, char* argv[]) {$/;"	f	signature:(int argc, char* argv[])
 maxc	DrrBlock.h	/^    short maxc[4];$/;"	m	struct:DrrHisRecord	access:public
 message	Exceptions.h	/^    const string message; \/\/! Error Message$/;"	m	class:GenError	access:private
 minc	DrrBlock.h	/^    short minc[4];$/;"	m	struct:DrrHisRecord	access:public
@@ -411,19 +439,31 @@ operator ()	Histogram.h	/^        long  operator() (unsigned ix) const;$/;"	p	cl
 operator ()	Histogram.h	/^        long  operator() (unsigned ix, unsigned iy) const;$/;"	p	class:Histogram2D	access:public	signature:(unsigned ix, unsigned iy) const
 operator ()	Histogram.h	/^        long& operator() (unsigned ix);$/;"	p	class:Histogram1D	access:public	signature:(unsigned ix)
 operator ()	Histogram.h	/^        long& operator() (unsigned ix, unsigned iy);$/;"	p	class:Histogram2D	access:public	signature:(unsigned ix, unsigned iy)
-operator *	Histogram.cpp	/^const Histogram1D operator*(const Histogram1D& left,$/;"	f	signature:(const Histogram1D& left, const int right)
-operator *	Histogram.h	/^        friend const Histogram1D operator*(const Histogram1D& left,$/;"	p	class:Histogram1D	access:friend	signature:(const Histogram1D& left, int right)
-operator *	Histogram.h	/^        friend const Histogram2D operator*(const Histogram2D& left,$/;"	p	class:Histogram2D	access:friend	signature:(const Histogram2D& left, int right)
-operator +	Histogram.cpp	/^const Histogram1D operator+(const Histogram1D& left,$/;"	f	signature:(const Histogram1D& left, const Histogram1D& right)
-operator +	Histogram.h	/^        friend const Histogram1D operator+(const Histogram1D& left,$/;"	p	class:Histogram1D	access:friend	signature:(const Histogram1D& left, const Histogram1D& right)
-operator +	Histogram.h	/^        friend const Histogram2D operator+(const Histogram2D& left,$/;"	p	class:Histogram2D	access:friend	signature:(const Histogram2D& left, const Histogram2D& right)
-operator +=	Histogram.h	/^        friend const Histogram1D operator+=(Histogram1D& left,$/;"	p	class:Histogram1D	access:friend	signature:(Histogram1D& left, const Histogram1D& right)
-operator +=	Histogram.h	/^        friend const Histogram2D operator+=(Histogram2D& left,$/;"	p	class:Histogram2D	access:friend	signature:(Histogram2D& left, const Histogram2D& right)
-operator -	Histogram.h	/^        friend const Histogram1D operator-(const Histogram1D& left,$/;"	p	class:Histogram1D	access:friend	signature:(const Histogram1D& left, const Histogram1D& right)
-operator -	Histogram.h	/^        friend const Histogram2D operator-(const Histogram2D& left,$/;"	p	class:Histogram2D	access:friend	signature:(const Histogram2D& left, const Histogram2D& right)
-operator -=	Histogram.h	/^        friend const Histogram1D operator-=(Histogram1D& left,$/;"	p	class:Histogram1D	access:friend	signature:(Histogram1D& left, const Histogram1D& right)
-operator -=	Histogram.h	/^        friend const Histogram2D operator-=(Histogram2D& left,$/;"	p	class:Histogram2D	access:friend	signature:(Histogram2D& left, const Histogram2D& right)
+operator *	Histogram.cpp	/^Histogram1D Histogram1D::operator*(int right) const {$/;"	f	class:Histogram1D	signature:(int right) const
+operator *	Histogram.cpp	/^Histogram2D Histogram2D::operator*(int right) const {$/;"	f	class:Histogram2D	signature:(int right) const
+operator *	Histogram.h	/^        Histogram1D operator*(int right) const;$/;"	p	class:Histogram1D	access:public	signature:(int right) const
+operator *	Histogram.h	/^        Histogram2D operator*(int right) const;$/;"	p	class:Histogram2D	access:public	signature:(int right) const
+operator *=	Histogram.cpp	/^Histogram1D& Histogram1D::operator*=(int right) {$/;"	f	class:Histogram1D	signature:(int right)
+operator *=	Histogram.cpp	/^Histogram2D& Histogram2D::operator*=(int right) {$/;"	f	class:Histogram2D	signature:(int right)
+operator *=	Histogram.h	/^        Histogram1D& operator*=(int right); $/;"	p	class:Histogram1D	access:public	signature:(int right)
+operator *=	Histogram.h	/^        Histogram2D& operator*=(int right); $/;"	p	class:Histogram2D	access:public	signature:(int right)
+operator +	Histogram.cpp	/^Histogram1D Histogram1D::operator+(const Histogram1D& right) const {$/;"	f	class:Histogram1D	signature:(const Histogram1D& right) const
+operator +	Histogram.cpp	/^Histogram2D Histogram2D::operator+(const Histogram2D& right) const {$/;"	f	class:Histogram2D	signature:(const Histogram2D& right) const
+operator +	Histogram.h	/^        Histogram1D operator+(const Histogram1D& right) const; $/;"	p	class:Histogram1D	access:public	signature:(const Histogram1D& right) const
+operator +	Histogram.h	/^        Histogram2D operator+(const Histogram2D& right) const; $/;"	p	class:Histogram2D	access:public	signature:(const Histogram2D& right) const
+operator +=	Histogram.cpp	/^Histogram1D& Histogram1D::operator+=(const Histogram1D& right) {$/;"	f	class:Histogram1D	signature:(const Histogram1D& right)
+operator +=	Histogram.cpp	/^Histogram2D& Histogram2D::operator+=(const Histogram2D& right) {$/;"	f	class:Histogram2D	signature:(const Histogram2D& right)
+operator +=	Histogram.h	/^        Histogram1D& operator+=(const Histogram1D& right); $/;"	p	class:Histogram1D	access:public	signature:(const Histogram1D& right)
+operator +=	Histogram.h	/^        Histogram2D& operator+=(const Histogram2D& right); $/;"	p	class:Histogram2D	access:public	signature:(const Histogram2D& right)
+operator -	Histogram.cpp	/^Histogram1D Histogram1D::operator-(const Histogram1D& right) const {$/;"	f	class:Histogram1D	signature:(const Histogram1D& right) const
+operator -	Histogram.cpp	/^Histogram2D Histogram2D::operator-(const Histogram2D& right) const {$/;"	f	class:Histogram2D	signature:(const Histogram2D& right) const
+operator -	Histogram.h	/^        Histogram1D operator-(const Histogram1D& right) const; $/;"	p	class:Histogram1D	access:public	signature:(const Histogram1D& right) const
+operator -	Histogram.h	/^        Histogram2D operator-(const Histogram2D& right) const; $/;"	p	class:Histogram2D	access:public	signature:(const Histogram2D& right) const
+operator -=	Histogram.h	/^        Histogram1D& operator-=(const Histogram1D& right); $/;"	p	class:Histogram1D	access:public	signature:(const Histogram1D& right)
+operator -=	Histogram.h	/^        Histogram2D& operator-=(const Histogram2D& right); $/;"	p	class:Histogram2D	access:public	signature:(const Histogram2D& right)
 operator =	DrrBlock.h	/^    DrrHisRecordExtended& operator=(const DrrHisRecord& right) {$/;"	f	struct:DrrHisRecordExtended	access:public	signature:(const DrrHisRecord& right)
+operator =	Histogram.cpp	/^Histogram1D& operator=(const Histogram1D& right){$/;"	f	signature:(const Histogram1D& right)
+operator =	Histogram.h	/^        Histogram1D& operator=(const Histogram1D&);$/;"	p	class:Histogram1D	access:public	signature:(const Histogram1D&)
 operator []	Histogram.cpp	/^long Histogram1D::operator[](unsigned ix) const {$/;"	f	class:Histogram1D	signature:(unsigned ix) const
 operator []	Histogram.cpp	/^long& Histogram1D::operator[](unsigned ix) {$/;"	f	class:Histogram1D	signature:(unsigned ix)
 operator []	Histogram.h	/^        long  operator[] (unsigned ix) const;$/;"	p	class:Histogram1D	access:public	signature:(unsigned ix) const
@@ -437,9 +477,12 @@ process1D	readHisClass.cpp	/^void ReadHis::process1D(vector<unsigned int> &d) {$
 process1D	readHisClass.h	/^    void process1D(vector<unsigned int> &d); \/\/\/ Processing 1D histograms$/;"	p	class:ReadHis	access:private	signature:(vector<unsigned int> &d)
 process2D	readHisClass.cpp	/^void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {$/;"	f	class:ReadHis	signature:(vector<unsigned int> &d, DrrHisRecordExtended &info)
 process2D	readHisClass.h	/^    void process2D(vector<unsigned int> &d, DrrHisRecordExtended &info); \/\/\/Processing 2D histograms$/;"	p	class:ReadHis	access:private	signature:(vector<unsigned int> &d, DrrHisRecordExtended &info)
+pureVirtual	Histogram.h	/^        virtual void pureVirtual () = 0;$/;"	p	class:Histogram	access:public	signature:()
+pureVirtual	Histogram.h	/^        void pureVirtual() { } \/\/ Nothing here but no longer pure virtual$/;"	f	class:Histogram1D	access:public	signature:()
+pureVirtual	Histogram.h	/^        void pureVirtual() { } \/\/ Nothing here but no longer pure virtual$/;"	f	class:Histogram2D	access:public	signature:()
 raw	DrrBlock.h	/^    short raw[4];$/;"	m	struct:DrrHisRecord	access:public
-readBlock	HisDrr.cpp	/^void HisDrr::readBlock(ifstream& file, drrBlock *block) {$/;"	f	class:HisDrr	signature:(ifstream& file, drrBlock *block)
-readBlock	HisDrr.h	/^        void readBlock(ifstream& file, drrBlock* block);$/;"	p	class:HisDrr	access:private	signature:(ifstream& file, drrBlock* block)
+readBlock	HisDrr.cpp	/^void HisDrr::readBlock(drrBlock *block) {$/;"	f	class:HisDrr	signature:(drrBlock *block)
+readBlock	HisDrr.h	/^    void readBlock(drrBlock *block);$/;"	p	class:HisDrr	access:private	signature:(drrBlock *block)
 rebin1D	Histogram.h	/^        void rebin1D (Histogram1D* rebinned);$/;"	p	class:Histogram1D	access:public	signature:(Histogram1D* rebinned)
 rebin2D	Histogram.h	/^        void rebin2D (Histogram2D* rebinned);$/;"	p	class:Histogram2D	access:public	signature:(Histogram2D* rebinned)
 record	DrrBlock.h	/^    DrrHisRecord record; $/;"	m	union:drrBlock	access:public
@@ -471,10 +514,10 @@ setValue	HisDrr.cpp	/^void HisDrr::setValue(const int id, unsigned int pos, unsi
 setValue	HisDrr.cpp	/^void HisDrr::setValue(const int id, unsigned int pos, unsigned short value){$/;"	f	class:HisDrr	signature:(const int id, unsigned int pos, unsigned short value)
 setValue	HisDrr.cpp	/^void HisDrr::setValue(const int id, vector<unsigned int> &value){$/;"	f	class:HisDrr	signature:(const int id, vector<unsigned int> &value)
 setValue	HisDrr.cpp	/^void HisDrr::setValue(const int id, vector<unsigned short> &value){$/;"	f	class:HisDrr	signature:(const int id, vector<unsigned short> &value)
-setValue	HisDrr.h	/^        void setValue(const int id, unsigned int pos, unsigned short value);$/;"	p	class:HisDrr	access:public	signature:(const int id, unsigned int pos, unsigned short value)
-setValue	HisDrr.h	/^        void setValue(const int id, unsigned int pos, unsigned value);$/;"	p	class:HisDrr	access:public	signature:(const int id, unsigned int pos, unsigned value)
-setValue	HisDrr.h	/^        void setValue(const int id, vector<unsigned short>& value);$/;"	p	class:HisDrr	access:public	signature:(const int id, vector<unsigned short>& value)
-setValue	HisDrr.h	/^        void setValue(const int id, vector<unsigned>& value);$/;"	p	class:HisDrr	access:public	signature:(const int id, vector<unsigned>& value)
+setValue	HisDrr.h	/^    void setValue(const int id, unsigned int pos, unsigned int value);$/;"	p	class:HisDrr	access:public	signature:(const int id, unsigned int pos, unsigned int value)
+setValue	HisDrr.h	/^    void setValue(const int id, unsigned int pos, unsigned short value);$/;"	p	class:HisDrr	access:public	signature:(const int id, unsigned int pos, unsigned short value)
+setValue	HisDrr.h	/^    void setValue(const int id, vector<unsigned int> &value);$/;"	p	class:HisDrr	access:public	signature:(const int id, vector<unsigned int> &value)
+setValue	HisDrr.h	/^    void setValue(const int id, vector<unsigned short> &value);$/;"	p	class:HisDrr	access:public	signature:(const int id, vector<unsigned short> &value)
 setZeroSup	readhis.cpp	/^        void setZeroSup (const bool b) { isZeroSup_ = b; }$/;"	f	class:Options	access:public	signature:(const bool b)
 show	Exceptions.h	/^    string show() { return message;}$/;"	f	class:GenError	access:public	signature:()
 showInfo	readHisClass.cpp	/^void ReadHis::showInfo(DrrHisRecordExtended hisList) {$/;"	f	class:ReadHis	signature:(DrrHisRecordExtended hisList)
@@ -493,6 +536,7 @@ yMin_	Histogram.h	/^        double   yMin_;$/;"	m	class:Histogram2D	access:priva
 ylabel	DrrBlock.h	/^    char ylabel[12];$/;"	m	struct:DrrHisRecord	access:public
 zero	readHisClass.h	/^    bool zero; \/\/\/ zero suppression$/;"	m	struct:Flags	access:public
 zeroHistogram	HisDrr.cpp	/^void HisDrr::zeroHistogram(int id) {$/;"	f	class:HisDrr	signature:(int id)
-zeroHistogram	HisDrr.h	/^        void zeroHistogram(int id);$/;"	p	class:HisDrr	access:public	signature:(int id)
+zeroHistogram	HisDrr.h	/^    void zeroHistogram(int id);$/;"	p	class:HisDrr	access:public	signature:(int id)
+~HisDrr	HisDrr.h	/^    ~HisDrr() {$/;"	f	class:HisDrr	access:public	signature:()
 ~Histogram	Histogram.h	/^        virtual ~Histogram () {  }$/;"	f	class:Histogram	access:public	signature:()
 ~ReadHis	readHisClass.h	/^    ~ReadHis(){}$/;"	f	class:ReadHis	access:public	signature:()

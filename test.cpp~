@@ -4,10 +4,11 @@
 
 using namespace std;
 
-void show(Histogram1D& h) {
+void show(Histogram& h) {
     cout << "Histogram " << h.gethisId() << endl;
-    for (int i = 0; i < h.getnBinX(); i++)
-        cout << "[" << i << "] = " << h[i] << endl;
+    Histogram1D g = reinterpret_cast<Histogram1D>(h);
+    for (int i = 0; i < g.getnBinX(); i++)
+        cout << "[" << i << "] = " << g[i] << endl;
 }
 
 int main() {

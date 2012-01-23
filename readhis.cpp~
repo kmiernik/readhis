@@ -475,12 +475,12 @@ int main (int argc, char* argv[]) {
 
             delete h2;
         } else {
+            delete h;
             throw GenError("Error: Only 1 and 2 dimensional histograms are supported.");
         }
 
         delete h;
     } catch (GenError &err) {
-        delete h;
         cout << "Error: " << err.show() << endl;
         cout << "Run readhis --help for more information" << endl;
     }
