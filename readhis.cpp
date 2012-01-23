@@ -273,7 +273,6 @@ int main (int argc, char* argv[]) {
                     exit(1);
                 }
                 if ( !(options->setGx(true, a[0], a[1])) ) {
-                    status = error;
                     cout << "Error: wrong arguments for --gx option" << endl;
                     cout << "Run readhis --help for more information" << endl;
                     exit(1);
@@ -295,7 +294,6 @@ int main (int argc, char* argv[]) {
                     exit(1);
                 }
                 if ( !(options->setGy(true, a[0], a[1])) ) {
-                    status = error;
                     cout << "Error: wrong arguments for --gy option" << endl;
                     cout << "Run readhis --help for more information" << endl;
                     exit(1);
@@ -317,7 +315,6 @@ int main (int argc, char* argv[]) {
                     exit(1);
                 }
                 if ( !(options->setBg(true, a[0], a[1])) ) {
-                    status = error;
                     cout << "Error: wrong arguments for --bg option" << endl;
                     cout << "Run readhis --help for more information" << endl;
                     exit(1);
@@ -339,7 +336,6 @@ int main (int argc, char* argv[]) {
                     exit(1);
                 }
                 if ( !(options->setSBg(true, a[0], a[1], a[2], a[3])) ) {
-                    status = error;
                     cout << "Error: wrong arguments for --sbg option" << endl;
                     cout << "Run readhis --help for more information" << endl;
                     exit(1);
@@ -468,11 +464,11 @@ int main (int argc, char* argv[]) {
 
         if (info.hisDim == 1) {
             HisDrrHisto1D* h1 = new HisDrrHisto1D(info);
-
+            //Process here...
             delete h1;
         } else if (info.hisID == 2) {
             HisDrrHisto2D* h2 = new HisDrrHisto2D(info);
-
+            //Process here...
             delete h2;
         } else {
             throw GenError("Error: Only 1 and 2 dimensional histograms are supported.");
@@ -480,7 +476,6 @@ int main (int argc, char* argv[]) {
 
         delete h;
     } catch (GenError &err) {
-        delete h;
         cout << "Error: " << err.show() << endl;
         cout << "Run readhis --help for more information" << endl;
     }
