@@ -1,29 +1,23 @@
 #ifndef HHISDRRHISTO
 #define HHISDRRHISTO
 
+#include <string>
 #include "DrrBlock.h"
 #include "HisDrr.h"
 #include "Histogram.h"
+#include "Exceptions.h"
+#include "Options.h"
 
-class HisDrrHisto1D : public Histogram1D {
+using namespace std;
+
+class HisDrrHisto {
     public:
-        HisDrrHisto1D(DrrHisRecordExtended& info) : Histogram1D(info.minc[0], info.maxc[0], info.scaled[0], "" )
-        {info_ = info;}
-
-        void Process();
+        HisDrrHisto(const Options* options, string& baseName);
+        void process();
     private:
-        DrrHisRecordExtended info_;
-};
-
-class HisDrrHisto2D : public Histogram2D {
-    public:
-        HisDrrHisto2D(DrrHisRecordExtended& info) : Histogram2D(info.minc[0], info.maxc[0], info.scaled[0],
-                                                                info.minc[1], info.maxc[1], info.scaled[1],
-                                                                "" )
-        {info_ = info;}
-        void Process();
-    private:
-        DrrHisRecordExtended info_;
+        void runListMode(HisDrr* h, bool zero = false);
+        const Options* options_;
+        string baseName_;
 };
 
 #endif

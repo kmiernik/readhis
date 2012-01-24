@@ -25,7 +25,7 @@ Flags::Flags() {
 }
 
 int Flags::flagPos(vector<string> &flags, const string &match) {
-    for (unsigned int i = 0; i < flags.size(); i++)
+    for (unsigned int i = 0; i < flags.size(); ++i)
         if (flags[i] == match)
             return i;
     return -1;
@@ -205,7 +205,7 @@ void ReadHis::process1D(vector<unsigned int> &d) {
             cSpectrum[x/options.bin] += d[x];
             cError[x] += cSpectrum[x];
         }
-        for (unsigned i = 0; i < sz; i++)
+        for (unsigned i = 0; i < sz; ++i)
             cError[i] = sqrt(cError[i]);
 
     }
@@ -291,7 +291,7 @@ void ReadHis::process2D(vector<unsigned int> &d, DrrHisRecordExtended &info) {
     } else {
         bin2D(d);
     }
-    for (int i = 0; i < sz; i++)
+    for (int i = 0; i < sz; ++i)
         cError[i] = sqrt(cError[i]);
 }
 
@@ -304,7 +304,7 @@ void ReadHis::process() {
         if (options.list) {
             vector<int> list;
             h->getHisList(list);
-            for (unsigned int i = 0; i < list.size()-1; i++)
+            for (unsigned int i = 0; i < list.size()-1; ++i)
                 cout << list[i] << ", ";
             cout << list[list.size()-1] << endl;
         }

@@ -7,7 +7,7 @@ void Histogram::getDataRaw (vector<long>& values) const  {
     unsigned sz = values_.size();
     values.clear();
     values.reserve(sz);
-    for (unsigned i = 0; i < sz; i++)
+    for (unsigned i = 0; i < sz; ++i)
         values.push_back(values_[i]);
 }
 
@@ -16,7 +16,7 @@ void Histogram::getErrorsRaw (vector<double>& errors) const  {
     unsigned sz = errors_.size();
     errors.clear();
     errors.reserve(sz);
-    for (unsigned i = 0; i < sz; i++)
+    for (unsigned i = 0; i < sz; ++i)
         errors.push_back(errors_[i]);
 }
 
@@ -26,10 +26,23 @@ void Histogram::setDataRaw (vector<long>& values) {
 
     unsigned i = 0;
 
-    for (; i < szLow; i++)
+    for (; i < szLow; ++i)
         values_[i] = values[i];
 
-    for (; i < szHigh; i++)
+    for (; i < szHigh; ++i)
+        values_[i] = 0;
+}
+
+void Histogram::setDataRaw (vector<unsigned>& values) {
+    unsigned szLow  = min( values.size(), values_.size() );
+    unsigned szHigh = max( values.size(), values_.size() );
+
+    unsigned i = 0;
+
+    for (; i < szLow; ++i)
+        values_[i] = static_cast<long>(values[i]);
+
+    for (; i < szHigh; ++i)
         values_[i] = 0;
 }
 
@@ -39,10 +52,10 @@ void Histogram::setErrorsRaw (vector<double>& errors) {
 
     unsigned i = 0;
 
-    for (; i < szLow; i++)
+    for (; i < szLow; ++i)
         errors_[i] = errors[i];
 
-    for (; i < szHigh; i++)
+    for (; i < szHigh; ++i)
         errors_[i] = 0;
 }
     
@@ -103,7 +116,7 @@ Histogram1D& Histogram1D::operator=(const Histogram1D& right){
 
 Histogram1D& Histogram1D::operator*=(int right) {
     unsigned sz = this->values_.size();
-    for (unsigned i = 0; i < sz; i++)
+    for (unsigned i = 0; i < sz; ++i)
         this->values_[i] *= right;
     return *this;
 }
@@ -114,7 +127,7 @@ Histogram1D& Histogram1D::operator+=(const Histogram1D& right) {
         this->nBinX_ == right.nBinX_) {
        
         unsigned sz = this->values_.size();
-        for (unsigned i = 0; i < sz; i++)
+        for (unsigned i = 0; i < sz; ++i)
             this->values_[i] += right.values_[i];
         return *this;
     } else {
@@ -128,7 +141,7 @@ Histogram1D& Histogram1D::operator-=(const Histogram1D& right) {
         this->nBinX_ == right.nBinX_) {
        
         unsigned sz = this->values_.size();
-        for (unsigned i = 0; i < sz; i++)
+        for (unsigned i = 0; i < sz; ++i)
             this->values_[i] -= right.values_[i];
         return *this;
     } else {
@@ -229,8 +242,8 @@ void Histogram2D::gateX (unsigned x0, unsigned x1, vector<long>& result) {
     result.clear();
     result.resize(nBinY_ + 2, 0);
 
-    for (unsigned ix = x0; ix < x1 + 1; ix++) 
-        for (unsigned iy = 0; iy < nBinY_ + 2; iy++) 
+    for (unsigned ix = x0; ix < x1 + 1; ++ix) 
+        for (unsigned iy = 0; iy < nBinY_ + 2; ++iy) 
             result[iy] += values_[iy * (nBinX_ + 2) + ix];
 
 }
@@ -240,8 +253,8 @@ void Histogram2D::gateY (unsigned y0, unsigned y1, vector<long>& result) {
     result.clear();
     result.resize(nBinX_ + 2, 0);
 
-    for (unsigned iy = y0; iy < y1 + 1; iy++) 
-        for (unsigned ix = 0; ix < nBinX_ + 2; iy++) 
+    for (unsigned iy = y0; iy < y1 + 1; ++iy) 
+        for (unsigned ix = 0; ix < nBinX_ + 2; ++iy) 
             result[ix] += values_[iy * (nBinX_ + 2) + ix];
 
 }
@@ -256,19 +269,19 @@ void Histogram2D::gateXbackground (unsigned x0, unsigned x1,
     resultErrors.clear();
     resultErrors.resize(nBinY_ + 2, 0);
 
-    for (unsigned ix = x0; ix < x1 + 1; ix++) 
-        for (unsigned iy = 0; iy < nBinY_ + 2; iy++) {
+    for (unsigned ix = x0; ix < x1 + 1; ++ix) 
+        for (unsigned iy = 0; iy < nBinY_ + 2; ++iy) {
             result[iy] += values_[iy * (nBinX_ + 2) + ix];
             resultErrors[iy] += values_[iy * (nBinX_ + 2) + ix];
         }
 
-    for (unsigned ix = b0; ix < b1 + 1; ix++) 
-        for (unsigned iy = 0; iy < nBinY_ + 2; iy++) {
+    for (unsigned ix = b0; ix < b1 + 1; ++ix) 
+        for (unsigned iy = 0; iy < nBinY_ + 2; ++iy) {
             result[iy] -= values_[iy * (nBinX_ + 2) + ix];
             resultErrors[iy] += values_[iy * (nBinX_ + 2) + ix];
         }
 
-    for (unsigned iy = 0; iy < nBinY_ + 2; iy++)
+    for (unsigned iy = 0; iy < nBinY_ + 2; ++iy)
         resultErrors[iy] = sqrt(resultErrors[iy]);
 
 }
@@ -283,19 +296,19 @@ void Histogram2D::gateYbackground (unsigned y0, unsigned y1,
     resultErrors.clear();
     resultErrors.resize(nBinX_ + 2, 0);
 
-    for (unsigned iy = y0; iy < y1 + 1; iy++) 
-        for (unsigned ix = 0; ix < nBinX_ + 2; ix++) {
+    for (unsigned iy = y0; iy < y1 + 1; ++iy) 
+        for (unsigned ix = 0; ix < nBinX_ + 2; ++ix) {
             result[ix] += values_[iy * (nBinX_ + 2) + ix];
             resultErrors[ix] += values_[iy * (nBinX_ + 2) + ix];
         }
 
-    for (unsigned iy = b0; iy < b1 + 1; iy++) 
-        for (unsigned ix = 0; ix < nBinX_ + 2; ix++) {
+    for (unsigned iy = b0; iy < b1 + 1; ++iy) 
+        for (unsigned ix = 0; ix < nBinX_ + 2; ++ix) {
             result[ix] -= values_[iy * (nBinX_ + 2) + ix];
             resultErrors[ix] += values_[iy * (nBinX_ + 2) + ix];
         }
 
-    for (unsigned ix = 0; ix < nBinY_ + 2; ix++)
+    for (unsigned ix = 0; ix < nBinY_ + 2; ++ix)
         resultErrors[ix] = sqrt(resultErrors[ix]);
 
 }
@@ -322,7 +335,7 @@ Histogram2D& Histogram2D::operator=(const Histogram2D& right){
 
 Histogram2D& Histogram2D::operator*=(int right) {
     unsigned sz = this->values_.size();
-    for (unsigned i = 0; i < sz; i++)
+    for (unsigned i = 0; i < sz; ++i)
         this->values_[i] *= right;
     return *this;
 }
@@ -336,7 +349,7 @@ Histogram2D& Histogram2D::operator+=(const Histogram2D& right) {
         this->nBinY_ == right.nBinY_) {
        
         unsigned sz = this->values_.size();
-        for (unsigned i = 0; i < sz; i++)
+        for (unsigned i = 0; i < sz; ++i)
             this->values_[i] += right.values_[i];
         return *this;
     } else {
@@ -353,7 +366,7 @@ Histogram2D& Histogram2D::operator-=(const Histogram2D& right) {
         this->nBinY_ == right.nBinY_) {
        
         unsigned sz = this->values_.size();
-        for (unsigned i = 0; i < sz; i++)
+        for (unsigned i = 0; i < sz; ++i)
             this->values_[i] -= right.values_[i];
         return *this;
     } else {

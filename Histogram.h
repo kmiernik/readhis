@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <cstdlib>
+#include <string>
 #include <sstream>
 #include "HisDrr.h"
 #include "DrrBlock.h"
@@ -20,34 +21,35 @@ using namespace std;
  */
 class Histogram {
     public:
-        const char* gethisId() const { return hisId_; }
-        double   getxMin() const  { return xMin_; }
-        double   getxMax() const { return xMax_; }
-        unsigned getnBinX() const  { return nBinX_; }
-        double getBinWidthX() const { return xMin_ - xMax_ / double(nBinX_) ; }
+        Histogram  (double xMin,  double xMax,
+                    unsigned nBinX, string& hisId)
+                    : xMin_(xMin), xMax_(xMax),
+                      nBinX_(nBinX), hisId_(hisId) {}
 
-        double getX (unsigned ix) const { 
+        virtual string gethisId() const = 0; 
+        virtual double   getxMin() const  { return xMin_; }
+        virtual double   getxMax() const { return xMax_; }
+        virtual unsigned getnBinX() const  { return nBinX_; }
+        virtual double getBinWidthX() const { return xMin_ - xMax_ / double(nBinX_) ; }
+
+        virtual double getX (unsigned ix) const { 
             return ( double(ix) - 0.5 ) * getBinWidthX() + xMin_;
         }
+
         virtual void getDataRaw (vector<long>& values) const;
         virtual void setDataRaw (vector<long>& values);
+        virtual void setDataRaw (vector<unsigned>& values);
 
         virtual void getErrorsRaw (vector<double>& errors) const;
         virtual void setErrorsRaw (vector<double>& errors);
 
-        virtual void pureVirtual () = 0;
-
-        Histogram  (double xMin,  double xMax,
-                    unsigned nBinX, const char* hisId)
-                    : xMin_(xMin), xMax_(xMax),
-                      nBinX_(nBinX), hisId_(hisId) {}
         virtual ~Histogram () {  }
 
     protected:
         double   xMin_;
         double   xMax_;
         unsigned nBinX_;
-        const char* hisId_;
+        string hisId_;
         /**
          * Vector storing raw data. Element [0] stores undershoots, 
          * element [nBinX+1] stores overshoots, elements [1-nBinX] store
@@ -70,14 +72,14 @@ class Histogram {
 class Histogram1D : public Histogram {
     public:
         Histogram1D (double xMin,  double xMax,
-                     unsigned nBinX, const char* hisId)
+                     unsigned nBinX, string& hisId)
                     : Histogram(xMin, xMax, nBinX, hisId) 
                     { 
                         values_.resize( nBinX_ + 2, 0);
                         errors_.resize( nBinX_ + 2, 0.0);
                     }
 
-        void pureVirtual() { } // Nothing here but no longer pure virtual
+        string gethisId() const { return hisId_; }
 
         virtual void add (double x, long n = 1);
         virtual long get (unsigned ix);
@@ -109,7 +111,7 @@ class Histogram2D : public Histogram {
         Histogram2D (double xMin,    double xMax,
                      double yMin,    double yMax,
                      unsigned nBinX, unsigned nBinY,
-                     const char* hisId)
+                     string hisId)
                     : Histogram(xMin, xMax, nBinX, hisId),
                       yMin_(yMin), yMax_(yMax), nBinY_(nBinY)
                     { 
@@ -117,7 +119,7 @@ class Histogram2D : public Histogram {
                         errors_.resize( (nBinX_ + 2) * (nBinY_ + 2), 0.0 );
                     }
 
-        void pureVirtual() { } // Nothing here but no longer pure virtual
+        virtual string gethisId() const { return hisId_; }
 
         double   getyMin()  { return yMin_; }
         double   getyMax()  { return yMax_; }

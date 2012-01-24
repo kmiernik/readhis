@@ -23,142 +23,6 @@ static struct option long_options[] = {
     {0, 0, 0, 0}
 };
 
-class Options {
-    public:
-        unsigned getHisId () { return hisId_; }
-        bool setHisId (unsigned const hisId) {
-            if (hisId > 0 && hisId < 10000) {
-                hisId_ = hisId;
-                isIdSet_ = true;
-                return true;
-            } else {
-                isIdSet_ = false;
-                return false;
-            }
-        }
-        bool getisIdSet() { return isIdSet_; }
-
-        bool getListMode() { return isListMode_; }
-        void setListMode (const bool b) { 
-            if (b) {
-                isListModeZ_ = false;
-                isListMode_ = true;
-            } else {
-                isListMode_ = false;
-            }
-            
-        }
-
-        bool getInfoMode() { return isInfoMode_; }
-        void setInfoMode (const bool b) { isInfoMode_ = b; }
-
-        bool getListModeZ() { return isListModeZ_; }
-        void setListModeZ (const bool b) { 
-            if (b) {
-                isListMode_ = false;
-                isListModeZ_ = true;
-            } else {
-                isListModeZ_ = false;
-            }
-        }
-
-        bool getZeroSup() { return isZeroSup_; }
-        void setZeroSup (const bool b) { isZeroSup_ = b; }
-        
-        bool getGx() { return isGx_; }
-        bool setGx (const bool isGx, const unsigned g0, const unsigned g1) {
-            if (g0 > g1)
-                return false;
-            isGx_ = isGx;
-            if (isGx) {
-                isGy_ = false;
-                g0_ = g0;
-                g1_ = g1;
-            }
-            return true;
-        }
-
-        bool getGy() { return isGy_; }
-        bool setGy (const bool isGy, const unsigned g0, const unsigned g1) {
-            if (g0 > g1)
-                return false;
-            isGy_ = isGy;
-            if (isGy) {
-                isGx_ = false;
-                g0_ = g0;
-                g1_ = g1;
-            }
-            g0_ = g0;
-            g1_ = g1;
-            return true;
-        }
-
-        bool getBg() { return isBg_; }
-        bool setBg (const bool isBg, const unsigned b0, const unsigned b1) {
-            if (b0 > b1)
-                return false;
-            isBg_ = isBg;
-            if (isBg) {
-                isSBg_ = false;
-                b0_ = b0;
-                b1_ = b1;
-            }
-            return true;
-        }
-        
-        bool getSBg() { return isSBg_; }
-        bool setSBg (const bool isSBg, const unsigned b0, const unsigned b1,
-                                       const unsigned b2, const unsigned b3) {
-            if ( !(b3 > b2 && b2 > b1 && b1 > b0) )
-                return false;
-            isSBg_ = isSBg;
-            if (isSBg) {
-                isBg_ = false;
-                b0_ = b0;
-                b1_ = b1;
-                b2_ = b2;
-                b3_ = b3;
-            }
-            return true;
-        }
-
-        Options() {
-            hisId_ = 0;
-            isIdSet_ = false;
-            isListMode_ = false;
-            isListModeZ_ = false;
-            isInfoMode_ = false;
-            isZeroSup_ = false;
-            isGx_ = false;
-            isGy_ = false;
-            isBg_ = false;
-            isSBg_ = false;
-            g0_ = 0;
-            g1_ = 0;
-            b0_ = 0;
-            b1_ = 0;
-            b2_ = 0;
-            b3_ = 0;
-        }
-    private:
-        unsigned hisId_;
-        bool isIdSet_;
-        bool isListMode_;
-        bool isListModeZ_;
-        bool isInfoMode_;
-        bool isZeroSup_;
-        bool isGx_;
-        bool isGy_;
-        bool isBg_;
-        bool isSBg_;
-        unsigned g0_;
-        unsigned g1_;
-        unsigned b0_;
-        unsigned b1_;
-        unsigned b2_;
-        unsigned b3_;
-};
-
 enum Status {
     ok,
     warning,
@@ -379,106 +243,20 @@ int main (int argc, char* argv[]) {
             }
         }
 
-    /* Print any remaining command line arguments (not options). */
     string fileName;
     if (optind < argc) {
         fileName = argv[optind];
+    } else {
+        cout << "Error: missing histogram file name" << endl;
+        cout << "Run readhis --help for more information" << endl;
+        exit(1);
     }
-    cout << fileName << endl;
     
     unsigned int dot = fileName.find_last_of(".");
     string baseName = fileName.substr(0,dot);
-    string drr = baseName + ".drr";
-    string his = baseName + ".his";
 
-    try {
-        HisDrr *h = new HisDrr(drr, his);
-
-        if (options->getListMode()) {
-            vector<int> list;
-            h->getHisList(list);
-            unsigned sz = list.size();
-            for (unsigned int i = 0; i < sz; i++) {
-                cout << list[i] << ", ";
-                if ((i+1) % 10 == 0)
-                    cout << endl;
-
-            }
-            cout << endl;
-            exit(0);
-        }
-        if (options->getListModeZ()) {
-            vector<int> list;
-            vector<unsigned int> d;
-            h->getHisList(list);
-            for (unsigned int i = 0; i < list.size(); i++) {
-                h->getHistogram(d, list[i]);
-                unsigned int sz = d.size();
-                bool empty = true;
-                for (unsigned int j = 0; j < sz; j++)
-                    if (d[j] > 0) {
-                        empty = false;
-                        break;
-                    }
-                if (empty)
-                    cout << "E" << list[i];
-                else
-                    cout << "\033[1;34m" << list[i] << "\033[0m";
-                cout << ", ";
-                if ((i+1) % 10 == 0)
-                    cout << endl;
-
-            }
-            cout << "\033[0;30m\033[0m" << endl;
-            exit(0);
-        }
-
-        int hisId = options->getHisId();
-        DrrHisRecordExtended info = h->getHistogramInfo(hisId);
-        if (options->getInfoMode()) {
-            cout << "# INFORMATIONS: " << info.hisID << endl;
-            cout << "#ID: " << info.hisID << endl;
-            cout << "#hisDim: " << info.hisDim << endl;
-            cout << "#halfWords: " << info.halfWords << endl;
-            for (int j = 0; j < 4; j++)
-                cout << "#params[" << j << "]: " << info.params[j] << endl;
-            for (int j = 0; j < 4; j++)
-                cout << "#raw[" << j << "]: " << info.raw[j] << endl;
-            for (int j = 0; j < 4; j++)
-                cout << "#scaled[" << j << "]: " << info.scaled[j] << endl;
-            for (int j = 0; j < 4; j++)
-                cout << "#minc[" << j << "]: " << info.minc[j] << endl;
-            for (int j = 0; j < 4; j++)
-                cout << "#maxc[" << j << "]: " << info.maxc[j] << endl;
-
-            cout << "#offset: " << info.offset << endl;
-            cout << "#xlabel: " << info.xlabel << endl;
-            cout << "#ylabel: " << info.ylabel << endl;
-
-            for (int j = 0; j < 4; j++)
-                cout << "#calcon[" << j << "]: " << info.calcon[j] << endl;
-
-            cout << "#title: " << info.title << endl;
-            exit(0);
-        }
-
-        if (info.hisDim == 1) {
-            HisDrrHisto1D* h1 = new HisDrrHisto1D(info);
-            //Process here...
-            delete h1;
-        } else if (info.hisID == 2) {
-            HisDrrHisto2D* h2 = new HisDrrHisto2D(info);
-            //Process here...
-            delete h2;
-        } else {
-            throw GenError("Error: Only 1 and 2 dimensional histograms are supported.");
-        }
-
-        delete h;
-    } catch (GenError &err) {
-        cout << "Error: " << err.show() << endl;
-        cout << "Run readhis --help for more information" << endl;
-    }
+    HisDrrHisto h(options, baseName);
+    h.process();
    
     delete options;
     exit(0);

@@ -6,7 +6,7 @@ using namespace std;
 
 void show(Histogram1D& h) {
     cout << "Histogram " << h.gethisId() << endl;
-    for (int i = 0; i < h.getnBinX(); i++)
+    for (int i = 0; i < h.getnBinX(); ++i)
         cout << "[" << i << "] = " << h[i] << endl;
 }
 
@@ -22,7 +22,7 @@ int main() {
     require(h1->getnBinX() == h2->getnBinX());
     
     cout << "Testing set(), [] and ()" << endl;
-    for (int i = 0; i < 11; i++) {
+    for (int i = 0; i < 11; ++i) {
         h1->set(i, i);
         (*h2)[i] = -1;
         (*h3)[i] = 2;
@@ -31,18 +31,18 @@ int main() {
 
     show(*h4);
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; ++i) {
         cout << (*h1)[i] << " " << (*h2)[i] << " " << (*h3)(i) << " " << (*h4)[i] << endl;
     }
     *h4 = *h1 + *h2 - *h3 - *h4;
     cout << "*h4 = *h1 + *h2 - *h3 - *h4" << endl;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; ++i) {
         cout << (*h1)[i] << " " << (*h2)[i] << " " << (*h3)(i) << " " << (*h4)[i] << endl;
     }
 
     *h4 += *h2 + *h3*(-1);
     cout << "*h4 += *h2 + *h3*(-3)" << endl;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; ++i) {
         cout << (*h1)[i] << " " << (*h2)[i] << " " << (*h3)(i) << " " << (*h4)[i] << endl;
     }
 

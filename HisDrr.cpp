@@ -117,11 +117,11 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
     // Using information from drrData drr header is created
     DrrHeader head;
     int totLength;
-    for (unsigned int i = 0; i < drrData.size(); i++) 
+    for (unsigned int i = 0; i < drrData.size(); ++i) 
         totLength += (drrData[i].scaled[0]+drrData[i].scaled[1])*drrData[i].halfWords; 
     // Magic words (whatever they do...)
     string initial = "HHIRFDIR0001";
-    for (unsigned int i = 0; i < initial.size(); i++) {
+    for (unsigned int i = 0; i < initial.size(); ++i) {
         head.initial[i] = initial[i];
     }
     head.nHis = drrData.size();
@@ -135,7 +135,7 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
     head.date[4]=date->tm_hour; 
     head.date[5]=date->tm_min; 
     char description[40] = {0};
-    for (int i = 0; i < 40; i++)
+    for (int i = 0; i < 40; ++i)
         head.description[i] = description[i];
     // Header is followed by 44 empty bytes to reach 128 bytes long block
     drrFile->write((char *)&head, sizeof(head));
@@ -147,28 +147,28 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
     // This part is creating and writing records for each histogram
     // At the same time filling in the his file with '0' values
     int offset = 0;
-    for (unsigned int i = 0; i < drrData.size(); i++) {
+    for (unsigned int i = 0; i < drrData.size(); ++i) {
         int dim = 0;
-        for (int j = 0; j < 2; j++)
+        for (int j = 0; j < 2; ++j)
             if (drrData[i].scaled[j] > 0)
                 dim++;
         record.hisDim = dim;
         record.halfWords = drrData[i].halfWords;
 
-        for (int j = 0; j < 4; j++)
+        for (int j = 0; j < 4; ++j)
             record.params[j] = 0;
 
         record.raw[0] = drrData[i].scaled[0];
         record.raw[1] = drrData[i].scaled[1];
-        for (int j = 2; j < 4; j++)
+        for (int j = 2; j < 4; ++j)
             record.raw[j] = 0;
 
         record.scaled[0] = drrData[i].scaled[0];
         record.scaled[1] = drrData[i].scaled[1];
-        for (int j = 2; j < 4; j++)
+        for (int j = 2; j < 4; ++j)
             record.scaled[j] = 0;
 
-        for (int j = 0; j < 4; j++)
+        for (int j = 0; j < 4; ++j)
             record.minc[j] = 0;
 
         record.maxc[0] = drrData[i].scaled[0]-1;
@@ -176,16 +176,16 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
             record.maxc[1] = drrData[i].scaled[1]-1;
         else
             record.maxc[1] = 0;
-        for (int j = 2; j < 4; j++)
+        for (int j = 2; j < 4; ++j)
             record.maxc[j] = 0;
         
         record.offset = offset;
         char label[12] = {0};
-        for (int j = 0; j < 12; j++) {
+        for (int j = 0; j < 12; ++j) {
             record.xlabel[j] = label[j];
             record.ylabel[j] = label[j];
         }
-        for (int j = 0; j < 4; j++)
+        for (int j = 0; j < 4; ++j)
             record.calcon[j] = 0;
         unsigned int k = 0; 
         while ( (k < 39)&&(k < drrData[i].title.size() - 1) ){
@@ -222,18 +222,18 @@ HisDrr::HisDrr(string &drr, string &his, string &input) {
 
     //At the end of file we put a list of histograms in 128 bytes long blocks
     //They are build of 32 records of 4 bytes (int) long histogram Id's
-    for (unsigned int i = 0; i < drrData.size()/32 + 1; i++) {
+    for (unsigned int i = 0; i < drrData.size()/32 + 1; ++i) {
         int hisList[32] = {0};
         unsigned int j = 0;
         while ((j < drrData.size())&&(j < 32)) {
             hisList[j%32] = drrData[i*32+j].hisID;
-            j++;
+            ++j;
         }
         drrFile->write((char *)hisList, 128);
     }
     //Testing messages 
     //    cout << "# Created files " << drr << " and " << his << " with following histograms: " << endl;
-    //    for (unsigned int i = 0; i < drrData.size(); i++) {
+    //    for (unsigned int i = 0; i < drrData.size(); ++i) {
     //        cout << "# " << drrData[i].hisID << " " << drrData[i].halfWords << " " << drrData[i].scaled[0] << " " << drrData[i].scaled[1] << " \"" << drrData[i].title << "\"" << endl; 
     //    }
 
@@ -278,7 +278,7 @@ void HisDrr::loadDrr() {
     int hId;
     DrrHisRecordExtended drrRecExt;
     hisList.reserve(nHis);
-    for (int i = 0; i < nHis; i++) {
+    for (int i = 0; i < nHis; ++i) {
         if (drrFile->good()) {
             readBlock(&block);
             int currentPos = drrFile->tellg();
@@ -315,7 +315,7 @@ void HisDrr::loadDrr() {
 void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
     // First we search if histogram id exists
     int index = -1;
-    for (unsigned int i = 0; i < hisList.size(); i++)
+    for (unsigned int i = 0; i < hisList.size(); ++i)
         if (hisList[i].hisID == id) {
             index = i;
             break;
@@ -336,7 +336,7 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
         hisFile->seekg(hisList[index].offset*2);
         // Lenght of data is equal to product of all histogram dimensions lengths
         unsigned int length = 1;
-        for (int i = 0; i < hisList[index].hisDim; i++)
+        for (int i = 0; i < hisList[index].hisDim; ++i)
             length = length * hisList[index].scaled[i];
             
         // Check if data exceedes size of unsigned int 
@@ -356,7 +356,7 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
         // which is given in 2 bytes units
         // We cast this value on unsigned int, which is zeroed first
         // It is a safe cast then.
-        for (unsigned int i = 0; i < length; i++) {
+        for (unsigned int i = 0; i < length; ++i) {
             unsigned int u = 0;
             hisFile->read((char*)&u, hisList[index].halfWords*2);
             r.push_back(u);
@@ -372,7 +372,7 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
 DrrHisRecordExtended HisDrr::getHistogramInfo(int id) {
     // First we search if histogram id exists
     int index = -1;
-    for (unsigned int i = 0; i < hisList.size(); i++)
+    for (unsigned int i = 0; i < hisList.size(); ++i)
         if (hisList[i].hisID == id) {
             index = i;
             break;
@@ -389,14 +389,14 @@ DrrHisRecordExtended HisDrr::getHistogramInfo(int id) {
 
 void HisDrr::getHisList(vector<int> &r) {
     r.reserve(hisList.size());
-    for (unsigned int i = 0; i < hisList.size(); i++)
+    for (unsigned int i = 0; i < hisList.size(); ++i)
         r.push_back(hisList[i].hisID);
 }
 
 void HisDrr::zeroHistogram(int id) {
     // First we search if histogram id exists
     int index = -1;
-    for (unsigned int i = 0; i < hisList.size(); i++)
+    for (unsigned int i = 0; i < hisList.size(); ++i)
         if (hisList[i].hisID == id) {
             index = i;
             break;
@@ -416,7 +416,7 @@ void HisDrr::zeroHistogram(int id) {
         hisFile->seekp(hisList[index].offset*2);
         // Lenght of data is equal to product of all histogram dimensions lengths
         unsigned int length = 1;
-        for (int i = 0; i < hisList[index].hisDim; i++)
+        for (int i = 0; i < hisList[index].hisDim; ++i)
             length = length * hisList[index].scaled[i];
             
         // We put 0 for all data in histogram.
@@ -433,7 +433,7 @@ void HisDrr::zeroHistogram(int id) {
 void HisDrr::setValue(const int id, unsigned int pos, unsigned int value){
     // First we search if histogram id exists
     int index = -1;
-    for (unsigned int i = 0; i < hisList.size(); i++)
+    for (unsigned int i = 0; i < hisList.size(); ++i)
         if (hisList[i].hisID == id) {
             index = i;
             break;
@@ -460,7 +460,7 @@ void HisDrr::setValue(const int id, unsigned int pos, unsigned int value){
         hisFile->seekp(hisList[index].offset*2 + pos*hisList[index].halfWords*2);
         // Lenght of data is equal to product of all histogram dimensions lengths
         unsigned int length = 1;
-        for (int i = 0; i < hisList[index].hisDim; i++)
+        for (int i = 0; i < hisList[index].hisDim; ++i)
             length = length * hisList[index].scaled[i];
         if (pos > length) {
             stringstream err;
@@ -477,7 +477,7 @@ void HisDrr::setValue(const int id, unsigned int pos, unsigned int value){
 void HisDrr::setValue(const int id, unsigned int pos, unsigned short value){
     // First we search if histogram id exists
     int index = -1;
-    for (unsigned int i = 0; i < hisList.size(); i++)
+    for (unsigned int i = 0; i < hisList.size(); ++i)
         if (hisList[i].hisID == id) {
             index = i;
             break;
@@ -504,7 +504,7 @@ void HisDrr::setValue(const int id, unsigned int pos, unsigned short value){
         hisFile->seekp(hisList[index].offset*2 + pos*hisList[index].halfWords*2);
         // Lenght of data is equal to product of all histogram dimensions lengths
         unsigned int length = 1;
-        for (int i = 0; i < hisList[index].hisDim; i++)
+        for (int i = 0; i < hisList[index].hisDim; ++i)
             length = length * hisList[index].scaled[i];
         if (pos > length) {
             stringstream err;
@@ -520,7 +520,7 @@ void HisDrr::setValue(const int id, unsigned int pos, unsigned short value){
 void HisDrr::setValue(const int id, vector<unsigned int> &value){
     // First we search if histogram id exists
     int index = -1;
-    for (unsigned int i = 0; i < hisList.size(); i++)
+    for (unsigned int i = 0; i < hisList.size(); ++i)
         if (hisList[i].hisID == id) {
             index = i;
             break;
@@ -546,7 +546,7 @@ void HisDrr::setValue(const int id, vector<unsigned int> &value){
         hisFile->seekp(hisList[index].offset*2);
         // Lenght of data is equal to product of all histogram dimensions lengths
         unsigned int length = 1;
-        for (int i = 0; i < hisList[index].hisDim; i++)
+        for (int i = 0; i < hisList[index].hisDim; ++i)
             length = length * hisList[index].scaled[i];
 //        cout << "length: " << length << " put size: " << value.size() << endl;
         if (value.size() != length) {
@@ -558,7 +558,7 @@ void HisDrr::setValue(const int id, vector<unsigned int> &value){
         // Write value 
         // First cast from vector to array
         unsigned int *newvalue = new unsigned int[length];
-        for (unsigned int i = 0; i < length; i++) {
+        for (unsigned int i = 0; i < length; ++i) {
             newvalue[i] = value[i];
         }
 
@@ -574,7 +574,7 @@ void HisDrr::setValue(const int id, vector<unsigned int> &value){
 void HisDrr::setValue(const int id, vector<unsigned short> &value){
     // First we search if histogram id exists
     int index = -1;
-    for (unsigned int i = 0; i < hisList.size(); i++)
+    for (unsigned int i = 0; i < hisList.size(); ++i)
         if (hisList[i].hisID == id) {
             index = i;
             break;
@@ -600,7 +600,7 @@ void HisDrr::setValue(const int id, vector<unsigned short> &value){
         hisFile->seekp(hisList[index].offset*2);
         // Lenght of data is equal to product of all histogram dimensions lengths
         unsigned int length = 1;
-        for (int i = 0; i < hisList[index].hisDim; i++)
+        for (int i = 0; i < hisList[index].hisDim; ++i)
             length = length * hisList[index].scaled[i];
         if (value.size() != length) {
             stringstream err;
@@ -611,7 +611,7 @@ void HisDrr::setValue(const int id, vector<unsigned short> &value){
         // Write value 
         // First cast from vector to array
         unsigned short *newvalue = new unsigned short[length];
-        for (unsigned int i = 0; i < length; i++) {
+        for (unsigned int i = 0; i < length; ++i) {
             newvalue[i] = value[i];
         }
 
