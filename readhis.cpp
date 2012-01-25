@@ -2,6 +2,7 @@
 #include <getopt.h>
 #include <stdio.h>
 #include <string.h>
+#include <string>
 #include <iostream>
 #include "HisDrr.h"
 #include "HisDrrHisto.h"

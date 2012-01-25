@@ -22,18 +22,18 @@ using namespace std;
 class Histogram {
     public:
         Histogram  (double xMin,  double xMax,
-                    unsigned nBinX, string& hisId)
+                    unsigned nBinX, string hisId)
                     : xMin_(xMin), xMax_(xMax),
-                      nBinX_(nBinX), hisId_(hisId) {}
+                      nBinX_(nBinX), hisId_(hisId) { underflow = 0; overflow = 0;}
 
         virtual string gethisId() const = 0; 
         virtual double   getxMin() const  { return xMin_; }
         virtual double   getxMax() const { return xMax_; }
         virtual unsigned getnBinX() const  { return nBinX_; }
-        virtual double getBinWidthX() const { return xMin_ - xMax_ / double(nBinX_) ; }
+        virtual double getBinWidthX() const { return (xMax_ - xMin_) / double(nBinX_) ; }
 
         virtual double getX (unsigned ix) const { 
-            return ( double(ix) - 0.5 ) * getBinWidthX() + xMin_;
+            return ( double(ix) + 0.5 ) * getBinWidthX() + xMin_;
         }
 
         virtual void getDataRaw (vector<long>& values) const;
@@ -50,21 +50,10 @@ class Histogram {
         double   xMax_;
         unsigned nBinX_;
         string hisId_;
-        /**
-         * Vector storing raw data. Element [0] stores undershoots, 
-         * element [nBinX+1] stores overshoots, elements [1-nBinX] store
-         * "normal" data, total lenght (for 1D) is nBinX+2.
-         * For 2D elements [1-nBinX] stores data for y = 0 (undershoots)
-         *        elements [nBinX+2 - 2*(nBinX+2)-1] stores y = 1
-         *        e.g nBinX = 4, nBinY = 2
-         *        [0  1  2  3  4    5 ]
-         *            ------------
-         *        [6  |7  8  9  10| 11]
-         *        [12 |13 14 15 16| 17]
-         *            -------------
-         *        [18 19 20 21 22 23]
-         * real data is in frame, the rest are overshoot/undershoots bins
-         */
+
+        unsigned underflow; 
+        unsigned overflow;
+
         vector<long>   values_;
         vector<double> errors_;
 };
@@ -72,11 +61,11 @@ class Histogram {
 class Histogram1D : public Histogram {
     public:
         Histogram1D (double xMin,  double xMax,
-                     unsigned nBinX, string& hisId)
+                     unsigned nBinX, string hisId)
                     : Histogram(xMin, xMax, nBinX, hisId) 
-                    { 
-                        values_.resize( nBinX_ + 2, 0);
-                        errors_.resize( nBinX_ + 2, 0.0);
+                    {
+                        values_.resize( nBinX_ , 0);
+                        errors_.resize( nBinX_ , 0.0);
                     }
 
         string gethisId() const { return hisId_; }
@@ -115,8 +104,8 @@ class Histogram2D : public Histogram {
                     : Histogram(xMin, xMax, nBinX, hisId),
                       yMin_(yMin), yMax_(yMax), nBinY_(nBinY)
                     { 
-                        values_.resize( (nBinX_ + 2) * (nBinY_ + 2), 0);
-                        errors_.resize( (nBinX_ + 2) * (nBinY_ + 2), 0.0 );
+                        values_.resize( (nBinX_ ) * (nBinY_ ), 0);
+                        errors_.resize( (nBinX_ ) * (nBinY_ ), 0.0 );
                     }
 
         virtual string gethisId() const { return hisId_; }
@@ -135,7 +124,7 @@ class Histogram2D : public Histogram {
         void setError (unsigned ix, unsigned iy, double error);
 
         double getY (unsigned iy) {
-            return ( double(iy) - 0.5 ) * getBinWidthY() + yMin_;
+            return ( double(iy) + 0.5 ) * getBinWidthY() + yMin_;
         }
 
         void gateX (unsigned x0, unsigned x1, vector<long>& result);

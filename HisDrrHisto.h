@@ -12,12 +12,15 @@ using namespace std;
 
 class HisDrrHisto {
     public:
-        HisDrrHisto(const Options* options, string& baseName);
+        HisDrrHisto(Options* options, string baseName) : baseName_(baseName) {
+        options_ = options;}
         void process();
     private:
-        void runListMode(HisDrr* h, bool zero = false);
-        const Options* options_;
+        Options* options_;
         string baseName_;
+
+        void runListMode(HisDrr* h, bool zero);
+        void runInfoMode(DrrHisRecordExtended& info);
 };
 
 #endif

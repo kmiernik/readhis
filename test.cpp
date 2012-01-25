@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "Histogram.h"
 #include "Exceptions.h"
 
@@ -6,13 +7,13 @@ using namespace std;
 
 void show(Histogram1D& h) {
     cout << "Histogram " << h.gethisId() << endl;
-    for (int i = 0; i < h.getnBinX(); ++i)
+    for (unsigned i = 0; i < h.getnBinX(); ++i)
         cout << "[" << i << "] = " << h[i] << endl;
 }
 
 int main() {
-    int xMin = 0;
-    int xMax = 10;
+    double xMin = 0;
+    double xMax = 10;
     int nBin = 10;
     Histogram1D* h1 = new Histogram1D(xMin, xMax, nBin, "A");
     Histogram1D* h2 = new Histogram1D(xMin, xMax, nBin, "B");

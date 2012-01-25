@@ -9,7 +9,7 @@ SDIR =
 		
 all: readhis test
 
-readhis: readhis.o HisDrr.o Histogram.o HisDrrHisto.o
+readhis: readhis.o HisDrr.o Histogram.o HisDrrHisto.o 
 	$(CPP) $(CPPFLAGS) -o $@ readhis.o HisDrr.o Histogram.o HisDrrHisto.o
 
 test: test.o Histogram.o

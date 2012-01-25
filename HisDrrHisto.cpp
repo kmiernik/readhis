@@ -1,15 +1,19 @@
 #include <string> 
-#include "HisDrrHisto.h"
+#include "DrrBlock.h"
+#include "HisDrr.h"
+#include "Histogram.h"
+#include "Exceptions.h"
 #include "Options.h"
+#include "HisDrrHisto.h"
 
 using namespace std;
 
-inline HisDrrHisto::HisDrrHisto(const Options* options, string& baseName) {
-    options_ = options;
-    baseName_ = baseName;
-}
+//inline HisDrrHisto::HisDrrHisto(Options* options, string baseName) {
+//    options_ = options;
+//    baseName_ = baseName;
+//}
 
-void runListMode(HisDrr* h, bool zero /* = false */) {
+void HisDrrHisto::runListMode(HisDrr* h, bool zero) {
     vector<int> list;
     h->getHisList(list);
     unsigned numOfHis = list.size();
@@ -41,7 +45,7 @@ void runListMode(HisDrr* h, bool zero /* = false */) {
     exit(0);
 }
 
-void runInfoMode(DrrHisRecordExtended& info) {
+void HisDrrHisto::runInfoMode(DrrHisRecordExtended& info) {
     cout << "# INFORMATIONS: " << info.hisID << endl;
     cout << "#ID: " << info.hisID << endl;
     cout << "#hisDim: " << info.hisDim << endl;
@@ -77,7 +81,7 @@ void HisDrrHisto::process() {
         HisDrr *hisdata = new HisDrr(drr, his);
         
         if ( options_->getListMode() )
-            runListMode(hisdata);
+            runListMode(hisdata, false);
         else if (options_->getListModeZ())
             runListMode(hisdata, true);
 
@@ -101,12 +105,57 @@ void HisDrrHisto::process() {
             data.push_back(0);
             
             h1->setDataRaw(data);
-            for (int i = 0; i < info.scaled[0] + 2; ++i)
-                cout << h1->getX(i) << " " << (*h1)[i] << endl;
+            if (options_->getZeroSup()) {
+
+                for (int i = 0; i < info.scaled[0] + 1; ++i)
+                    if ((*h1)[i] == 0 )
+                        cout << h1->getX(i) << " " << (*h1)[i] << endl;
+
+            } else {
+
+                for (int i = 0; i < info.scaled[0] + 1; ++i)
+                    cout << h1->getX(i) << " " << (*h1)[i] << endl;
+
+            }
 
             delete h1;
         } else if (info.hisID == 2) {
-            //Process here...
+            string name = "2D";
+            Histogram2D* h2 = new Histogram2D(info.minc[0], info.maxc[0], info.scaled[0],
+                                              info.minc[1], info.maxc[1], info.scaled[1],
+                                              name);
+
+            vector<unsigned> data;
+            data.reserve(info.scaled[0] + 2);
+            data.reserve( (info.scaled[0] + 2) * (info.scaled[1] + 2));
+            //Load data from his file
+            hisdata->getHistogram(data, hisId);
+            // Now add under- and overshoot bins
+            data.insert(data.begin(), 0);
+            data.push_back(0);
+
+            if (options_->getGy()) {
+                // --gy 
+                if (options_->getBg()){
+                    // --bg
+                    if (options_->getSBg()){
+                        //--sbg
+                    }
+                }
+            } else if (options_->getGx()){
+                // --gx 
+                if (options_->getBg()){
+                    // --bg
+                    if (options_->getSBg()){
+                        // --sbg
+                    }
+                }
+            } else {
+                // no gates
+            }
+
+            delete h2;
+
         } else {
             throw GenError("Error: Only 1 and 2 dimensional histograms are supported.");
         }
