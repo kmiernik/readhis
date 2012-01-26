@@ -4,6 +4,19 @@
 #include "Histogram.h"
 #include "Exceptions.h"
 
+//
+//****************************************************  class  Histogram
+//
+
+Histogram::Histogram (double xMin,  double xMax,
+                    unsigned nBinX, string hisId)
+                    : xMin_(xMin), xMax_(xMax),
+                      nBinX_(nBinX), hisId_(hisId) {
+    underflow = 0;
+    overflow = 0;
+}
+
+
 void Histogram::getDataRaw (vector<long>& values) const  {
     unsigned sz = values_.size();
     values.clear();
@@ -60,7 +73,20 @@ void Histogram::setErrorsRaw (vector<double>& errors) {
         errors_[i] = 0;
 }
     
-//************************ Histogram1D
+//
+//****************************************************  class  Histogram1D
+//
+
+Histogram1D::Histogram1D (double xMin,  double xMax,
+                          unsigned nBinX, string hisId)
+                          : Histogram(xMin, xMax, nBinX, hisId) {
+    values_.resize( nBinX_ , 0);
+    errors_.resize( nBinX_ , 0.0);
+}
+
+unsigned short Histogram1D::getDim() const {
+    return 1;
+}
 
 void Histogram1D::add (double x, long n /* = 1*/) {
     unsigned ix = 0;
@@ -102,6 +128,10 @@ void Histogram1D::setError (unsigned ix, double error) {
         errors_[ix] = error;
     else
         throw ArrayError("Histogram1D::setError Matrix subscript out of bounds"); 
+}
+
+void Histogram1D::rebin1D (Histogram1D* rebinned) {
+    //To be implemented
 }
 
 Histogram1D& Histogram1D::operator=(const Histogram1D& right){
@@ -201,7 +231,23 @@ long Histogram1D::operator()(unsigned ix) const {
      throw ArrayError("Histogram1D::operator(): Matrix subscript out of bounds");
 }
 
-//***************************          Histogram2D
+//
+//****************************************************  class  Histogram2D
+//
+
+Histogram2D::Histogram2D (double xMin,    double xMax,
+                          double yMin,    double yMax,
+                          unsigned nBinX, unsigned nBinY,
+                          string hisId)
+                        : Histogram(xMin, xMax, nBinX, hisId),
+                          yMin_(yMin), yMax_(yMax), nBinY_(nBinY) { 
+    values_.resize( (nBinX_ ) * (nBinY_ ), 0);
+    errors_.resize( (nBinX_ ) * (nBinY_ ), 0.0 );
+}
+
+unsigned short Histogram2D::getDim() const {
+    return 2;
+}
 
 void Histogram2D::add (double x, double y, long n /* = 1*/) {
     unsigned ix = static_cast<unsigned>( (x - xMin_) / getBinWidthX() );
@@ -216,7 +262,7 @@ void Histogram2D::add (double x, double y, long n /* = 1*/) {
         values_[iy * nBinX_  + ix] += n;
 }
 
-long Histogram2D::get (unsigned ix, unsigned iy){
+long Histogram2D::get (unsigned ix, unsigned iy) const {
     return values_[iy * (nBinX_ ) + ix];
 }
 
@@ -227,7 +273,7 @@ void Histogram2D::set (unsigned ix, unsigned iy, long value) {
         throw ArrayError("Histogram2D::set Matrix subscript out of bounds"); 
 }
 
-double Histogram2D::getError (unsigned ix, unsigned iy){
+double Histogram2D::getError (unsigned ix, unsigned iy) const{
     if (ix < nBinX_ && iy < nBinY_ )
         return errors_[iy * nBinX_  + ix];
     else
@@ -319,6 +365,10 @@ void Histogram2D::gateYbackground (unsigned y0, unsigned y1,
     for (unsigned ix = 0; ix < nBinY_; ++ix)
         resultErrors[ix] = sqrt(resultErrors[ix]);
 
+}
+
+void Histogram2D::rebin2D (Histogram2D* rebinned) {
+    //To be implemented
 }
 
 Histogram2D& Histogram2D::operator=(const Histogram2D& right){

@@ -19,7 +19,7 @@ static struct option long_options[] = {
     {"zero",  no_argument, 0,       'z'},
     {"info",  no_argument, 0,       'I'},
     {"list",  no_argument, 0,       'l'},
-    {"listZ", no_argument, 0,       'L'},
+    {"List",  no_argument, 0,       'L'},
     {"help",  no_argument, 0,       'h'},
     {0, 0, 0, 0}
 };
@@ -87,8 +87,8 @@ void help() {
     cout << "  --list : short (-l), does not requires id. Displays list of" << endl;
     cout << "           histograms present in the file. " << endl;
     cout << endl;
-    cout << "  --listZ : short (-L), does not requires id. As above," << endl; 
-    cout << "            additionally marks empty histograms. " << endl;
+    cout << "  --List : short (-L), does not requires id. As above," << endl; 
+    cout << "            additionally marks empty histograms and histogram dimensions. " << endl;
     cout << endl;
 
     cout << "  --help  : displays this help " << endl;
@@ -255,10 +255,16 @@ int main (int argc, char* argv[]) {
     
     unsigned int dot = fileName.find_last_of(".");
     string baseName = fileName.substr(0,dot);
+    const string drr = baseName + ".drr";
+    const string his = baseName + ".his";
 
-    HisDrrHisto h(options, baseName);
-    h.process();
-   
+    try {
+        HisDrrHisto h(drr, his, options);
+        h.process();
+    } catch (GenError &err) {
+        cout << "Error: " << err.show() << endl;
+    }
+  
     delete options;
     exit(0);
 }

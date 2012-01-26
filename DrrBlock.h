@@ -68,9 +68,34 @@ struct DrrHisRecord {
 struct DrrHisRecordExtended : DrrHisRecord {
     //! Histogram ID (unique)
     int hisID;
-    //! Overloaded operator= in case when we want to do DrrHisRecordExt = DrrHisRecord
-    // (which is very convenient)
+
     DrrHisRecordExtended& operator=(const DrrHisRecord& right) {
+        hisDim = right.hisDim;
+        halfWords = right.halfWords;
+        for (int i = 0; i < 4; ++i)
+            params[i] = right.params[i];
+        for (int i = 0; i < 4; ++i)
+            raw[i] = right.raw[i];
+        for (int i = 0; i < 4; ++i)
+            scaled[i] = right.scaled[i];
+        for (int i = 0; i < 4; ++i)
+            minc[i] = right.minc[i];
+        for (int i = 0; i < 4; ++i)
+            maxc[i] = right.maxc[i];
+        offset = right.offset;
+        for (int i = 0; i < 12; ++i)
+            xlabel[i] = right.xlabel[i];
+        for (int i = 0; i < 12; ++i)
+            ylabel[i] = right.ylabel[i];
+        for (int i = 0; i < 4; ++i)
+            calcon[i] = right.calcon[i];
+        for (int i = 0; i < 40; ++i)
+            title[i] = right.title[i];
+        return *this;
+  }
+
+  DrrHisRecordExtended& operator=(const DrrHisRecordExtended& right) {
+        hisID = right.hisID;
         hisDim = right.hisDim;
         halfWords = right.halfWords;
         for (int i = 0; i < 4; ++i)

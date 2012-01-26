@@ -12,15 +12,21 @@ using namespace std;
 //    options_ = options;
 //    baseName_ = baseName;
 //}
+HisDrrHisto::HisDrrHisto(const string drr, const string his, 
+                         const Options* options)
+                        : HisDrr(drr, his) {
+    options_ = options;
+}
 
-void HisDrrHisto::runListMode(HisDrr* h, bool zero) {
+void HisDrrHisto::runListMode(bool more) {
     vector<int> list;
-    h->getHisList(list);
+    getHisList(list);
     unsigned numOfHis = list.size();
     for (unsigned int i = 0; i < numOfHis; ++i) {
-        if (zero) {
+        if (more) {
             vector<unsigned int> d;
-            h->getHistogram(d, list[i]);
+            getHistogram(d, list[i]);
+            info = getHistogramInfo(list[i]);
             unsigned int sz = d.size();
             bool empty = true;
             for (unsigned int j = 0; j < sz; ++j)
@@ -29,9 +35,9 @@ void HisDrrHisto::runListMode(HisDrr* h, bool zero) {
                     break;
                 }
             if (empty)
-                cout << "E" << list[i];
+                cout << "E" << list[i] << "(" << info.hisDim << ")";
             else
-                cout << "\033[1;34m" << list[i] << "\033[0m";
+                cout << "\033[1;34m" << list[i] << "\033[0m" << "(" << info.hisDim << ")";
         } else {
             cout << list[i];
         }
@@ -42,11 +48,9 @@ void HisDrrHisto::runListMode(HisDrr* h, bool zero) {
 
     }
     cout << "\033[0;30m\033[0m" << endl;
-    exit(0);
 }
 
-void HisDrrHisto::runInfoMode(DrrHisRecordExtended& info) {
-    cout << "# INFORMATIONS: " << info.hisID << endl;
+void HisDrrHisto::runInfoMode() {
     cout << "#ID: " << info.hisID << endl;
     cout << "#hisDim: " << info.hisDim << endl;
     cout << "#halfWords: " << info.halfWords << endl;
@@ -69,101 +73,110 @@ void HisDrrHisto::runInfoMode(DrrHisRecordExtended& info) {
         cout << "#calcon[" << j << "]: " << info.calcon[j] << endl;
 
     cout << "#title: " << info.title << endl;
-    exit(0);
+}
+
+void HisDrrHisto::process1D() {
+    // maxc + 1 because drr has bins numbered 0 to maxc 
+    // but size then is maxc+ 1
+    histogram = new Histogram1D(info.minc[0], info.maxc[0] + 1,
+                                info.scaled[0], "");
+
+    vector<unsigned> data;
+    data.reserve(info.scaled[0]);
+    //Load data from his file
+    getHistogram(data, info.hisID);
+    histogram->setDataRaw(data);
+
+    Histogram1D* h1 = dynamic_cast<Histogram1D*>(histogram);
+    if (options_->getZeroSup()) {
+
+        for (int i = 0; i < info.scaled[0]; ++i)
+            if ((*h1)[i] == 0 )
+                cout << h1->getX(i) << " " << (*h1)[i] << endl;
+
+    } else {
+
+        for (int i = 0; i < info.scaled[0]; ++i)
+            cout << h1->getX(i) << " " << (*h1)[i] << endl;
+
+    }
+    delete histogram;
+}
+
+void HisDrrHisto::process2D() {
+    histogram = new Histogram2D(info.minc[0], info.maxc[0] + 1,
+                                info.minc[1], info.maxc[1] + 1, 
+                                info.scaled[0], info.scaled[1],
+                                "");
+
+    vector<unsigned> data;
+    data.reserve( info.scaled[0] * info.scaled[1]);
+
+    //Load data from his file
+    getHistogram(data, info.hisID);
+    histogram->setDataRaw(data);
+
+    Histogram2D* h2 = dynamic_cast<Histogram2D*>(histogram);
+    if (options_->getGy()) {
+        // --gy 
+        if (options_->getBg()){
+            // --bg
+            if (options_->getSBg()){
+                //--sbg
+            }
+        }
+    } else if (options_->getGx()){
+        // --gx 
+        if (options_->getBg()){
+            // --bg
+            if (options_->getSBg()){
+                // --sbg
+            }
+        }
+    } else {
+        // no gates
+        for (int x = 0; x < info.scaled[0]; ++x) {
+            for (int y = 0; y < info.scaled[1]; ++y) {
+                cout << h2->getX(x) << " " << h2->getY(y)  
+                     << " " << (*h2)(x,y) << endl;
+            }
+            cout << endl;
+        }
+    }
+    delete histogram;
 }
 
 void HisDrrHisto::process() {
 
     try {
-        string drr = baseName_ + ".drr";
-        string his = baseName_ + ".his";
-
-        HisDrr *hisdata = new HisDrr(drr, his);
-        
         if ( options_->getListMode() )
-            runListMode(hisdata, false);
+            runListMode(false);
         else if (options_->getListModeZ())
-            runListMode(hisdata, true);
-
-        int hisId = options_->getHisId();
-        DrrHisRecordExtended info = hisdata->getHistogramInfo(hisId);
-
-        if (options_->getInfoMode()) {
-            runInfoMode(info);
-        }
-
-        if (info.hisDim == 1) {
-            string name = "1D";
-            Histogram1D* h1 = new Histogram1D(info.minc[0], info.maxc[0], info.scaled[0], name);
-
-            vector<unsigned> data;
-            data.reserve(info.scaled[0] + 2);
-            //Load data from his file
-            hisdata->getHistogram(data, hisId);
-            // Now add under- and overshoot bins
-            data.insert(data.begin(), 0);
-            data.push_back(0);
+            runListMode(true);
+        else {
             
-            h1->setDataRaw(data);
-            if (options_->getZeroSup()) {
-
-                for (int i = 0; i < info.scaled[0] + 1; ++i)
-                    if ((*h1)[i] == 0 )
-                        cout << h1->getX(i) << " " << (*h1)[i] << endl;
-
-            } else {
-
-                for (int i = 0; i < info.scaled[0] + 1; ++i)
-                    cout << h1->getX(i) << " " << (*h1)[i] << endl;
-
+            if (!options_->isIdSet()) {
+                throw GenError("Histogram id is required");
             }
 
-            delete h1;
-        } else if (info.hisID == 2) {
-            string name = "2D";
-            Histogram2D* h2 = new Histogram2D(info.minc[0], info.maxc[0], info.scaled[0],
-                                              info.minc[1], info.maxc[1], info.scaled[1],
-                                              name);
+            int hisId = options_->getHisId();
+            info = getHistogramInfo(hisId);
 
-            vector<unsigned> data;
-            data.reserve(info.scaled[0] + 2);
-            data.reserve( (info.scaled[0] + 2) * (info.scaled[1] + 2));
-            //Load data from his file
-            hisdata->getHistogram(data, hisId);
-            // Now add under- and overshoot bins
-            data.insert(data.begin(), 0);
-            data.push_back(0);
-
-            if (options_->getGy()) {
-                // --gy 
-                if (options_->getBg()){
-                    // --bg
-                    if (options_->getSBg()){
-                        //--sbg
-                    }
-                }
-            } else if (options_->getGx()){
-                // --gx 
-                if (options_->getBg()){
-                    // --bg
-                    if (options_->getSBg()){
-                        // --sbg
-                    }
-                }
+            if (options_->getInfoMode()) { 
+                runInfoMode();
+            } else if (info.hisDim == 1) {
+                process1D();
+            } else if (info.hisDim == 2) {
+                process2D();
             } else {
-                // no gates
+                throw GenError("Only 1 and 2 dimensional histograms are supported.");
             }
-
-            delete h2;
-
-        } else {
-            throw GenError("Error: Only 1 and 2 dimensional histograms are supported.");
         }
-
-        delete hisdata;
     } catch (GenError &err) {
         cout << "Error: " << err.show() << endl;
         cout << "Run readhis --help for more information" << endl;
     }
 }
 
+HisDrrHisto::~HisDrrHisto() {
+}

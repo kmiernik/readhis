@@ -13,7 +13,37 @@
 #include "Exceptions.h"
 using namespace std;
 
-HisDrr::HisDrr(string &drr, string &his) {
+HisDrr::HisDrr(fstream* drr, fstream* his) {
+    /* test of size of int and short */
+    if ( sizeof(unsigned short) != 2 || sizeof(unsigned int) != 4 ) {
+        stringstream err;
+        err << "HisDrr:-3: This program is intended to run with 'unsigned short' size 2 bytes and"
+            << " and 'unsigned int' size 4 bytes. Your machine uses " << sizeof(unsigned short)
+            << " and " << sizeof(unsigned int) << " respectively." << endl;
+        string msg = err.str();
+        throw IOError(msg);
+    }
+    
+    drrFile = drr;
+    if (!drrFile->good()) {
+        stringstream err;
+        err << "HisDrr:-2: Could not open file " << drr;
+        string msg = err.str();
+        throw IOError(msg);
+    }
+
+    hisFile = his; 
+    if (!hisFile->good()) {
+        stringstream err;
+        err << "HisDrr:-1: Could not open file " << his;
+        string msg = err.str();
+        throw IOError(msg);
+    }
+
+    loadDrr();
+}
+
+HisDrr::HisDrr(const string &drr, const string &his) {
     /* test of size of int and short */
     if ( sizeof(unsigned short) != 2 || sizeof(unsigned int) != 4 ) {
         stringstream err;
@@ -43,7 +73,7 @@ HisDrr::HisDrr(string &drr, string &his) {
     loadDrr();
 }
 
-HisDrr::HisDrr(string &drr, string &his, string &input) {
+HisDrr::HisDrr(const string &drr, const string &his, const string &input) {
     /* test of size of int and short */
     if ( sizeof(unsigned short) != 2 || sizeof(unsigned int) != 4 ) {
         stringstream err;
@@ -369,7 +399,7 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
     rtn.swap(r);
 }
 
-DrrHisRecordExtended HisDrr::getHistogramInfo(int id) {
+DrrHisRecordExtended HisDrr::getHistogramInfo(int id) const {
     // First we search if histogram id exists
     int index = -1;
     for (unsigned int i = 0; i < hisList.size(); ++i)

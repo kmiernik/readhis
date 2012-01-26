@@ -38,10 +38,12 @@ class HisDrr {
     void loadDrr();
 
     public:
-    //! Constructor loading data from .drr
-    HisDrr(string &drr, string &his);
+    //! Constructor taking fstreams 
+    HisDrr(fstream* drr, fstream* his);
+    //! Constructor taking names and opening fstreams
+    HisDrr(const string &drr, const string &his);
     //! Constructor creating and opening new his and drr using definition from input file,
-    HisDrr(string &drr, string &his, string &input);
+    HisDrr(const string &drr, const string &his, const string &input);
 
     ~HisDrr() {
         drrFile->close();
@@ -55,7 +57,7 @@ class HisDrr {
       // Return by reference version
     void getHistogram(vector<unsigned int> &rtn, int id);
     //! return drr data on specified histogram
-    DrrHisRecordExtended getHistogramInfo(int id);
+    DrrHisRecordExtended getHistogramInfo(int id) const;
     //! return histograms id's list 
     void getHisList(vector<int> &r);
     //! zeroes data for a given histogram

@@ -22,25 +22,28 @@ using namespace std;
 class Histogram {
     public:
         Histogram  (double xMin,  double xMax,
-                    unsigned nBinX, string hisId)
-                    : xMin_(xMin), xMax_(xMax),
-                      nBinX_(nBinX), hisId_(hisId) { underflow = 0; overflow = 0;}
+                    unsigned nBinX, string hisId);
 
-        virtual string gethisId() const = 0; 
-        virtual double   getxMin() const  { return xMin_; }
-        virtual double   getxMax() const { return xMax_; }
-        virtual unsigned getnBinX() const  { return nBinX_; }
-        virtual double getBinWidthX() const { return (xMax_ - xMin_) / double(nBinX_) ; }
+        //Number of Histogram dimensions is pure virtual
+        virtual unsigned short getDim() const = 0;
+        
+        //These are basic operations, no need of virutal
+        inline double   getxMin() const;
+        inline double   getxMax() const;
+        inline unsigned getnBinX() const;
+        inline string gethisId() const; 
 
-        virtual double getX (unsigned ix) const { 
-            return ( double(ix) + 0.5 ) * getBinWidthX() + xMin_;
-        }
+        inline double getBinWidthX() const;
+        inline double getX (unsigned ix) const;
 
-        virtual void getDataRaw (vector<long>& values) const;
+        inline virtual long getUnder () const;
+        inline virtual long getOver () const;
+
+        void getDataRaw (vector<long>& values) const;
         virtual void setDataRaw (vector<long>& values);
         virtual void setDataRaw (vector<unsigned>& values);
 
-        virtual void getErrorsRaw (vector<double>& errors) const;
+        void getErrorsRaw (vector<double>& errors) const;
         virtual void setErrorsRaw (vector<double>& errors);
 
         virtual ~Histogram () {  }
@@ -51,48 +54,58 @@ class Histogram {
         unsigned nBinX_;
         string hisId_;
 
-        unsigned underflow; 
-        unsigned overflow;
+        long underflow; 
+        long overflow;
 
         vector<long>   values_;
         vector<double> errors_;
 };
 
+inline long Histogram::getUnder () const { return underflow; }
+inline long Histogram::getOver () const  { return overflow; }
+inline double   Histogram::getxMin() const  { return xMin_; }
+inline double   Histogram::getxMax() const { return xMax_; }
+inline unsigned Histogram::getnBinX() const  { return nBinX_; }
+inline string          Histogram::gethisId() const { return hisId_; }
+
+inline double   Histogram::getBinWidthX() const { 
+    return (xMax_ - xMin_) / double(nBinX_) ;
+}
+inline double   Histogram::getX (unsigned ix) const { 
+    return ( double(ix) + 0.5 ) * getBinWidthX() + xMin_;
+}
+
+
 class Histogram1D : public Histogram {
     public:
         Histogram1D (double xMin,  double xMax,
-                     unsigned nBinX, string hisId)
-                    : Histogram(xMin, xMax, nBinX, hisId) 
-                    {
-                        values_.resize( nBinX_ , 0);
-                        errors_.resize( nBinX_ , 0.0);
-                    }
+                     unsigned nBinX, string hisId);
 
-        string gethisId() const { return hisId_; }
+        unsigned short getDim() const;
 
         virtual void add (double x, long n = 1);
         virtual long get (unsigned ix);
         virtual void set (unsigned ix, long value);
         
-        double getError (unsigned ix);
-        void setError (unsigned ix, double error);
+        virtual double getError (unsigned ix);
+        virtual void setError (unsigned ix, double error);
 
-        void rebin1D (Histogram1D* rebinned);
+        virtual void rebin1D (Histogram1D* rebinned);
 
-        Histogram1D& operator=(const Histogram1D&);
+        virtual Histogram1D& operator=(const Histogram1D&);
 
-        Histogram1D& operator*=(int right); 
-        Histogram1D& operator+=(const Histogram1D& right); 
-        Histogram1D& operator-=(const Histogram1D& right); 
+        virtual Histogram1D& operator*=(int right); 
+        virtual Histogram1D& operator+=(const Histogram1D& right); 
+        virtual Histogram1D& operator-=(const Histogram1D& right); 
 
-        const Histogram1D operator*(int right) const;
-        const Histogram1D operator+(const Histogram1D& right) const; 
-        const Histogram1D operator-(const Histogram1D& right) const; 
+        virtual const Histogram1D operator*(int right) const;
+        virtual const Histogram1D operator+(const Histogram1D& right) const; 
+        virtual const Histogram1D operator-(const Histogram1D& right) const; 
 
-        long& operator[] (unsigned ix);
-        long  operator[] (unsigned ix) const;
-        long& operator() (unsigned ix);
-        long  operator() (unsigned ix) const;
+        virtual long& operator[] (unsigned ix);
+        virtual long  operator[] (unsigned ix) const;
+        virtual long& operator() (unsigned ix);
+        virtual long  operator() (unsigned ix) const;
 };
 
 class Histogram2D : public Histogram {
@@ -100,63 +113,66 @@ class Histogram2D : public Histogram {
         Histogram2D (double xMin,    double xMax,
                      double yMin,    double yMax,
                      unsigned nBinX, unsigned nBinY,
-                     string hisId)
-                    : Histogram(xMin, xMax, nBinX, hisId),
-                      yMin_(yMin), yMax_(yMax), nBinY_(nBinY)
-                    { 
-                        values_.resize( (nBinX_ ) * (nBinY_ ), 0);
-                        errors_.resize( (nBinX_ ) * (nBinY_ ), 0.0 );
-                    }
+                     string hisId);
 
-        virtual string gethisId() const { return hisId_; }
+        unsigned short getDim() const;
 
-        double   getyMin()  { return yMin_; }
-        double   getyMax()  { return yMax_; }
-        unsigned getnBinY() { return nBinY_; }
-
-        double getBinWidthY(){ return yMin_ - yMax_ / double(nBinY_) ; }
+        inline double   getyMin() const;
+        inline double   getyMax() const;
+        inline unsigned getnBinY() const;
+        inline double getBinWidthY() const;
+        inline double getY (unsigned iy) const;
 
         virtual void add (double x, double y, long n = 1);
-        virtual long get (unsigned ix, unsigned iy);
+        virtual long get (unsigned ix, unsigned iy) const;
         virtual void set (unsigned ix, unsigned iy, long value);
         
-        double getError (unsigned ix, unsigned iy);
-        void setError (unsigned ix, unsigned iy, double error);
+        virtual double getError (unsigned ix, unsigned iy) const;
+        virtual void setError (unsigned ix, unsigned iy, double error);
 
-        double getY (unsigned iy) {
-            return ( double(iy) + 0.5 ) * getBinWidthY() + yMin_;
-        }
+        virtual void gateX (unsigned x0, unsigned x1, vector<long>& result);
+        virtual void gateY (unsigned y0, unsigned y1, vector<long>& result);
 
-        void gateX (unsigned x0, unsigned x1, vector<long>& result);
-        void gateY (unsigned y0, unsigned y1, vector<long>& result);
+        virtual void gateXbackground (unsigned x0, unsigned x1,
+                                      unsigned b0, unsigned b1,
+                                      vector<long>& result,
+                                      vector<double>& resultErrors);
+        virtual void gateYbackground (unsigned y0, unsigned y1,
+                                      unsigned b0, unsigned b1,
+                                      vector<long>& result,
+                                      vector<double>& resultErrors);
 
-        void gateXbackground (unsigned x0, unsigned x1,
-                              unsigned b0, unsigned b1,
-                              vector<long>& result,
-                              vector<double>& resultErrors);
-        void gateYbackground (unsigned y0, unsigned y1,
-                              unsigned b0, unsigned b1,
-                              vector<long>& result,
-                              vector<double>& resultErrors);
-        void rebin2D (Histogram2D* rebinned);
+        virtual void rebin2D (Histogram2D* rebinned);
 
-        Histogram2D& operator=(const Histogram2D&);
+        virtual Histogram2D& operator=(const Histogram2D&);
 
-        Histogram2D& operator*=(int right); 
-        Histogram2D& operator+=(const Histogram2D& right); 
-        Histogram2D& operator-=(const Histogram2D& right); 
+        virtual Histogram2D& operator*=(int right); 
+        virtual Histogram2D& operator+=(const Histogram2D& right); 
+        virtual Histogram2D& operator-=(const Histogram2D& right); 
 
-        const Histogram2D operator*(int right) const;
-        const Histogram2D operator+(const Histogram2D& right) const; 
-        const Histogram2D operator-(const Histogram2D& right) const; 
+        virtual const Histogram2D operator*(int right) const;
+        virtual const Histogram2D operator+(const Histogram2D& right) const; 
+        virtual const Histogram2D operator-(const Histogram2D& right) const; 
 
-        long& operator() (unsigned ix, unsigned iy);
-        long  operator() (unsigned ix, unsigned iy) const;
+        virtual long& operator() (unsigned ix, unsigned iy);
+        virtual long  operator() (unsigned ix, unsigned iy) const;
 
-    private:
+    protected:
         double   yMin_;
         double   yMax_;
         unsigned nBinY_;
 
 };
+
+inline double   Histogram2D::getyMin() const  { return yMin_; }
+inline double   Histogram2D::getyMax() const  { return yMax_; }
+inline unsigned Histogram2D::getnBinY() const { return nBinY_; }
+inline double   Histogram2D::getBinWidthY() const { 
+    return (yMax_ - yMin_) / double(nBinY_) ;
+}
+inline double Histogram2D::getY (unsigned iy) const {
+    return ( double(iy) + 0.5 ) * getBinWidthY() + yMin_;
+}
+
+
 #endif

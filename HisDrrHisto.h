@@ -10,17 +10,24 @@
 
 using namespace std;
 
-class HisDrrHisto {
+class HisDrrHisto : public HisDrr {
     public:
-        HisDrrHisto(Options* options, string baseName) : baseName_(baseName) {
-        options_ = options;}
+        HisDrrHisto(const string drr, const string his,
+                    const Options* options);
         void process();
+        ~HisDrrHisto();
     private:
-        Options* options_;
+        const Options* options_;
         string baseName_;
+        //current histogram
+        Histogram* histogram;
+        //current info
+        DrrHisRecordExtended info;
 
-        void runListMode(HisDrr* h, bool zero);
-        void runInfoMode(DrrHisRecordExtended& info);
+        void runListMode(bool zero);
+        void runInfoMode();
+        void process1D();
+        void process2D();
 };
 
 #endif
