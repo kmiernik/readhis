@@ -118,13 +118,13 @@ void HisDrrHisto::process2D() {
 
     Histogram2D* h2 = dynamic_cast<Histogram2D*>(histogram);
     if (options_->getGy()) {
-        // --gy 
         if (options_->getBg()){
             // --bg
             if (options_->getSBg()){
                 //--sbg
             }
         }
+        // --gy 
     } else if (options_->getGx()){
         // --gx 
         if (options_->getBg()){
