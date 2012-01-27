@@ -43,9 +43,6 @@ class Histogram {
         virtual void setDataRaw (vector<long>& values);
         virtual void setDataRaw (vector<unsigned>& values);
 
-        void getErrorsRaw (vector<double>& errors) const;
-        virtual void setErrorsRaw (vector<double>& errors);
-
         virtual ~Histogram () {  }
 
     protected:
@@ -58,7 +55,6 @@ class Histogram {
         long overflow;
 
         vector<long>   values_;
-        vector<double> errors_;
 };
 
 inline long Histogram::getUnder () const { return underflow; }
@@ -87,9 +83,6 @@ class Histogram1D : public Histogram {
         virtual long get (unsigned ix);
         virtual void set (unsigned ix, long value);
         
-        virtual double getError (unsigned ix);
-        virtual void setError (unsigned ix, double error);
-
         virtual void rebin1D (Histogram1D* rebinned);
 
         virtual Histogram1D& operator=(const Histogram1D&);
@@ -126,21 +119,11 @@ class Histogram2D : public Histogram {
         virtual void add (double x, double y, long n = 1);
         virtual long get (unsigned ix, unsigned iy) const;
         virtual void set (unsigned ix, unsigned iy, long value);
-        
-        virtual double getError (unsigned ix, unsigned iy) const;
-        virtual void setError (unsigned ix, unsigned iy, double error);
 
         virtual void gateX (unsigned x0, unsigned x1, vector<long>& result);
         virtual void gateY (unsigned y0, unsigned y1, vector<long>& result);
 
-        virtual void gateXbackground (unsigned x0, unsigned x1,
-                                      unsigned b0, unsigned b1,
-                                      vector<long>& result,
-                                      vector<double>& resultErrors);
-        virtual void gateYbackground (unsigned y0, unsigned y1,
-                                      unsigned b0, unsigned b1,
-                                      vector<long>& result,
-                                      vector<double>& resultErrors);
+        virtual void transpose ();
 
         virtual void rebin2D (Histogram2D* rebinned);
 

@@ -34,8 +34,8 @@ class Options {
         bool setSBg (bool isSBg, unsigned b0, unsigned b1,
                                  unsigned b2, unsigned b3);
         
-        std::vector<unsigned> getGate();
-        std::vector<unsigned> getBgGate();
+        void getGate(std::vector<unsigned>& rtn) const;
+        void getBgGate(std::vector<unsigned>& rtn) const;
 
         Options();
 

@@ -108,11 +108,20 @@ bool Options::setSBg (bool isSBg, unsigned b0, unsigned b1,
     return true;
 }
 
-std::vector<unsigned> Options::getGate() {
-    return g_;
+void Options::getGate(std::vector<unsigned>& rtn) const {
+    rtn.clear();
+    rtn.reserve(g_.size());
+    unsigned sz = g_.size();
+    for (unsigned i = 0; i < sz; ++i)
+        rtn.push_back(g_[i]);
 }
-std::vector<unsigned> Options::getBgGate() {
-    return b_;
+
+void Options::getBgGate(std::vector<unsigned>& rtn) const {
+    rtn.clear();
+    rtn.reserve(b_.size());
+    unsigned sz = b_.size();
+    for (unsigned i = 0; i < sz; ++i)
+        rtn.push_back(b_[i]);
 }
 
 

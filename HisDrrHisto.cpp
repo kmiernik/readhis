@@ -1,4 +1,5 @@
 #include <string> 
+#include <cmath> 
 #include "DrrBlock.h"
 #include "HisDrr.h"
 #include "Histogram.h"
@@ -22,14 +23,14 @@ void HisDrrHisto::runListMode(bool more) {
     vector<int> list;
     getHisList(list);
     unsigned numOfHis = list.size();
-    for (unsigned int i = 0; i < numOfHis; ++i) {
+    for (unsigned i = 0; i < numOfHis; ++i) {
         if (more) {
             vector<unsigned int> d;
             getHistogram(d, list[i]);
             info = getHistogramInfo(list[i]);
-            unsigned int sz = d.size();
+            unsigned sz = d.size();
             bool empty = true;
-            for (unsigned int j = 0; j < sz; ++j)
+            for (unsigned j = 0; j < sz; ++j)
                 if (d[j] > 0) {
                     empty = false;
                     break;
@@ -118,23 +119,140 @@ void HisDrrHisto::process2D() {
 
     Histogram2D* h2 = dynamic_cast<Histogram2D*>(histogram);
     if (options_->getGy()) {
+        //--gy
+        vector<long> result;
+        vector<double> error;
+
+        vector<unsigned> gate;
+        options_->getGate(gate);
+
+        if (gate.size() < 2)
+            throw GenError("--gx: not enough gate points");
+
         if (options_->getBg()){
-            // --bg
-            if (options_->getSBg()){
-                //--sbg
+            //--gy --bg
+            vector<unsigned> bgr;
+            options_->getBgGate(bgr);
+
+            if (bgr.size() >= 2) {
+                vector<long> temp;
+                h2->gateY(gate[0], gate[1], result);
+                h2->gateY(bgr[0], bgr[1], temp);
+                unsigned sz = result.size();
+                error.resize(sz, 0.0);
+                for (unsigned i = 0; i < sz; ++i) {
+                    error[i] = sqrt(result[i] + temp[i]);
+                    result[i] -= temp[i];
+                }
+            } else {
+                throw GenError("--bg: not enough gate points");
             }
+            //end --gy --bg
+        } else if (options_->getSBg()){
+            //--gy --sbg
+            vector<unsigned> bgr;
+            options_->getBgGate(bgr);
+
+            if (bgr.size() >= 4) {
+                vector<long> temp1;
+                vector<long> temp2;
+
+                h2->gateY(gate[0], gate[1], result);
+                h2->gateY(bgr[0], bgr[1], temp1);
+                h2->gateY(bgr[2], bgr[3], temp2);
+                unsigned sz = result.size();
+                error.resize(sz, 0.0);
+                for (unsigned i = 0; i < sz; ++i) {
+                    error[i] = sqrt(result[i] + temp1[i] + temp2[i]);
+                    result[i] -= temp1[i] + temp2[i];
+                }
+            } else {
+                throw GenError("--sbg: not enough gate points");
+            }
+            //end --gy --sbg
+        } else {
+            // --gy no background
+            h2->gateY(gate[0], gate[1], result);
+            unsigned sz = result.size();
+            error.resize(sz, 0.0);
+            for (unsigned i = 0; i < sz; ++i) {
+                error[i] = sqrt(result[i]);
+            }
+            // end --gx no background
         }
-        // --gy 
+
+        unsigned sz = result.size();
+        for (unsigned i = 0; i < sz; ++i)
+            cout << h2->getX(i) << " " << result[i] << " " << error[i] << endl;
+        //end --gx
     } else if (options_->getGx()){
-        // --gx 
+        //--gx
+        vector<long> result;
+        vector<double> error;
+
+        vector<unsigned> gate;
+        options_->getGate(gate);
+        if (gate.size() < 2)
+            throw GenError("--gx: not enough gate points");
+
         if (options_->getBg()){
-            // --bg
-            if (options_->getSBg()){
-                // --sbg
+            //--gx --bg
+            vector<unsigned> bgr;
+            options_->getBgGate(bgr);
+
+            if (bgr.size() >= 2) {
+                vector<long> temp;
+                h2->gateX(gate[0], gate[1], result);
+                h2->gateX(bgr[0], bgr[1], temp);
+                unsigned sz = result.size();
+                error.resize(sz, 0.0);
+                for (unsigned i = 0; i < sz; ++i) {
+                    error[i] = sqrt(result[i] + temp[i]);
+                    result[i] -= temp[i];
+                }
+            } else {
+                throw GenError("--bg: not enough gate points");
             }
+            //end --gx --bg
+        } else if (options_->getSBg()){
+            //--gx --sbg
+            vector<unsigned> bgr;
+            options_->getBgGate(bgr);
+
+            if (bgr.size() >= 4) {
+                vector<long> temp1;
+                vector<long> temp2;
+
+                h2->gateX(gate[0], gate[1], result);
+                h2->gateX(bgr[0], bgr[1], temp1);
+                h2->gateX(bgr[2], bgr[3], temp2);
+                unsigned sz = result.size();
+                error.resize(sz, 0.0);
+                for (unsigned i = 0; i < sz; ++i) {
+                    error[i] = sqrt(result[i] + temp1[i] + temp2[i]);
+                    result[i] -= temp1[i] + temp2[i];
+                }
+            } else {
+                throw GenError("--sbg: not enough gate points");
+            }
+            //end --gx --sbg
+        } else {
+            // --gx no background
+            h2->gateX(gate[0], gate[1], result);
+            unsigned sz = result.size();
+            error.resize(sz, 0.0);
+            for (unsigned i = 0; i < sz; ++i) {
+                error[i] = sqrt(result[i]);
+            }
+            // end --gx no background
         }
+
+        unsigned sz = result.size();
+        for (unsigned i = 0; i < sz; ++i)
+            cout << h2->getY(i) << " " << result[i] << " " << error[i] << endl;
+        //end --gx
     } else {
-        // no gates
+        // No gates case
         for (int x = 0; x < info.scaled[0]; ++x) {
             for (int y = 0; y < info.scaled[1]; ++y) {
                 cout << h2->getX(x) << " " << h2->getY(y)  
@@ -142,7 +260,9 @@ void HisDrrHisto::process2D() {
             }
             cout << endl;
         }
-    }
+        //end no gates
+    } 
+
     delete histogram;
 }
 
@@ -154,7 +274,6 @@ void HisDrrHisto::process() {
         else if (options_->getListModeZ())
             runListMode(true);
         else {
-            
             if (!options_->isIdSet()) {
                 throw GenError("Histogram id is required");
             }

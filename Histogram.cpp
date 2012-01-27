@@ -25,15 +25,6 @@ void Histogram::getDataRaw (vector<long>& values) const  {
         values.push_back(values_[i]);
 }
 
-
-void Histogram::getErrorsRaw (vector<double>& errors) const  {
-    unsigned sz = errors_.size();
-    errors.clear();
-    errors.reserve(sz);
-    for (unsigned i = 0; i < sz; ++i)
-        errors.push_back(errors_[i]);
-}
-
 void Histogram::setDataRaw (vector<long>& values) {
     unsigned szLow  = min( values.size(), values_.size() );
     unsigned sz = values_.size();
@@ -60,18 +51,6 @@ void Histogram::setDataRaw (vector<unsigned>& values) {
         values_[i] = 0;
 }
 
-void Histogram::setErrorsRaw (vector<double>& errors) {
-    unsigned szLow  = min( errors.size(), errors_.size() );
-    unsigned sz = errors_.size();
-
-    unsigned i = 0;
-
-    for (; i < szLow; ++i)
-        errors_[i] = errors[i];
-
-    for (; i < sz; ++i)
-        errors_[i] = 0;
-}
     
 //
 //****************************************************  class  Histogram1D
@@ -81,7 +60,6 @@ Histogram1D::Histogram1D (double xMin,  double xMax,
                           unsigned nBinX, string hisId)
                           : Histogram(xMin, xMax, nBinX, hisId) {
     values_.resize( nBinX_ , 0);
-    errors_.resize( nBinX_ , 0.0);
 }
 
 unsigned short Histogram1D::getDim() const {
@@ -116,20 +94,6 @@ void Histogram1D::set (unsigned ix, long value) {
         throw ArrayError("Histogram1D::set Matrix subscript out of bounds"); 
 }
         
-double Histogram1D::getError (unsigned ix) {
-    if (ix < nBinX_ )
-        return errors_[ix];
-    else
-        throw ArrayError("Histogram1D::getError Matrix subscript out of bounds"); 
-}
-
-void Histogram1D::setError (unsigned ix, double error) {
-    if (ix < nBinX_ )
-        errors_[ix] = error;
-    else
-        throw ArrayError("Histogram1D::setError Matrix subscript out of bounds"); 
-}
-
 void Histogram1D::rebin1D (Histogram1D* rebinned) {
     //To be implemented
 }
@@ -144,7 +108,6 @@ Histogram1D& Histogram1D::operator=(const Histogram1D& right){
     this->nBinX_= right.nBinX_;
     this->hisId_ = right.hisId_;
     this->values_ = right.values_;
-    this->errors_ = right.errors_;
 
     return *this;
 }
@@ -242,7 +205,6 @@ Histogram2D::Histogram2D (double xMin,    double xMax,
                         : Histogram(xMin, xMax, nBinX, hisId),
                           yMin_(yMin), yMax_(yMax), nBinY_(nBinY) { 
     values_.resize( (nBinX_ ) * (nBinY_ ), 0);
-    errors_.resize( (nBinX_ ) * (nBinY_ ), 0.0 );
 }
 
 unsigned short Histogram2D::getDim() const {
@@ -273,20 +235,6 @@ void Histogram2D::set (unsigned ix, unsigned iy, long value) {
         throw ArrayError("Histogram2D::set Matrix subscript out of bounds"); 
 }
 
-double Histogram2D::getError (unsigned ix, unsigned iy) const{
-    if (ix < nBinX_ && iy < nBinY_ )
-        return errors_[iy * nBinX_  + ix];
-    else
-        throw ArrayError("Histogram2D::getErrors Matrix subscript out of bounds"); 
-}
-
-void Histogram2D::setError (unsigned ix, unsigned iy, double error) {
-    if (ix < nBinX_  && iy < nBinY_ )
-        errors_[iy * nBinX_  + ix] = error;
-    else
-        throw ArrayError("Histogram2D::setError Matrix subscript out of bounds"); 
-}
-
 /**
     * Gate includes over and undershoots (0 and nbinX+1 respectively). 
     * Gate includes both x0 and x1 bins.
@@ -308,63 +256,31 @@ void Histogram2D::gateY (unsigned y0, unsigned y1, vector<long>& result) {
     result.resize(nBinX_, 0);
 
     for (unsigned iy = y0; iy < y1 + 1; ++iy) 
-        for (unsigned ix = 0; ix < nBinX_ ; ++iy) 
+        for (unsigned ix = 0; ix < nBinX_ ; ++ix) 
             result[ix] += values_[iy * nBinX_  + ix];
 
 }
 
-void Histogram2D::gateXbackground (unsigned x0, unsigned x1,
-                                   unsigned b0, unsigned b1,
-                        vector<long>& result,
-                        vector<double>& resultErrors) {
+void Histogram2D::transpose () {
+    vector<long> transposed;
+    transposed.reserve(values_.size());
 
-    result.clear();
-    result.resize(nBinY_ , 0);
-    resultErrors.clear();
-    resultErrors.resize(nBinY_ , 0);
+    for (unsigned x = 0; x < nBinX_; ++x)
+        for (unsigned y = 0; y < nBinY_; ++y)
+            transposed.push_back((*this)(x,y));
 
-    for (unsigned ix = x0; ix < x1 + 1; ++ix) 
-        for (unsigned iy = 0; iy < nBinY_ ; ++iy) {
-            result[iy] += values_[iy * nBinX_  + ix];
-            resultErrors[iy] += values_[iy * nBinX_  + ix];
-        }
+    values_.swap(transposed);
+    double   yMin = yMin_;
+    double   yMax = yMax_;
+    unsigned nBinY = nBinY_;
 
-    for (unsigned ix = b0; ix < b1 + 1; ++ix) 
-        for (unsigned iy = 0; iy < nBinY_ ; ++iy) {
-            result[iy] -= values_[iy * nBinX_  + ix];
-            resultErrors[iy] += values_[iy * nBinX_  + ix];
-        }
+    yMin_ = xMin_;
+    yMax_ = xMax_;
+    nBinY_ = nBinX_;
 
-    for (unsigned iy = 0; iy < nBinY_ ; ++iy)
-        resultErrors[iy] = sqrt(resultErrors[iy]);
-
-}
-
-void Histogram2D::gateYbackground (unsigned y0, unsigned y1,
-                                   unsigned b0, unsigned b1,
-                                   vector<long>& result,
-                                   vector<double>& resultErrors) {
-
-    result.clear();
-    result.resize(nBinX_ , 0);
-    resultErrors.clear();
-    resultErrors.resize(nBinX_ , 0);
-
-    for (unsigned iy = y0; iy < y1 + 1; ++iy) 
-        for (unsigned ix = 0; ix < nBinX_ ; ++ix) {
-            result[ix] += values_[iy * nBinX_ + ix];
-            resultErrors[ix] += values_[iy * nBinX_ + ix];
-        }
-
-    for (unsigned iy = b0; iy < b1 + 1; ++iy) 
-        for (unsigned ix = 0; ix < nBinX_; ++ix) {
-            result[ix] -= values_[iy * nBinX_  + ix];
-            resultErrors[ix] += values_[iy * nBinX_  + ix];
-        }
-
-    for (unsigned ix = 0; ix < nBinY_; ++ix)
-        resultErrors[ix] = sqrt(resultErrors[ix]);
-
+    xMin_ = yMin;
+    xMax_ = yMax;
+    nBinX_ = nBinY;
 }
 
 void Histogram2D::rebin2D (Histogram2D* rebinned) {
@@ -386,7 +302,6 @@ Histogram2D& Histogram2D::operator=(const Histogram2D& right){
 
     this->hisId_ = right.hisId_;
     this->values_ = right.values_;
-    this->errors_ = right.errors_;
 
     return *this;
 }
