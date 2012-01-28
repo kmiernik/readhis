@@ -24,24 +24,36 @@ class Histogram {
         Histogram  (double xMin,  double xMax,
                     unsigned nBinX, string hisId);
 
-        //Number of Histogram dimensions is pure virtual
+        /**Number of Histogram dimensions is pure virtual.*/
         virtual unsigned short getDim() const = 0;
         
         //These are basic operations, no need of virutal
-        inline double   getxMin() const;
-        inline double   getxMax() const;
-        inline unsigned getnBinX() const;
-        inline string gethisId() const; 
+        double   getxMin() const;
+        double   getxMax() const;
+        unsigned getnBinX() const;
+        string gethisId() const; 
 
-        inline double getBinWidthX() const;
-        inline double getX (unsigned ix) const;
+        double getBinWidthX() const;
+        /** returns middle of bin number ix */
+        double getX (unsigned ix) const;
+        /** returns low edge of bin number ix */
+        double getXlow (unsigned ix) const;
+        /** returns high edge of bin number ix */
+        double getXhigh (unsigned ix) const;
 
-        inline virtual long getUnder () const;
-        inline virtual long getOver () const;
+        virtual long getUnder () const;
+        virtual void setUnder (long underflow);
+        virtual long getOver () const;
+        virtual void setOver (long overflow);
+
+        virtual long getSum () const;
 
         void getDataRaw (vector<long>& values) const;
-        virtual void setDataRaw (vector<long>& values);
-        virtual void setDataRaw (vector<unsigned>& values);
+
+        virtual void setDataRaw (const vector<long>& values);
+        virtual void setDataRaw (const vector<int>& values);
+        virtual void setDataRaw (const vector<unsigned>& values);
+        virtual void setDataRaw (const vector<double>& values);
 
         virtual ~Histogram () {  }
 
@@ -51,24 +63,33 @@ class Histogram {
         unsigned nBinX_;
         string hisId_;
 
-        long underflow; 
-        long overflow;
+        long underflow_; 
+        long overflow_;
+
+        double binWidthX_;
 
         vector<long>   values_;
 };
 
-inline long Histogram::getUnder () const { return underflow; }
-inline long Histogram::getOver () const  { return overflow; }
+inline long     Histogram::getUnder () const { return underflow_; }
+inline void     Histogram::setUnder (long underflow) { underflow_ = underflow; }
+inline long     Histogram::getOver () const  { return overflow_; }
+inline void     Histogram::setOver (long overflow) { overflow_ = overflow; }
 inline double   Histogram::getxMin() const  { return xMin_; }
 inline double   Histogram::getxMax() const { return xMax_; }
 inline unsigned Histogram::getnBinX() const  { return nBinX_; }
-inline string          Histogram::gethisId() const { return hisId_; }
+inline string   Histogram::gethisId() const { return hisId_; }
 
-inline double   Histogram::getBinWidthX() const { 
-    return (xMax_ - xMin_) / double(nBinX_) ;
-}
+inline double   Histogram::getBinWidthX() const { return binWidthX_ ; }
+
 inline double   Histogram::getX (unsigned ix) const { 
-    return ( double(ix) + 0.5 ) * getBinWidthX() + xMin_;
+    return ( double(ix) + 0.5 ) * binWidthX_ + xMin_;
+}
+inline double   Histogram::getXlow (unsigned ix) const { 
+    return ( double(ix) ) * binWidthX_ + xMin_;
+}
+inline double   Histogram::getXhigh (unsigned ix) const { 
+    return ( double(ix) + 1.0 ) * binWidthX_ + xMin_;
 }
 
 
@@ -83,7 +104,12 @@ class Histogram1D : public Histogram {
         virtual long get (unsigned ix);
         virtual void set (unsigned ix, long value);
         
-        virtual void rebin1D (Histogram1D* rebinned);
+        /** Returns rebinned histogram (and ownership to it!).
+         *  Number of counts in new histogram is not guaranted to 
+         *  be the same, as it calculates new counts via floating
+         *  point (number of counts in new bin is proportional to area 
+         *  of intersection between new and old bin. Expect +/- 1 count.*/
+        Histogram1D* rebin1D (double xMin, double xMax, unsigned nBinX);
 
         virtual Histogram1D& operator=(const Histogram1D&);
 
@@ -115,6 +141,8 @@ class Histogram2D : public Histogram {
         inline unsigned getnBinY() const;
         inline double getBinWidthY() const;
         inline double getY (unsigned iy) const;
+        inline double getYlow (unsigned iy) const;
+        inline double getYhigh (unsigned iy) const;
 
         virtual void add (double x, double y, long n = 1);
         virtual long get (unsigned ix, unsigned iy) const;
@@ -145,16 +173,21 @@ class Histogram2D : public Histogram {
         double   yMax_;
         unsigned nBinY_;
 
+        double binWidthY_;
 };
 
 inline double   Histogram2D::getyMin() const  { return yMin_; }
 inline double   Histogram2D::getyMax() const  { return yMax_; }
 inline unsigned Histogram2D::getnBinY() const { return nBinY_; }
-inline double   Histogram2D::getBinWidthY() const { 
-    return (yMax_ - yMin_) / double(nBinY_) ;
+inline double   Histogram2D::getBinWidthY() const { return binWidthY_ ; }
+inline double   Histogram2D::getY (unsigned iy) const {
+    return ( double(iy) + 0.5 ) * binWidthY_ + yMin_;
 }
-inline double Histogram2D::getY (unsigned iy) const {
-    return ( double(iy) + 0.5 ) * getBinWidthY() + yMin_;
+inline double   Histogram2D::getYlow (unsigned iy) const {
+    return ( double(iy) ) * binWidthY_ + yMin_;
+}
+inline double   Histogram2D::getYhigh (unsigned iy) const {
+    return ( double(iy) + 1.0 ) * binWidthY_ + yMin_;
 }
 
 

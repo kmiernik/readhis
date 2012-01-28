@@ -12,10 +12,21 @@ Histogram::Histogram (double xMin,  double xMax,
                     unsigned nBinX, string hisId)
                     : xMin_(xMin), xMax_(xMax),
                       nBinX_(nBinX), hisId_(hisId) {
-    underflow = 0;
-    overflow = 0;
+    underflow_ = 0;
+    overflow_ = 0;
+    binWidthX_ = (xMax - xMin) / double(nBinX);
 }
 
+
+long Histogram::getSum () const {
+    long sum = 0;
+    unsigned sz = values_.size();
+
+    for (unsigned i = 0; i < sz; ++i)
+        sum += values_[i];
+
+    return sum;
+}
 
 void Histogram::getDataRaw (vector<long>& values) const  {
     unsigned sz = values_.size();
@@ -25,7 +36,7 @@ void Histogram::getDataRaw (vector<long>& values) const  {
         values.push_back(values_[i]);
 }
 
-void Histogram::setDataRaw (vector<long>& values) {
+void Histogram::setDataRaw (const vector<long>& values) {
     unsigned szLow  = min( values.size(), values_.size() );
     unsigned sz = values_.size();
 
@@ -38,7 +49,20 @@ void Histogram::setDataRaw (vector<long>& values) {
         values_[i] = 0;
 }
 
-void Histogram::setDataRaw (vector<unsigned>& values) {
+void Histogram::setDataRaw (const vector<int>& values) {
+    unsigned szLow  = min( values.size(), values_.size() );
+    unsigned sz = values_.size();
+
+    unsigned i = 0;
+
+    for (; i < szLow; ++i)
+        values_[i] = static_cast<int>(values[i]);
+
+    for (; i < sz; ++i)
+        values_[i] = 0;
+}
+
+void Histogram::setDataRaw (const vector<unsigned>& values) {
     unsigned szLow  = min( values.size(), values_.size() );
     unsigned sz = values_.size();
 
@@ -51,6 +75,35 @@ void Histogram::setDataRaw (vector<unsigned>& values) {
         values_[i] = 0;
 }
 
+void Histogram::setDataRaw (const vector<double>& values) {
+    unsigned szLow  = min( values.size(), values_.size() );
+    unsigned sz = values_.size();
+
+    unsigned i = 0;
+
+    // Proper rounding:
+    // if number ends with 5 it's rounded to nearest even
+    // e.g 1.5 -> 2
+    //     2.5 -> 2
+    //     3.5 -> 4
+    for (; i < szLow; ++i) {
+        //e.g 1.5 + 0.5 = 2.0
+        //e.g 2.5 + 0.5 = 3.0
+        double val = values[i] + 0.5;
+        double ip;
+        double fp;
+        fp = modf(val, &ip);
+        // 2 % 2 = 0 so 1.5 stays as 2.0 and goes to int=2
+        // 3 % 2 = 1 so 2.5 is now 2.9 and goes to int=2
+        if (fp == 0 && int(ip) % 2 == 1)
+                val -= 0.1;
+        
+        values_[i] = static_cast<long>(val);
+    }
+
+    for (; i < sz; ++i)
+        values_[i] = 0;
+}
     
 //
 //****************************************************  class  Histogram1D
@@ -73,9 +126,9 @@ void Histogram1D::add (double x, long n /* = 1*/) {
         if ( ix < nBinX_)
             values_[ix] += n;
         else
-            ++overflow;
+            ++overflow_;
     } else {
-        ++underflow;
+        ++underflow_;
     }
 
 }
@@ -94,8 +147,58 @@ void Histogram1D::set (unsigned ix, long value) {
         throw ArrayError("Histogram1D::set Matrix subscript out of bounds"); 
 }
         
-void Histogram1D::rebin1D (Histogram1D* rebinned) {
-    //To be implemented
+Histogram1D* Histogram1D::rebin1D (double xMin, double xMax, unsigned nBinX) {
+    
+    double binW = (xMax - xMin) / double(nBinX);   
+    double underflow;
+    double overflow;
+    unsigned sz = values_.size();
+    vector<double> values;
+    values.resize(sz, 0.0);
+    
+    for (unsigned i = 0; i < sz; ++i) {
+        // We find low and high edge of old bin
+        // we find which new bins it goes
+        // each new bin will get number of counts proportional
+        // to area of old bin fitting into new one
+        
+        // Auxillary points to calculate area per new bin:
+        // xlow, bin0_high, bin1_high, ..., xhigh
+        // each bin gets
+        // bin0 -> (bin0h - xlow) / dx, 
+        // bin1 -> (bin1h - bin0h) / dx,
+        // ...
+        
+        // auxillary points
+        vector<double> p;
+        p.push_back(getXlow(i));
+
+        int b0 = (getXlow(i) - xMin) / binW;
+        int b1 = (getXhigh(i) - xMin) / binW;
+        for (int b = b0; b < b1; ++b)
+            p.push_back( (b + 1) * binW + xMin );
+
+        p.push_back(getXhigh(i));
+
+        // p contains at least two points (xlow, xhigh)
+        for (unsigned j = 0; j < p.size() - 1; ++j) {
+            double area = (p[j+1] - p[j]) / binWidthX_ * get(i);
+            int binNumber = b0 + j;
+            if (binNumber < 0)
+                underflow += area;
+            else if (binNumber > (int)(nBinX - 1))
+                overflow += area;
+            else
+                values[binNumber] += area;
+        }
+    }
+
+    Histogram1D* rebinned = new Histogram1D(xMin, xMax, nBinX, "");
+    rebinned->setDataRaw(values);
+    rebinned->setUnder(underflow);
+    rebinned->setOver(overflow);
+
+    return rebinned;
 }
 
 Histogram1D& Histogram1D::operator=(const Histogram1D& right){
@@ -205,6 +308,7 @@ Histogram2D::Histogram2D (double xMin,    double xMax,
                         : Histogram(xMin, xMax, nBinX, hisId),
                           yMin_(yMin), yMax_(yMax), nBinY_(nBinY) { 
     values_.resize( (nBinX_ ) * (nBinY_ ), 0);
+    binWidthY_ = (yMax_ - yMin_) / double(nBinY_) ;
 }
 
 unsigned short Histogram2D::getDim() const {
@@ -217,9 +321,9 @@ void Histogram2D::add (double x, double y, long n /* = 1*/) {
     
     //Underflow first (if one coordinate is below min, and second over max, count goes to underflow)
     if (x < xMin_ || y < yMin_)
-        ++underflow;
+        ++underflow_;
     else if (x > xMax_ || y > yMax_)
-        ++overflow;
+        ++overflow_;
     else
         values_[iy * nBinX_  + ix] += n;
 }
