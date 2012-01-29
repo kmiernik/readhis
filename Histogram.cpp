@@ -371,41 +371,39 @@ unsigned Histogram2D::getiY (double y) const {
         return nBinY_ - 1;
 }
 
-/**
-    * Gate includes over and undershoots (0 and nbinX+1 respectively). 
-    * Gate includes both x0 and x1 bins.
-    */
-void Histogram2D::gateX (unsigned x0, unsigned x1, vector<long>& result) {
-
-    result.clear();
+Histogram1D* Histogram2D::gateX (double xl, double xh) const {
+    
+    vector<long> result;
     result.resize(nBinY_, 0);
 
-    cout << "#" << x0 << " -> ";
-    x0 = getiX(x0);
-    cout << x0 << endl;
-
-    cout << "#" << x1 << " -> ";
-    x1 = getiX(x1);
-    cout << x1 << endl;
+    unsigned x0 = getiX(xl);
+    unsigned x1 = getiX(xh);
 
     for (unsigned ix = x0; ix < x1 + 1; ++ix) 
         for (unsigned iy = 0; iy < nBinY_ ; ++iy) 
             result[iy] += values_[iy * nBinX_  + ix];
 
+    Histogram1D* gate = new Histogram1D(yMin_, yMax_, nBinY_, "");
+    gate->setDataRaw(result);
+    return gate;
+
 }
 
-void Histogram2D::gateY (unsigned y0, unsigned y1, vector<long>& result) {
+Histogram1D* Histogram2D::gateY (double yl, double yh) const {
 
-    result.clear();
+    vector<long> result;
     result.resize(nBinX_, 0);
 
-    y0 = getiY(y0);
-    y1 = getiY(y1);
+    unsigned y0 = getiY(yl);
+    unsigned y1 = getiY(yh);
 
     for (unsigned iy = y0; iy < y1 + 1; ++iy) 
         for (unsigned ix = 0; ix < nBinX_ ; ++ix) 
             result[ix] += values_[iy * nBinX_  + ix];
 
+    Histogram1D* gate = new Histogram1D(xMin_, xMax_, nBinX_, "");
+    gate->setDataRaw(result);
+    return gate;
 }
 
 void Histogram2D::transpose () {

@@ -155,8 +155,14 @@ class Histogram2D : public Histogram {
         virtual long get (unsigned ix, unsigned iy) const;
         virtual void set (unsigned ix, unsigned iy, long value);
 
-        virtual void gateX (unsigned x0, unsigned x1, vector<long>& result);
-        virtual void gateY (unsigned y0, unsigned y1, vector<long>& result);
+        /** Returns projection on Y axis gated on X axis.
+         * Return also ownership to projected histogram (1D).
+         * Gate starts at bin containing
+         * xl end on bin containing xh (including both).
+         */
+        virtual Histogram1D* gateX (double xl, double xh) const;
+        /** Return projection on X axis. See also gateX comment.*/
+        virtual Histogram1D* gateY (double yl, double yh) const;
 
         virtual void transpose ();
 
