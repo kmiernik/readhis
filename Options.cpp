@@ -1,6 +1,19 @@
 #include <vector>
 #include "Options.h"
 
+Options::Options() {
+    hisId_ = 0;
+    isIdSet_ = false;
+    isListMode_ = false;
+    isListModeZ_ = false;
+    isInfoMode_ = false;
+    isZeroSup_ = false;
+    isGx_ = false;
+    isGy_ = false;
+    isBg_ = false;
+    isSBg_ = false;
+}
+
 unsigned Options::getHisId () const { return hisId_; }
 bool Options::setHisId (unsigned hisId) {
     if (hisId > 0 && hisId < 10000) {
@@ -107,6 +120,23 @@ bool Options::setSBg (bool isSBg, unsigned b0, unsigned b1,
     }
     return true;
 }
+bool Options::getBin() const { return isBin_; }
+bool Options::setBin (bool isBin, unsigned bx, unsigned by /*= 0*/) {
+    if (bx < 2 || by == 1)
+        return false;
+
+    bin_.clear();
+    isBin_ = isBin;
+    if (isBin) {
+        bin_.resize(2, 0);
+        bin_[0] = bx;
+        if (by > 1)
+            bin_[1] = by;
+        else
+            bin_[1] = bx;
+    }
+    return true;
+}
 
 void Options::getGate(std::vector<unsigned>& rtn) const {
     rtn.clear();
@@ -124,16 +154,11 @@ void Options::getBgGate(std::vector<unsigned>& rtn) const {
         rtn.push_back(b_[i]);
 }
 
-
-Options::Options() {
-    hisId_ = 0;
-    isIdSet_ = false;
-    isListMode_ = false;
-    isListModeZ_ = false;
-    isInfoMode_ = false;
-    isZeroSup_ = false;
-    isGx_ = false;
-    isGy_ = false;
-    isBg_ = false;
-    isSBg_ = false;
+void Options::getBinning(std::vector<unsigned>& rtn) const {
+    rtn.clear();
+    rtn.reserve(bin_.size());
+    unsigned sz = bin_.size();
+    for (unsigned i = 0; i < sz; ++i)
+        rtn.push_back(bin_[i]);
 }
+

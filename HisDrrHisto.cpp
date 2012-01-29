@@ -89,15 +89,29 @@ void HisDrrHisto::process1D() {
     histogram->setDataRaw(data);
 
     Histogram1D* h1 = dynamic_cast<Histogram1D*>(histogram);
-    if (options_->getZeroSup()) {
 
-        for (int i = 0; i < info.scaled[0]; ++i)
+    if (options_->getBin()) {
+        Histogram1D* h1b;
+        vector<unsigned> bin;
+        options_->getBinning(bin);
+        if (bin[0] > 1)
+            h1b = h1->rebin1D(h1->getxMin(), h1->getxMax(), 
+                              (unsigned)h1->getnBinX()/bin[0]);
+        else
+            throw GenError("HisDrrHisto::process1D : Wrong binning size.");
+        (*h1) =(*h1b);
+        delete h1b;
+    }
+
+    unsigned sz = h1->getnBinX();
+    if (options_->getZeroSup()) {
+        for (unsigned i = 0; i < sz; ++i)
             if ((*h1)[i] == 0 )
                 cout << h1->getX(i) << " " << (*h1)[i] << endl;
 
     } else {
 
-        for (int i = 0; i < info.scaled[0]; ++i)
+        for (unsigned i = 0; i < sz; ++i)
             cout << h1->getX(i) << " " << (*h1)[i] << endl;
 
     }
@@ -118,6 +132,22 @@ void HisDrrHisto::process2D() {
     histogram->setDataRaw(data);
 
     Histogram2D* h2 = dynamic_cast<Histogram2D*>(histogram);
+
+    if (options_->getBin()) {
+        Histogram2D* h2b;
+        vector<unsigned> bin;
+        options_->getBinning(bin);
+        if (bin[0] > 1 && bin[1] > 1)
+            h2b = h2->rebin2D( h2->getxMin(), h2->getxMax(), 
+                               h2->getyMin(), h2->getyMax(), 
+                               (unsigned)h2->getnBinX()/bin[0],
+                               (unsigned)h2->getnBinY()/bin[1] );
+        else
+            throw GenError("HisDrrHisto::process1D : Wrong binning size.");
+        (*h2) =(*h2b);
+        delete h2b;
+    }
+
     if (options_->getGy()) {
         //--gy
         vector<long> result;
@@ -253,8 +283,11 @@ void HisDrrHisto::process2D() {
         //end --gx
     } else {
         // No gates case
-        for (int x = 0; x < info.scaled[0]; ++x) {
-            for (int y = 0; y < info.scaled[1]; ++y) {
+        unsigned szX = h2->getnBinX();
+        unsigned szY = h2->getnBinY();
+
+        for (unsigned x = 0; x < szX; ++x) {
+            for (unsigned y = 0; y < szY; ++y) {
                 cout << h2->getX(x) << " " << h2->getY(y)  
                      << " " << (*h2)(x,y) << endl;
             }

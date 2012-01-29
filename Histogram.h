@@ -34,10 +34,16 @@ class Histogram {
         string gethisId() const; 
 
         double getBinWidthX() const;
+
         /** returns middle of bin number ix */
         double getX (unsigned ix) const;
+
+        /** returns bin number where x is located*/
+        unsigned getiX (double x) const;
+
         /** returns low edge of bin number ix */
         double getXlow (unsigned ix) const;
+        
         /** returns high edge of bin number ix */
         double getXhigh (unsigned ix) const;
 
@@ -101,7 +107,7 @@ class Histogram1D : public Histogram {
         unsigned short getDim() const;
 
         virtual void add (double x, long n = 1);
-        virtual long get (unsigned ix);
+        virtual long get (unsigned ix) const;
         virtual void set (unsigned ix, long value);
         
         /** Returns rebinned histogram (and ownership to it!).
@@ -109,7 +115,7 @@ class Histogram1D : public Histogram {
          *  be the same, as it calculates new counts via floating
          *  point (number of counts in new bin is proportional to area 
          *  of intersection between new and old bin. Expect +/- 1 count.*/
-        Histogram1D* rebin1D (double xMin, double xMax, unsigned nBinX);
+        Histogram1D* rebin1D (double xMin, double xMax, unsigned nBinX) const;
 
         virtual Histogram1D& operator=(const Histogram1D&);
 
@@ -141,6 +147,7 @@ class Histogram2D : public Histogram {
         inline unsigned getnBinY() const;
         inline double getBinWidthY() const;
         inline double getY (unsigned iy) const;
+        unsigned getiY (double y) const;
         inline double getYlow (unsigned iy) const;
         inline double getYhigh (unsigned iy) const;
 
@@ -153,7 +160,9 @@ class Histogram2D : public Histogram {
 
         virtual void transpose ();
 
-        virtual void rebin2D (Histogram2D* rebinned);
+        Histogram2D* rebin2D (double xMin, double xMax,
+                              double yMin, double yMax,
+                              unsigned nBinX, unsigned nBinY) const;
 
         virtual Histogram2D& operator=(const Histogram2D&);
 

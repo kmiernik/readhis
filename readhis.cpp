@@ -16,6 +16,7 @@ static struct option long_options[] = {
     {"gy",    required_argument, 0, 'y'},
     {"bg",    required_argument, 0, 'b'},
     {"sbg",   required_argument, 0, 's'},
+    {"bin",   required_argument, 0, 'B'},
     {"zero",  no_argument, 0,       'z'},
     {"info",  no_argument, 0,       'I'},
     {"list",  no_argument, 0,       'l'},
@@ -30,20 +31,21 @@ enum Status {
     error
 };
 
-Status parseMultiArgs (char* arguments, int* argsArray, unsigned requiredArgs = 0) {
+Status parseMultiArgs (char* arguments, int* argsArray,
+                       unsigned requiredArgs = 0, unsigned optionalArgs = 0) {
     char* tokens;
     tokens = strtok(arguments, ",");
 
     unsigned numberOfTokens = 0;
     while (tokens != 0) {
-        if (numberOfTokens < requiredArgs)
+        if (numberOfTokens < requiredArgs + optionalArgs)
             argsArray[numberOfTokens] = atoi(tokens);
         else
             return warning;
         tokens = strtok(0, ",");
         numberOfTokens++;
     }    
-    if (numberOfTokens == requiredArgs)
+    if (numberOfTokens >= requiredArgs)
         return ok;
     else
         return error;
@@ -79,6 +81,9 @@ void help() {
     cout << "                      gx or gy option. Same as above exept that  " << endl;
     cout << "                      gate is split into two parts x0 to x1 and "<< endl;
     cout << "                      x2 to x3." << endl;
+    cout << "  --bin bx[,by] : short (-B), defines number of histogram bins " << endl;
+    cout << "                  to join. For 2D histogram if only one argument " << endl;
+    cout << "                  is given by=bx is assumed. Bin size must be > 1." << endl;
     cout << endl;
     cout << "  --zero : short (-z), suppresses bins with zero counts in output" << endl;
     cout << endl;
@@ -105,7 +110,7 @@ int main (int argc, char* argv[]) {
         /* getopt_long stores the option index here. */
         int option_index = 0;
 
-        flag = getopt_long (argc, argv, "i:x:y:b:s:zIlLh",
+        flag = getopt_long (argc, argv, "i:x:y:b:s:B:zIlLh",
                         long_options, &option_index);
 
         /* Detect the end of the options. */
@@ -209,6 +214,28 @@ int main (int argc, char* argv[]) {
                         << " and " << a[2] << " to " << a[3] << endl;
                 break;
             }
+
+            case 'B': {
+                int b[2] = {0};
+                Status status = parseMultiArgs(optarg, b, 1, 1);
+                if (status == warning) {
+                    cout << "Warning: option --bin with more then two arguments " << endl;
+                }
+                if (status == error) {
+                    cout << "Error: option --bin requires one or two "  
+                         << "arguments separated by coma e.g 2,4 " << endl;
+                    cout << "Run readhis --help for more information" << endl;
+                    exit(1);
+                }
+                if ( !(options->setBin(true, b[0], b[1])) ) {
+                    cout << "Error: wrong arguments for --bin option" << endl;
+                    cout << "Run readhis --help for more information" << endl;
+                    exit(1);
+                }
+                cout << "# Binning, X: " << b[0] << ", Y: " << b[1] << endl;
+                break;
+            }
+
 
             case 'z': {
                 options->setZeroSup(true);

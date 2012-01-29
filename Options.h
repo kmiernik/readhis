@@ -34,8 +34,12 @@ class Options {
         bool setSBg (bool isSBg, unsigned b0, unsigned b1,
                                  unsigned b2, unsigned b3);
         
+        bool getBin() const;
+        bool setBin (bool isBin, unsigned b0, unsigned b1 = 0);
+
         void getGate(std::vector<unsigned>& rtn) const;
         void getBgGate(std::vector<unsigned>& rtn) const;
+        void getBinning(std::vector<unsigned>& rtn) const;
 
         Options();
 
@@ -50,8 +54,10 @@ class Options {
         bool isGy_;
         bool isBg_;
         bool isSBg_;
+        bool isBin_;
         std::vector<unsigned> g_;
         std::vector<unsigned> b_;
+        std::vector<unsigned> bin_;
 };
 
 #endif
