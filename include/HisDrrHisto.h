@@ -1,3 +1,8 @@
+/*
+ * K. Miernik (k.a.miernik@gmail.com) 2012
+ *
+ */
+
 #ifndef HISDRRHISTO_H
 #define HISDRRHISTO_H
 

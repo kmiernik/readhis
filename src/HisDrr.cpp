@@ -1,5 +1,6 @@
-/**
- * Implementation of Spectrum class
+/*
+ * K. Miernik (k.a.miernik@gmail.com) 2012
+ *
  */
 
 #include <vector>

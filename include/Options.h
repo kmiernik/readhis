@@ -1,7 +1,17 @@
+/*
+ * K. Miernik (k.a.miernik@gmail.com) 2012
+ *
+ */
+
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
 #include <vector>
+/**
+ * Class for storing options for readhis. Options are loaded from
+ * command line by readhis and applied here. The @see HisDrrHisto requires 
+ * pointer to Options in ctor.
+ */
 
 class Options {
     public:

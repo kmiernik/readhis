@@ -1,3 +1,8 @@
+/*
+ * K. Miernik (k.a.miernik@gmail.com) 2012
+ *
+ */
+
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
 
@@ -39,7 +44,8 @@ namespace debug {
     /**
     * General function for requiriment check.
     */
-    inline void require(bool requirement, const std::string& msg = "Requirement failed"){
+    inline void require(bool requirement,
+                        const std::string& msg = "Requirement failed"){
         if (!requirement) {
             // fputs(msg.c_str(), stderr);
             // fputs("\n", stderr);
@@ -64,7 +70,7 @@ namespace debug {
                 text_ = text;
             }
             void show() const { 
-                std::cout << "C: " << counter_ << "." << index_ 
+                std::cout << "#C: " << counter_ << "." << index_ 
                           << " : " << text_ << std::endl;
             }
             ~Counter() { }

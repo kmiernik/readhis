@@ -1,3 +1,8 @@
+/*
+ * K. Miernik (k.a.miernik@gmail.com) 2012
+ *
+ */
+
 #include <cmath>
 #include <string>
 #include <vector>

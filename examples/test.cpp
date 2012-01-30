@@ -34,9 +34,14 @@ void show(Histogram2D& h) {
 int main(int argc, char** argv) {
     double xMin = 0;
     double xMax = 10;
-
-
-    int nBin = atoi(argv[1]);
+    
+    int nBin = 1;
+    if (argc > 1)
+        nBin = atoi(argv[1]);
+    else {
+        cout << "Argument required" << endl;
+        exit(1);
+    }
 
     debug::Counter cnt;
     Histogram1D* h11 = new Histogram1D(xMin, xMax, nBin, "A");

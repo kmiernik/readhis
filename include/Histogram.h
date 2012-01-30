@@ -1,3 +1,8 @@
+/*
+ * K. Miernik (k.a.miernik@gmail.com) 2012
+ *
+ */
+
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
