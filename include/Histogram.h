@@ -20,7 +20,6 @@ using namespace std;
 /**
  *  General purpose base Histogram class.
  *  No instance of base class is intended to be created. 
- *  Look for inheriting classes.
  *  @see Histogram1D
  *  @see Histogram2D
  */
@@ -33,59 +32,100 @@ class Histogram {
         virtual unsigned short getDim() const = 0;
         
         //These are basic operations, no need of virutal
+        /** Returns xMin_ .*/
         double   getxMin() const;
+
+        /** Returns xMax_ .*/
         double   getxMax() const;
+
+        /** Returns nBinX_ .*/
         unsigned getnBinX() const;
+
+        /** Returns hisId_ .*/
         string gethisId() const; 
 
+        /** Returns binWidthX_ */
         double getBinWidthX() const;
 
         /** returns middle of bin number ix */
         virtual double getX (unsigned ix) const;
 
-        /** returns bin number where x is located*/
+        /** Returns bin number where x is located. 
+         * If x is outside upper bound last bin is returned.
+         * If x is outside lower bound 0 bin is returned.
+         */
         virtual unsigned getiX (double x) const;
 
-        /** returns low edge of bin number ix */
+        /** Returns low edge of bin number ix */
         virtual double getXlow (unsigned ix) const;
         
-        /** returns high edge of bin number ix */
+        /** Returns high edge of bin number ix */
         virtual double getXhigh (unsigned ix) const;
 
+        /** Returns underflow_ */
         virtual long getUnder () const;
-        virtual void setUnder (long underflow);
-        virtual long getOver () const;
-        virtual void setOver (long overflow);
 
+        /** Returns overflow_ */
+        virtual long getOver () const;
+
+        /** Returns total number of counts in histogram */
         virtual long getSum () const;
 
+        /** Returns raw data in form of vector. */
         void getDataRaw (vector<long>& values) const;
 
+        /** Sets vector of raw data to passed vector */
         virtual void setDataRaw (const vector<long>& values);
+
+        /** Sets vector of raw data to passed vector. Casts int to long. */
         virtual void setDataRaw (const vector<int>& values);
+        
+        /** Sets vector of raw data to passed vector. Cast unsigned to long. */
         virtual void setDataRaw (const vector<unsigned>& values);
+
+        /** Sets vector of raw data to passed vector. Cast double to long 
+         * using more sophisticated rounding:
+         * * number with floating point part smaller then .5 is rounded down
+         * * number with floating point part larger then .5 is rounded down
+         * * number with floating point equal to .5 is rounded to
+         *                                          nearest even integer
+         * */
         virtual void setDataRaw (const vector<double>& values);
 
         virtual ~Histogram () {  }
 
     protected:
+        /** Lower edge of first bin. */
         double   xMin_;
+
+        /** Upper edge of last bin. */
         double   xMax_;
+        
+        /** Number of bins in X direction.*/
         unsigned nBinX_;
+
+        /** Histogram name. */
         string hisId_;
 
+        /** Any count that would to go bin lower then lowest goes here.
+         * In case of 2 and more dimensions if at least in one dimension count 
+         * would go to lower bin underflow is incremented only. */
         long underflow_; 
+
+        /** Any count that would go to bin higher then the last one goes
+         * here. @see underflow_ .
+         */
         long overflow_;
 
+        /** Bin width in X dimension. */
         double binWidthX_;
 
+        /** Raw data for any number of dimensions. */
         vector<long>   values_;
 };
 
 inline long     Histogram::getUnder () const { return underflow_; }
-inline void     Histogram::setUnder (long underflow) { underflow_ = underflow; }
 inline long     Histogram::getOver () const  { return overflow_; }
-inline void     Histogram::setOver (long overflow) { overflow_ = overflow; }
 inline double   Histogram::getxMin() const  { return xMin_; }
 inline double   Histogram::getxMax() const { return xMax_; }
 inline unsigned Histogram::getnBinX() const  { return nBinX_; }
@@ -103,12 +143,15 @@ inline double   Histogram::getXhigh (unsigned ix) const {
     return ( double(ix) + 1.0 ) * binWidthX_ + xMin_;
 }
 
-
+/**
+ * One dimenstional histogram holding 'long' per bin.
+ */
 class Histogram1D : public Histogram {
     public:
         Histogram1D (double xMin,  double xMax,
                      unsigned nBinX, string hisId);
 
+        /** Overloaded pure virtual from base class. Returns 1.*/
         unsigned short getDim() const;
 
         virtual void add (double x, long n = 1);
@@ -126,42 +169,84 @@ class Histogram1D : public Histogram {
          *  number of bins then anyway). */
         Histogram1D* rebin (double xMin, double xMax, unsigned nBinX) const;
 
+        /** lhs lstogram will be overwritten by rhs. */
         virtual Histogram1D& operator=(const Histogram1D&);
 
+        /** All elements of histogram will be multiplied by right integer. */
         virtual Histogram1D& operator*=(int right); 
+
+        /** All elements of histogram will be incremented by value of rhs
+         * histogram elements. Histograms nBinX, xMin and xMax must be the same. */
         virtual Histogram1D& operator+=(const Histogram1D& right); 
+
+        /** All elements of histogram will be decremented by value of rhs
+         * histogram elements. Histograms nBinX, xMin and xMax must be the same. */
         virtual Histogram1D& operator-=(const Histogram1D& right); 
 
+        /** Returns histogram wheere all elements of histogram are multiplied by right. */
         virtual const Histogram1D operator*(int right) const;
+
+        /** Returns histogram wheere all elements of histogram are multiplied by right. */
         virtual const Histogram1D operator+(const Histogram1D& right) const; 
         virtual const Histogram1D operator-(const Histogram1D& right) const; 
 
+        /** Access to elements by their index.*/
         virtual long& operator[] (unsigned ix);
+
+        /** Access to elements by their index.*/
         virtual long  operator[] (unsigned ix) const;
+
+        /** Access to elements by their index.*/
         virtual long& operator() (unsigned ix);
+
+        /** Access to elements by their index.*/
         virtual long  operator() (unsigned ix) const;
 };
 
+/** Two dimensional histogram holding 'long' per bin.*/
 class Histogram2D : public Histogram {
     public:
         Histogram2D (double xMin,    double xMax,
                      double yMin,    double yMax,
                      unsigned nBinX, unsigned nBinY,
                      string hisId);
-
+        /** Overloaded pure virutal from base class. Returns 2.*/
         unsigned short getDim() const;
 
+        /** Returns yMin_.*/
         inline double   getyMin() const;
+
+        /** Returns yMax_.*/
         inline double   getyMax() const;
+
+        /** Returns nBinY_.*/
         inline unsigned getnBinY() const;
+
+        /** Returns binWidthY_.*/
         inline double getBinWidthY() const;
+
+        /** Returns middle of bin number iy.*/
         inline double getY (unsigned iy) const;
+
+        /** Returns bin number where y is located. 
+         * If y is outside upper bound last bin is returned.
+         * If y is outside lower bound 0 bin is returned.
+         */
         unsigned getiY (double y) const;
-        inline double getYlow (unsigned iy) const;
+
+        /** Returns low edge of bin number iy */
+        inline double getYlow (unsigned iy) const;k
+
+        /** Returns high edge of bin number iy */
         inline double getYhigh (unsigned iy) const;
 
+        /** Add n counts to bin where (x,y) is located. */
         virtual void add (double x, double y, long n = 1);
+
+        /** Returns value of bin (ix,iy). @see Histogram2D::operator() */
         virtual long get (unsigned ix, unsigned iy) const;
+
+        /** Sets value of bin (ix,iy) to value. */
         virtual void set (unsigned ix, unsigned iy, long value);
 
         /** Returns projection on Y axis gated on X axis.
@@ -170,11 +255,16 @@ class Histogram2D : public Histogram {
          * xl end on bin containing xh (including both).
          */
         virtual Histogram1D* gateX (double xl, double xh) const;
-        /** Return projection on X axis. See also gateX comment.*/
+
+        /** Return projection on X axis. @see gateX .*/
         virtual Histogram1D* gateY (double yl, double yh) const;
 
+        /** 10 points for guessing what this function does.
+         * Yes! It transposes the 2D histogram as if it was a matrix. 
+         */
         virtual void transpose ();
-        /** See Histogram1D::rebin1D comment */
+
+        /** See Histogram1D::rebin comment */
         Histogram2D* rebin (double xMin, double xMax,
                             double yMin, double yMax,
                             unsigned nBinX, unsigned nBinY) const;
@@ -189,14 +279,23 @@ class Histogram2D : public Histogram {
         virtual const Histogram2D operator+(const Histogram2D& right) const; 
         virtual const Histogram2D operator-(const Histogram2D& right) const; 
 
+        /** Access to elements by their index.*/
         virtual long& operator() (unsigned ix, unsigned iy);
+
+        /** Access to elements by their index.*/
         virtual long  operator() (unsigned ix, unsigned iy) const;
 
     protected:
+        /** Lower edge of lowest bin in Y direction. */
         double   yMin_;
-        double   yMax_;
-        unsigned nBinY_;
 
+        /** High edge of highest bin in Y direction. */
+        double   yMax_;
+
+        /** Number of bins in Y direction.*/
+        unsigned nBinY_;
+    
+        /** Bin width in Y direction.*/
         double binWidthY_;
 };
 

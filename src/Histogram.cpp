@@ -174,10 +174,8 @@ Histogram1D* Histogram1D::rebin (double xMin, double xMax,
     unsigned sz = values_.size();
     vector<double> values;
     values.resize(nBinX, 0.0);
-//    cout << "#BP21: " << sz << endl;
     
     for (unsigned i = 0; i < sz; i++) {
-//        cout << "#BP21." << i << endl;
         // We find low and high edge of old bin
         // we find which new bins it goes
         // each new bin will get number of counts proportional
@@ -200,30 +198,24 @@ Histogram1D* Histogram1D::rebin (double xMin, double xMax,
             p.push_back( (b + 1) * binW + xMin );
 
         p.push_back(getXhigh(i));
-//        cout << "#BP21." << i << "b :" << b0 << " " << b1 << endl;
 
         // p contains at least two points (xlow, xhigh)
         for (unsigned j = 0; j < p.size() - 1; ++j) {
-//            cout << "#BP21." << i << "." << j << endl;
             double area = (p[j+1] - p[j]) / binWidthX_ * get(i);
             int ix = b0 + j;
-//            cout << "#BP21." << i << "." << j << "b: " << ix << endl;
             if (ix < 0)
                 underflow += area;
             else if (ix > (int)(nBinX - 1))
                 overflow += area;
             else 
                 values[ix] += area;
-//            cout << "#BP21." << i << "." << j << "c: " << area << " " << (int)(nBinX-1) << endl;
         }
-//            cout << "#BP21.d" << endl;
     }
 
-//    cout << "#BP22" << endl;
     Histogram1D* rebinned = new Histogram1D(xMin, xMax, nBinX, "");
     rebinned->setDataRaw(values);
-    rebinned->setUnder(underflow);
-    rebinned->setOver(overflow);
+    rebinned->underflow_ = underflow;
+    rebinned->overflow_ = overflow;
 
     return rebinned;
 }
@@ -436,7 +428,9 @@ void Histogram2D::transpose () {
 Histogram2D* Histogram2D::rebin ( double xMin, double xMax,
                                   double yMin, double yMax,
                                   unsigned nBinX, unsigned nBinY) const {
-    
+    //
+    // See Histogram1D::rebin for method 
+
     if (nBinX < 1 || nBinY < 1)
         throw GenError("Histogram2D::rebin: number of bins cannot be less then 1");
     double binWX = (xMax - xMin) / double(nBinX);   
@@ -490,13 +484,8 @@ Histogram2D* Histogram2D::rebin ( double xMin, double xMax,
 
     Histogram2D* rebinned = new Histogram2D(xMin, xMax, yMin, yMax, nBinX, nBinY, "");
     rebinned->setDataRaw(values);
-    rebinned->setUnder(underflow);
-    rebinned->setOver(overflow);
-
-//    double sum = 0.0;
-//    for (unsigned i = 0; i < values.size(); i++)
-//        sum += values[i];
-//    cout << "#sum before rounding: " << sum << endl;
+    rebinned->underflow_ = underflow;
+    rebinned->overflow_ = overflow_;
 
     return rebinned;
 }

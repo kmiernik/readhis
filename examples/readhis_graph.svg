@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="readhis_graph.svg">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="660.06192"
+     inkscape:cy="661.10935"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1142"
+     inkscape:window-x="0"
+     inkscape:window-y="26"
+     inkscape:window-maximized="1" />
+  <defs
+     id="defs4">
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Mend"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="scale(0.4) rotate(180) translate(10,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path3850" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Mend1"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend1">
+      <path
+         transform="scale(0.4) rotate(180) translate(10,0)"
+         style="marker-start:none;stroke:#b3b3b3;stroke-width:1.0pt;fill:#b3b3b3;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path4289" />
+    </marker>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <text
+       sodipodi:linespacing="125%"
+       id="text2985"
+       y="50.354332"
+       x="64.391396"
+       style="font-size:8.51139069px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+       xml:space="preserve"><tspan
+         y="50.354332"
+         x="64.391396"
+         id="tspan2987"
+         sodipodi:role="line">.his - raw binary data</tspan><tspan
+         id="tspan2989"
+         y="60.993572"
+         x="64.391396"
+         sodipodi:role="line">.drr - histogram headers and</tspan><tspan
+         id="tspan2991"
+         y="71.632812"
+         x="64.391396"
+         sodipodi:role="line">         data location in .his</tspan><tspan
+         id="tspan2993"
+         y="82.272049"
+         x="64.391396"
+         sodipodi:role="line">   * histogram id=100</tspan><tspan
+         id="tspan2995"
+         y="92.911285"
+         x="64.391396"
+         sodipodi:role="line">   * histogram id=101</tspan><tspan
+         id="tspan2999"
+         y="103.55053"
+         x="64.391396"
+         sodipodi:role="line">   * (...)</tspan><tspan
+         id="tspan2997"
+         y="114.18977"
+         x="64.391396"
+         sodipodi:role="line" /></text>
+    <rect
+       y="36.232052"
+       x="53.339752"
+       height="77.37487"
+       width="133.13712"
+       id="rect3001"
+       style="fill:none;stroke:#000000;stroke-width:0.60795653;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       inkscape:connector-curvature="0"
+       id="rect3003"
+       d="m 186.48232,16.632458 0,18.994414 m -133.148022,0 0,-18.994414 133.148022,0"
+       style="fill:none;stroke:#000000;stroke-width:0.60240519;stroke-miterlimit:4;stroke-opacity:1" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3775"
+       y="29.730158"
+       x="87.535637"
+       style="font-size:9.72730446px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+       xml:space="preserve"><tspan
+         y="29.730158"
+         x="87.535637"
+         id="tspan3777"
+         sodipodi:role="line">.his + .drr files</tspan></text>
+    <path
+       sodipodi:nodetypes="caaaaac"
+       inkscape:connector-curvature="0"
+       id="path3779"
+       d="m 188.31796,39.115779 c 0,0 4.27372,0.103531 5.39093,1.609828 2.33784,3.152033 -1.70737,8.215604 -0.0505,11.77304 0.56171,1.206004 2.98255,1.22733 3.06613,2.555103 0.0871,1.383543 -2.32929,1.751619 -2.83583,3.042043 -1.44438,3.679626 1.93154,8.395308 0.0263,11.858848 -0.99984,1.817668 -5.26373,3.3205 -5.26373,3.3205"
+       style="fill:none;stroke:#000000;stroke-width:0.60795653px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <text
+       xml:space="preserve"
+       style="font-size:8.51139069px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+       x="44.415672"
+       y="214.50259"
+       id="text3781"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="44.415672"
+         y="214.50259"
+         id="tspan3793">Sets and stores options.</tspan><tspan
+         sodipodi:role="line"
+         x="44.415672"
+         y="225.14183"
+         id="tspan4480">Setting functions contain logic</tspan><tspan
+         sodipodi:role="line"
+         x="44.415672"
+         y="235.78107"
+         id="tspan4470">and sanity checks.</tspan><tspan
+         sodipodi:role="line"
+         x="44.415672"
+         y="246.4203"
+         id="tspan4472">* --id</tspan><tspan
+         sodipodi:role="line"
+         x="44.415672"
+         y="257.05954"
+         id="tspan4474">* --gx</tspan><tspan
+         sodipodi:role="line"
+         x="44.415672"
+         y="267.69879"
+         id="tspan4476">* --bg</tspan><tspan
+         sodipodi:role="line"
+         x="44.415672"
+         y="278.33801"
+         id="tspan4478">...</tspan><tspan
+         sodipodi:role="line"
+         x="44.415672"
+         y="288.97726"
+         id="tspan3795" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.72730446px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+       x="85.42984"
+       y="193.87842"
+       id="text3801"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3803"
+         x="85.42984"
+         y="193.87842">Options</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.60795653;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3832"
+       width="133.13712"
+       height="83.47757"
+       x="32.967766"
+       y="200.38031" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.60240519;stroke-miterlimit:4;stroke-opacity:1"
+       d="m 166.11033,180.78072 0,18.99441 m -133.148027,0 0,-18.99441 133.148027,0"
+       id="path3834"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path3836"
+       d="M 203.18451,55.267366 274.42345,39.300017"
+       style="fill:none;stroke:#000000;stroke-width:0.60795653px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
+    <path
+       style="fill:#4d4d4d;stroke:#b3b3b3;stroke-width:0.91193479;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Mend1)"
+       d="m 354.11627,104.45762 -0.1869,-40.512758"
+       id="path4282"
+       inkscape:connector-curvature="0" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text4345"
+       y="140.67931"
+       x="293.24359"
+       style="font-size:8.51139069px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+       xml:space="preserve"><tspan
+         id="tspan4347"
+         y="140.67931"
+         x="293.24359"
+         sodipodi:role="line">Inherits after HisDrr</tspan><tspan
+         y="151.31854"
+         x="293.24359"
+         sodipodi:role="line"
+         id="tspan4359">Contains:</tspan><tspan
+         y="161.95778"
+         x="293.24359"
+         sodipodi:role="line"
+         id="tspan4361">* Histogram</tspan><tspan
+         y="172.59703"
+         x="293.24359"
+         sodipodi:role="line"
+         id="tspan4363">* Options</tspan><tspan
+         y="183.23627"
+         x="293.24359"
+         sodipodi:role="line"
+         id="tspan4365">Loads Histogram accordingly to</tspan><tspan
+         y="193.8755"
+         x="293.24359"
+         sodipodi:role="line"
+         id="tspan4367">Options.</tspan><tspan
+         y="204.51474"
+         x="293.24359"
+         sodipodi:role="line"
+         id="tspan4684">Processes histogram.</tspan><tspan
+         y="215.15398"
+         x="293.24359"
+         sodipodi:role="line"
+         id="tspan4423">Output is directed to cout</tspan><tspan
+         id="tspan4349"
+         y="225.79321"
+         x="293.24359"
+         sodipodi:role="line" /></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4351"
+       y="120.05512"
+       x="323.29315"
+       style="font-size:9.72730446px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+       xml:space="preserve"><tspan
+         y="120.05512"
+         x="323.29315"
+         id="tspan4353"
+         sodipodi:role="line">HisDrrHisto</tspan></text>
+    <rect
+       y="126.55702"
+       x="281.79568"
+       height="93.290535"
+       width="133.13712"
+       id="rect4355"
+       style="fill:none;stroke:#000000;stroke-width:0.60795653;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       inkscape:connector-curvature="0"
+       id="path4357"
+       d="m 414.93824,106.95743 0,18.99441 m -133.14802,0 0,-18.99441 133.14802,0"
+       style="fill:none;stroke:#000000;stroke-width:0.60240519;stroke-miterlimit:4;stroke-opacity:1" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.60795653;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Mend)"
+       d="M 145.1547,90.772914 290.24798,157.52683"
+       id="path4369"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:8.51139069px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+       x="190.75949"
+       y="333.48834"
+       id="text4371"
+       sodipodi:linespacing="125%"><tspan
+         id="tspan4383"
+         sodipodi:role="line"
+         x="190.75949"
+         y="333.48834">Parses command line options </tspan><tspan
+         sodipodi:role="line"
+         x="190.75949"
+         y="344.12759"
+         id="tspan4415">and creates</tspan><tspan
+         sodipodi:role="line"
+         x="190.75949"
+         y="354.76682"
+         id="tspan4678"> Options object.</tspan><tspan
+         sodipodi:role="line"
+         x="190.75949"
+         y="365.40607"
+         id="tspan4419">Passes Options to </tspan><tspan
+         sodipodi:role="line"
+         x="190.75949"
+         y="376.04532"
+         id="tspan4680"> HisDrrHisto.</tspan><tspan
+         sodipodi:role="line"
+         x="190.75949"
+         y="386.68454"
+         id="tspan4385" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.72730446px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+       x="225.63235"
+       y="313.47833"
+       id="text4387"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4389"
+         x="225.63235"
+         y="313.47833"
+         style="font-size:10.94321728px;font-weight:bold;-inkscape-font-specification:Liberation Sans Bold">readhis</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.60795653;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect4391"
+       width="133.13712"
+       height="61.046013"
+       x="179.3116"
+       y="319.36609" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.60240519;stroke-miterlimit:4;stroke-opacity:1"
+       d="m 312.45415,299.76649 0,18.99441 m -133.14803,0 0,-18.99441 133.14803,0"
+       id="path4393"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text4456"
+       y="46.880295"
+       x="297.58612"
+       style="font-size:8.51139069px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+       xml:space="preserve"><tspan
+         id="tspan4458"
+         y="46.880295"
+         x="297.58612"
+         sodipodi:role="line">Loads headers from file in ctor</tspan><tspan
+         id="tspan4460"
+         y="57.519535"
+         x="297.58612"
+         sodipodi:role="line" /></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4462"
+       y="26.256121"
+       x="338.60031"
+       style="font-size:9.72730446px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+       xml:space="preserve"><tspan
+         y="26.256121"
+         x="338.60031"
+         id="tspan4464"
+         sodipodi:role="line">HisDrr</tspan></text>
+    <rect
+       y="32.758015"
+       x="286.13821"
+       height="21.163813"
+       width="133.13712"
+       id="rect4466"
+       style="fill:none;stroke:#000000;stroke-width:0.60795653;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       inkscape:connector-curvature="0"
+       id="path4468"
+       d="m 419.28079,13.158422 0,18.994416 m -133.14802,0 0,-18.994416 133.14802,0"
+       style="fill:none;stroke:#000000;stroke-width:0.60240519;stroke-miterlimit:4;stroke-opacity:1" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.60795653px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="m 242.30815,373.85612 c 0,0 93.80134,-10.64931 115.94599,-45.81386 18.72882,-29.74038 -7.42597,-105.17691 -7.42597,-105.17691"
+       id="path4490"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cac" />
+    <path
+       sodipodi:nodetypes="cac"
+       inkscape:connector-curvature="0"
+       id="path4676"
+       d="m 190.41473,351.70914 c 0,0 -28.83137,-3.15623 -39.08293,-12.15913 -14.96494,-13.14218 -24.96963,-54.28183 -24.96963,-54.28183"
+       style="fill:none;stroke:#000000;stroke-width:0.60795653px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.60795653;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:0.60795651, 1.21591302;stroke-dashoffset:0;marker-end:url(#Arrow1Mend)"
+       d="m 168.48486,217.95871 c 0,0 14.55703,83.46538 45.59674,81.42275 29.2776,-1.92668 17.45926,-56.62527 32.57286,-81.77421 10.72227,-17.84178 40.38192,-47.63368 40.38192,-47.63368"
+       id="path4682"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="caac" />
+  </g>
+</svg>

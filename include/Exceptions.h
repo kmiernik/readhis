@@ -8,6 +8,7 @@
 
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <cstdio>
 
 /**
@@ -17,10 +18,14 @@
 * constructor.
 */
 class GenError {
-    const std::string message; //! Error Message
 public:
-    GenError(const std::string msg = 0) : message(msg) {}
+    /** Error message is passed in the ctor.*/
+    GenError(const std::string msg = "") : message(msg) {}
+    /** Shows error message. */
     std::string show() { return message;}
+private:
+    /** Error message. */
+    const std::string message;
 };
 
 /**
@@ -28,7 +33,8 @@ public:
 */
 class IOError : public GenError {
 public:
-    IOError(const std::string msg = 0) : GenError(msg) {} //! Constructor calling base class constructor in initializer list
+    /** Constructor calling base class constructor in initializer list */
+    IOError(const std::string msg = 0) : GenError(msg) {}
 };
 
 /**
@@ -36,7 +42,8 @@ public:
  */
 class ArrayError : public GenError {
 public:
-    ArrayError(const std::string msg = 0) : GenError(msg) {} //! Constructor calling base class constructor in initializer list
+    /** Constructor calling base class constructor in initializer list */
+    ArrayError(const std::string msg = 0) : GenError(msg) {}
 };
 
 namespace debug {
@@ -57,26 +64,50 @@ namespace debug {
      */
     class Counter {
         public:
+            /** Ctor, text message passed as an option. */
             Counter(const std::string& text = "") : text_(text) {
                 ++counter_;
                 index_ = 0;
                 show(); 
             }
+
+            /** Adds one to subindex, then calls show().*/
             void add() {
                 ++index_;
                 show();
             }
-            void setText(const std::string& text) {
-                text_ = text;
+            
+            /** Adds one to subindex, sets text to passed stringstream and calls show(). */
+            void set(const std::stringstream& text) {
+                ++index_;
+                text_ = text.str();
+                show();
             }
+
+            /** Adds one to subindex, sets text to passed string and calls show(). */
+            void set(const std::string& text) {
+                ++index_;
+                text_ = text;
+                show();
+            }
+
+            /** Prints to cout the counter number, index and message. */
             void show() const { 
                 std::cout << "#C: " << counter_ << "." << index_ 
                           << " : " << text_ << std::endl;
             }
             ~Counter() { }
         private:
+            /** Counter number. */
             static int counter_;
+
+            /** Sub index of counter, incremented by each call of add()
+             * and set.*/
             int index_;
+
+            /** Optional text stored by counter. In a form of stringstream
+             * for easier passing values of variables etc.
+             */
             std::string text_;
     };
 }

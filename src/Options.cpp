@@ -43,9 +43,6 @@ void Options::setListMode (bool b) {
     
 }
 
-bool Options::getInfoMode() const { return isInfoMode_; }
-void Options::setInfoMode (bool b) { isInfoMode_ = b; }
-
 bool Options::getListModeZ() const { return isListModeZ_; }
 void Options::setListModeZ (bool b) { 
     if (b) {
@@ -55,6 +52,10 @@ void Options::setListModeZ (bool b) {
         isListModeZ_ = false;
     }
 }
+
+bool Options::getInfoMode() const { return isInfoMode_; }
+void Options::setInfoMode (bool b) { isInfoMode_ = b; }
+
 
 bool Options::getZeroSup() const { return isZeroSup_; }
 void Options::setZeroSup (bool b) { isZeroSup_ = b; }

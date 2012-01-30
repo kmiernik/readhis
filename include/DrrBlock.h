@@ -1,7 +1,6 @@
 /*
-* K. Miernik (k.a.miernik@gmail.com)
+* K. Miernik (k.a.miernik@gmail.com) 2012
 * 
-* Definition file for His_drr class 
 */
 
 #ifndef DRRBLOCK_H
@@ -9,11 +8,10 @@
 
 using namespace std;
 
-//// drr file header structure
 /**
- * drr files start with a header the struct itself is of 84 bytes lenght
+ * A drr file header structure. The drr files start with a header. The struct itself is of 84 bytes lenght
  * but it is followed by 44 bytes of garbage (leftovers from previous file?)
- * to make it round 128 bytes
+ * to make it round 128 bytes as other blocks in file.
  */
 struct DrrHeader {
     //! string HHIRFDIR0001
@@ -28,10 +26,9 @@ struct DrrHeader {
     char description[40];
 };
 
-/// drr block data on histogram
 /**  
- * Structure holding information on specific histgram in .his file
- * it is 128 bytes long and follows structure of drr file
+ * Structure holding information on specific histgram in his file.
+ * It is 128 bytes long and follows structure of drr file.
  */
 struct DrrHisRecord {
     //! Number of dimensions
@@ -60,8 +57,8 @@ struct DrrHisRecord {
     char title[40];
 };
 
-/// Drr block on histogram plus hisID 
 /**
+ * DrrHisRecord plus hisID.
  * Structure extending DrrHisRecord by hisID which is found at the end of
  * drr file (block of 128 contains 32 record -> 4 bytes long id's)
  */
@@ -122,7 +119,6 @@ struct DrrHisRecordExtended : DrrHisRecord {
 
 };
 
-/// Union to read block of data from drr file
 /**
  * This union defines block of data to be read from drr file.
  * Drr file is build using block of 128 bytes.

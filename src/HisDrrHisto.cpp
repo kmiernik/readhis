@@ -37,7 +37,7 @@ void HisDrrHisto::runListMode(bool more) {
                     break;
                 }
             if (empty)
-                cout << "E" << list[i] << "(" << info.hisDim << ")";
+                cout << list[i] << "E(" << info.hisDim << ")";
             else
                 cout << "\033[1;34m" << list[i] << "\033[0m" << "(" << info.hisDim << ")";
         } else {
@@ -103,18 +103,16 @@ void HisDrrHisto::process1D() {
         (*h1) =(*h1b);
         delete h1b;
     }
-
+    
+    cout << "#X  N  dN" << endl;
     unsigned sz = h1->getnBinX();
     if (options_->getZeroSup()) {
         for (unsigned i = 0; i < sz; ++i)
             if ((*h1)[i] == 0 )
-                cout << h1->getX(i) << " " << (*h1)[i] << endl;
-
+                cout << h1->getX(i) << " " << (*h1)[i] << " " << sqrt( (*h1)[i] ) << endl;
     } else {
-
         for (unsigned i = 0; i < sz; ++i)
             cout << h1->getX(i) << " " << (*h1)[i] << endl;
-
     }
     delete histogram;
 }
@@ -159,7 +157,7 @@ void HisDrrHisto::process2D() {
         }
 
         if (bg || sbg){
-            //--gy --bg
+            //--gy/gx --bg
             vector<unsigned> bgr;
             options_->getBgGate(bgr);
             Histogram1D* projBg;
@@ -176,7 +174,7 @@ void HisDrrHisto::process2D() {
                 throw GenError("process2D: Not enough background gate points");
 
             if (sbg) {
-                //--gy --sbg
+                //--gy/gx --sbg
                 if (bgr.size() >= 4) {
                     if (gx)
                         projBg = h2->gateX(bgr[2], bgr[3]);
@@ -223,6 +221,8 @@ void HisDrrHisto::process2D() {
         }
 
         unsigned sz = proj->getnBinX();
+
+        cout << "#X  N  dN" << endl;
         for (unsigned i = 0; i < sz; ++i)
             cout << proj->getX(i) << " " << (*proj)[i] << " " << sqrt((*projErr)[i]) << endl;
 
@@ -251,6 +251,7 @@ void HisDrrHisto::process2D() {
         unsigned szX = h2->getnBinX();
         unsigned szY = h2->getnBinY();
 
+        cout << "#X  Y  N" << endl;
         for (unsigned x = 0; x < szX; ++x) {
             for (unsigned y = 0; y < szY; ++y) {
                 cout << h2->getX(x) << " " << h2->getY(y)  
@@ -261,329 +262,6 @@ void HisDrrHisto::process2D() {
         //end no gates
     }
     //*******************************************************
-/*
-    if (options_->getGy()) {
-        //--gy
-        vector<double> resultX;
-        vector<long> result;
-        vector<double> error;
-
-        vector<unsigned> gate;
-        options_->getGate(gate);
-
-        if (gate.size() < 2)
-            throw GenError("--gx: not enough gate points");
-
-        if (options_->getBg()){
-            //--gy --bg
-            vector<unsigned> bgr;
-            options_->getBgGate(bgr);
-
-            if (bgr.size() >= 2) {
-                Histogram1D* h1g = h2->gateY(gate[0], gate[1]);
-                Histogram1D* h1b = h2->gateY(bgr[0], bgr[1]);
-
-                if (options_->getBin()) {
-                    Histogram1D* h1gb;
-                    Histogram1D* h1bb;
-
-                    vector<unsigned> bin;
-                    options_->getBinning(bin);
-                    if (bin[0] > 1) {
-                        h1gb = h1g->rebin(h1g->getxMin(), h1g->getxMax(), 
-                                            (unsigned)h1g->getnBinX()/bin[0]);
-                        h1bb = h1b->rebin(h1b->getxMin(), h1b->getxMax(), 
-                                            (unsigned)h1b->getnBinX()/bin[0]);
-                    } else
-                        throw GenError("HisDrrHisto::process1D : Wrong binning size.");
-                    (*h1g) =(*h1gb);
-                    (*h1b) =(*h1bb);
-                    delete h1gb;
-                    delete h1bb;
-                }
-
-                unsigned sz = h1g->getnBinX();
-                result.resize(sz, 0);
-                resultX.resize(sz, 0.0);
-                error.resize(sz, 0.0);
-                for (unsigned i = 0; i < sz; ++i) {
-                    error[i] = sqrt( (*h1g)[i] + (*h1b)[i] );
-                    result[i] = (*h1g)[i] - (*h1b)[i];
-                    resultX[i] = h1g->getX(i);
-                }
-
-                delete h1b;
-                delete h1g;
-
-            } else {
-                throw GenError("--bg: not enough gate points");
-            }
-            //end --gy --bg
-        } else if (options_->getSBg()){
-            //--gy --sbg
-            vector<unsigned> bgr;
-            options_->getBgGate(bgr);
-
-            if (bgr.size() >= 4) {
-                Histogram1D* h1g  = h2->gateY(gate[0], gate[1]);
-                Histogram1D* h1b1 = h2->gateY(bgr[0], bgr[1]);
-                Histogram1D* h1b2 = h2->gateY(bgr[2], bgr[3]);
-
-                if (options_->getBin()) {
-                    // gate, bckg 1, bckg 2 - binned
-                    Histogram1D* h1gb;
-                    Histogram1D* h1b1b;
-                    Histogram1D* h1b2b;
-
-                    vector<unsigned> bin;
-                    options_->getBinning(bin);
-                    if (bin[0] > 1) {
-                        h1gb = h1g->rebin(h1g->getxMin(), h1g->getxMax(), 
-                                            (unsigned)h1g->getnBinX()/bin[0]);
-                        h1b1b = h1b1->rebin(h1b1->getxMin(), h1b1->getxMax(), 
-                                            (unsigned)h1b1->getnBinX()/bin[0]);
-                        h1b2b = h1b2->rebin(h1b2->getxMin(), h1b2->getxMax(), 
-                                            (unsigned)h1b2->getnBinX()/bin[0]);
-                    } else
-                        throw GenError("HisDrrHisto::process1D : Wrong binning size.");
-                    (*h1g) =(*h1gb);
-                    (*h1b1) =(*h1b1b);
-                    (*h1b2) =(*h1b2b);
-                    delete h1gb;
-                    delete h1b1b;
-                    delete h1b2b;
-                }
-
-                unsigned sz = h1g->getnBinX();
-                result.resize(sz, 0);
-                resultX.resize(sz, 0.0);
-                error.resize(sz, 0.0);
-                for (unsigned i = 0; i < sz; ++i) {
-                    error[i] = sqrt( (*h1g)[i] + (*h1b1)[i] + (*h1b2)[i] );
-                    result[i] = (*h1g)[i] - (*h1b1)[i] - (*h1b2)[i];
-                    resultX[i] = h1g->getX(i);
-                }
-
-                delete h1b2;
-                delete h1b1;
-                delete h1g;
-            } else {
-                throw GenError("--sbg: not enough gate points");
-            }
-            //end --gy --sbg
-        } else {
-            // --gy no background
-            Histogram1D* h1g  = h2->gateY(gate[0], gate[1]);
-
-            if (options_->getBin()) {
-                // gate binned
-                Histogram1D* h1gb;
-                vector<unsigned> bin;
-                options_->getBinning(bin);
-                if (bin[0] > 1) {
-                    h1gb = h1g->rebin(h1g->getxMin(), h1g->getxMax(), 
-                                        (unsigned)h1g->getnBinX()/bin[0]);
-                } else
-                    throw GenError("HisDrrHisto::process1D : Wrong binning size.");
-                (*h1g) =(*h1gb);
-                delete h1gb;
-            }
-
-            unsigned sz = h1g->getnBinX();
-            result.resize(sz, 0);
-            error.resize(sz, 0.0);
-            resultX.resize(sz, 0.0);
-            for (unsigned i = 0; i < sz; ++i) {
-                error[i] = sqrt( (*h1g)[i] );
-                result[i] = (*h1g)[i];
-                resultX[i] = h1g->getX(i);
-            }
-
-            delete h1g;
-            // end --gx no background
-        }
-
-        unsigned sz = result.size();
-        for (unsigned i = 0; i < sz; ++i)
-            cout << resultX[i] << " " << result[i] << " " << error[i] << endl;
-        //end --gx
-    } else if (options_->getGx()){
-        //--gx
-        vector<long> result;
-        vector<long> resultX;
-        vector<double> error;
-
-        vector<unsigned> gate;
-        options_->getGate(gate);
-        if (gate.size() < 2)
-            throw GenError("--gx: not enough gate points");
-
-        if (options_->getBg()){
-            //--gx --bg
-            vector<unsigned> bgr;
-            options_->getBgGate(bgr);
-
-            if (bgr.size() >= 2) {
-                Histogram1D* h1g = h2->gateX(gate[0], gate[1]);
-                Histogram1D* h1b = h2->gateX(bgr[0], bgr[1]);
-
-                if (options_->getBin()) {
-                    Histogram1D* h1gb;
-                    Histogram1D* h1bb;
-
-                    vector<unsigned> bin;
-                    options_->getBinning(bin);
-                    if (bin[0] > 1) {
-                        h1gb = h1g->rebin(h1g->getxMin(), h1g->getxMax(), 
-                                            (unsigned)h1g->getnBinX()/bin[0]);
-                        h1bb = h1b->rebin(h1b->getxMin(), h1b->getxMax(), 
-                                            (unsigned)h1b->getnBinX()/bin[0]);
-                    } else
-                        throw GenError("HisDrrHisto::process1D : Wrong binning size.");
-                    (*h1g) =(*h1gb);
-                    (*h1b) =(*h1bb);
-                    delete h1gb;
-                    delete h1bb;
-                }
-
-
-                unsigned sz = h1g->getnBinX();
-                result.resize(sz, 0);
-                resultX.resize(sz, 0.0);
-                error.resize(sz, 0.0);
-                for (unsigned i = 0; i < sz; ++i) {
-                    error[i] = sqrt( (*h1g)[i] + (*h1b)[i] );
-                    result[i] = (*h1g)[i] - (*h1b)[i];
-                    resultX[i] = h1g->getX(i);
-                }
-
-                delete h1b;
-                delete h1g;
-            } else {
-                throw GenError("--bg: not enough gate points");
-            }
-            //end --gx --bg
-        } else if (options_->getSBg()){
-            //--gx --sbg
-            vector<unsigned> bgr;
-            options_->getBgGate(bgr);
-
-            if (bgr.size() >= 4) {
-                // gate, bckg 1, bckg 2
-                Histogram1D* h1g  = h2->gateX(gate[0], gate[1]);
-                Histogram1D* h1b1 = h2->gateX(bgr[0], bgr[1]);
-                Histogram1D* h1b2 = h2->gateX(bgr[2], bgr[3]);
-
-                if (options_->getBin()) {
-                    // gate, bckg 1, bckg 2 - binned
-                    Histogram1D* h1gb;
-                    Histogram1D* h1b1b;
-                    Histogram1D* h1b2b;
-
-                    vector<unsigned> bin;
-                    options_->getBinning(bin);
-                    if (bin[0] > 1) {
-                        h1gb = h1g->rebin(h1g->getxMin(), h1g->getxMax(), 
-                                            (unsigned)h1g->getnBinX()/bin[0]);
-                        h1b1b = h1b1->rebin(h1b1->getxMin(), h1b1->getxMax(), 
-                                            (unsigned)h1b1->getnBinX()/bin[0]);
-                        h1b2b = h1b2->rebin(h1b2->getxMin(), h1b2->getxMax(), 
-                                            (unsigned)h1b2->getnBinX()/bin[0]);
-                    } else
-                        throw GenError("HisDrrHisto::process1D : Wrong binning size.");
-                    (*h1g) =(*h1gb);
-                    (*h1b1) =(*h1b1b);
-                    (*h1b2) =(*h1b2b);
-                    delete h1gb;
-                    delete h1b1b;
-                    delete h1b2b;
-                }
-
-
-                unsigned sz = h1g->getnBinX();
-                result.resize(sz, 0);
-                resultX.resize(sz, 0.0);
-                error.resize(sz, 0.0);
-                for (unsigned i = 0; i < sz; ++i) {
-                    error[i] = sqrt( (*h1g)[i] + (*h1b1)[i] + (*h1b2)[i] );
-                    result[i] = (*h1g)[i] - (*h1b1)[i] - (*h1b2)[i];
-                    resultX[i] = h1g->getX(i);
-                }
-
-                delete h1b2;
-                delete h1b1;
-                delete h1g;
-            } else {
-                throw GenError("--sbg: not enough gate points");
-            }
-            //end --gx --sbg
-        } else {
-            // --gx no background
-            Histogram1D* h1g  = h2->gateX(gate[0], gate[1]);
-            if (options_->getBin()) {
-                // gate binned
-                Histogram1D* h1gb;
-                vector<unsigned> bin;
-                options_->getBinning(bin);
-                if (bin[0] > 1) {
-                    h1gb = h1g->rebin(h1g->getxMin(), h1g->getxMax(), 
-                                        (unsigned)h1g->getnBinX()/bin[0]);
-                } else
-                    throw GenError("HisDrrHisto::process1D : Wrong binning size.");
-                (*h1g) =(*h1gb);
-                delete h1gb;
-            }
-
-            unsigned sz = h1g->getnBinX();
-            result.resize(sz, 0);
-            resultX.resize(sz, 0.0);
-            error.resize(sz, 0.0);
-            for (unsigned i = 0; i < sz; ++i) {
-                error[i] = sqrt( (*h1g)[i] );
-                result[i] = (*h1g)[i];
-                resultX[i] = h1g->getX(i);
-            }
-
-            delete h1g;
-            // end --gx no background
-        }
-
-        unsigned sz = result.size();
-        for (unsigned i = 0; i < sz; ++i)
-            cout << resultX[i] << " " << result[i] << " " << error[i] << endl;
-        //end --gx
-    } else {
-        // No gates case
-        
-        // Rebinning (if applicable)
-        if (options_->getBin()) {
-            Histogram2D* h2b;
-            vector<unsigned> bin;
-            options_->getBinning(bin);
-            if (bin[0] > 1 && bin[1] > 1)
-                h2b = h2->rebin( h2->getxMin(), h2->getxMax(), 
-                                h2->getyMin(), h2->getyMax(), 
-                                (unsigned)h2->getnBinX()/bin[0],
-                                (unsigned)h2->getnBinY()/bin[1] );
-            else
-                throw GenError("HisDrrHisto::process1D : Wrong binning size.");
-            (*h2) =(*h2b);
-            delete h2b;
-        }
-
-        unsigned szX = h2->getnBinX();
-        unsigned szY = h2->getnBinY();
-
-        for (unsigned x = 0; x < szX; ++x) {
-            for (unsigned y = 0; y < szY; ++y) {
-                cout << h2->getX(x) << " " << h2->getY(y)  
-                     << " " << (*h2)(x,y) << endl;
-            }
-            cout << endl;
-        }
-        //end no gates
-    } 
-*/
 
     delete histogram;
 }

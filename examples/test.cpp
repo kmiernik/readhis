@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 #include "Histogram.h"
 #include "Exceptions.h"
 
@@ -44,24 +45,32 @@ int main(int argc, char** argv) {
     }
 
     debug::Counter cnt;
+    stringstream ss;
+
     Histogram1D* h11 = new Histogram1D(xMin, xMax, nBin, "A");
 
     cnt.add();
+
     vector<int> data;
     for (int i = 0; i < nBin; ++i)
-        data.push_back(i);
+        data.push_back(i+1);
     
-    cnt.add();
     h11->setDataRaw(data);
-    Histogram1D* h12 = h11->rebin(-2, 5, 12);
-    //show(*h11);
-    //show(*h12);
-    cnt.add();
 
-    delete h12;
+    ss << "h11[0] = " << (*h11)[0];
+    cnt.set(ss);
+    ss.str("");
+
+    h11 = h11->rebin(-2, 5, 12);
+
+    ss << "h11[0] = " << (*h11)[0];
+    cnt.set(ss);
+    ss.str("");
+
     delete h11;
     
-    cnt.add();
+    cnt.set(ss);
+
     vector<int> data2;
     for (int i = 0; i < nBin; ++i)
     for (int j = 0; j < nBin; ++j)
