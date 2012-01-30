@@ -1,5 +1,5 @@
-#ifndef HHISTOGRAM
-#define HHISTOGRAM
+#ifndef HISTOGRAM_H
+#define HISTOGRAM_H
 
 #include <vector>
 #include <iostream>
@@ -36,16 +36,16 @@ class Histogram {
         double getBinWidthX() const;
 
         /** returns middle of bin number ix */
-        double getX (unsigned ix) const;
+        virtual double getX (unsigned ix) const;
 
         /** returns bin number where x is located*/
-        unsigned getiX (double x) const;
+        virtual unsigned getiX (double x) const;
 
         /** returns low edge of bin number ix */
-        double getXlow (unsigned ix) const;
+        virtual double getXlow (unsigned ix) const;
         
         /** returns high edge of bin number ix */
-        double getXhigh (unsigned ix) const;
+        virtual double getXhigh (unsigned ix) const;
 
         virtual long getUnder () const;
         virtual void setUnder (long underflow);
@@ -111,11 +111,15 @@ class Histogram1D : public Histogram {
         virtual void set (unsigned ix, long value);
         
         /** Returns rebinned histogram (and ownership to it!).
-         *  Number of counts in new histogram is not guaranted to 
-         *  be the same, as it calculates new counts via floating
+         *  Number of counts in a new histogram is not guaranted to 
+         *  be the same, as it calculates new number of counts via floating
          *  point (number of counts in new bin is proportional to area 
-         *  of intersection between new and old bin. Expect +/- 1 count.*/
-        Histogram1D* rebin1D (double xMin, double xMax, unsigned nBinX) const;
+         *  of intersection between new and old bin and then rounded).
+         *  Expect +/- 1 count.
+         *  Expect bad results especially when increasing number of bin
+         *  when small number of counts are present (why would you increase
+         *  number of bins then anyway). */
+        Histogram1D* rebin (double xMin, double xMax, unsigned nBinX) const;
 
         virtual Histogram1D& operator=(const Histogram1D&);
 
@@ -165,10 +169,10 @@ class Histogram2D : public Histogram {
         virtual Histogram1D* gateY (double yl, double yh) const;
 
         virtual void transpose ();
-
-        Histogram2D* rebin2D (double xMin, double xMax,
-                              double yMin, double yMax,
-                              unsigned nBinX, unsigned nBinY) const;
+        /** See Histogram1D::rebin1D comment */
+        Histogram2D* rebin (double xMin, double xMax,
+                            double yMin, double yMax,
+                            unsigned nBinX, unsigned nBinY) const;
 
         virtual Histogram2D& operator=(const Histogram2D&);
 

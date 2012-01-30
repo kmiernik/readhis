@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
     
 //    cout << "#BP2" << endl;
     h11->setDataRaw(data);
-    Histogram1D* h12 = h11->rebin1D(-2, 5, 12);
+    Histogram1D* h12 = h11->rebin(-2, 5, 12);
     //show(*h11);
     //show(*h12);
 
@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
 //    cout << "#BP5" << endl;
     h21->setDataRaw(data2);
 //    cout << "#BP6" << endl;
-    Histogram2D* h22 = h21->rebin2D(0, 10, 0, 10, 5, 5);
+    Histogram2D* h22 = h21->rebin(0, 10, 0, 10, 5, 5);
 //    cout << "#BP7" << endl;
     //show(*h21);
     show(*h22);

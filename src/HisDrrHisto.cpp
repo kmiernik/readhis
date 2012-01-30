@@ -9,10 +9,6 @@
 
 using namespace std;
 
-//inline HisDrrHisto::HisDrrHisto(Options* options, string baseName) {
-//    options_ = options;
-//    baseName_ = baseName;
-//}
 HisDrrHisto::HisDrrHisto(const string drr, const string his, 
                          const Options* options)
                         : HisDrr(drr, his) {
@@ -95,7 +91,7 @@ void HisDrrHisto::process1D() {
         vector<unsigned> bin;
         options_->getBinning(bin);
         if (bin[0] > 1)
-            h1b = h1->rebin1D(h1->getxMin(), h1->getxMax(), 
+            h1b = h1->rebin(h1->getxMin(), h1->getxMax(), 
                               (unsigned)h1->getnBinX()/bin[0]);
         else
             throw GenError("HisDrrHisto::process1D : Wrong binning size.");
@@ -133,6 +129,134 @@ void HisDrrHisto::process2D() {
 
     Histogram2D* h2 = dynamic_cast<Histogram2D*>(histogram);
 
+    bool gx = options_->getGx();
+    bool gy = options_->getGx();
+    bool bg = options_->getBg();
+    bool sbg = options_->getSBg();
+
+    if (gx || gy){
+        // Resulting projection
+        Histogram1D* proj;
+        // Uncertainities are going to be stored in a separate histogram
+        Histogram1D* projErr;
+
+        vector<unsigned> gate;
+        options_->getGate(gate);
+        if (gate.size() < 2)
+            throw GenError("process2D: Not enough gate points");
+       
+        if (gx) {
+            proj = h2->gateX(gate[0], gate[1]);
+            projErr = h2->gateX(gate[0], gate[1]);
+        } else {
+            proj = h2->gateY(gate[0], gate[1]);
+            projErr = h2->gateY(gate[0], gate[1]);
+        }
+
+        if (bg || sbg){
+            //--gy --bg
+            vector<unsigned> bgr;
+            options_->getBgGate(bgr);
+            Histogram1D* projBg;
+
+            if (bgr.size() >= 2) {
+                if (gx)
+                    projBg = h2->gateX(bgr[0], bgr[1]);
+                else
+                    projBg = h2->gateY(bgr[0], bgr[1]);
+
+                *proj -= *projBg;
+                *projErr += *projBg;
+            } else
+                throw GenError("process2D: Not enough background gate points");
+
+            if (sbg) {
+                //--gy --sbg
+                if (bgr.size() >= 4) {
+                    if (gx)
+                        projBg = h2->gateX(bgr[2], bgr[3]);
+                    else
+                        projBg = h2->gateY(bgr[2], bgr[3]);
+
+                    *proj -= *projBg;
+                    *projErr += *projBg;
+                } else
+                    throw GenError("process2D: Not enough split background gate points");
+            }
+
+            delete projBg;
+        }
+
+        if (options_->getBin()) {
+            // proj binned
+            Histogram1D* projBin;
+            Histogram1D* projErrBin;
+
+            vector<unsigned> bin;
+            options_->getBinning(bin);
+            if (bin[0] > 1 && bin[1] > 1) {
+                if (gx) {
+                    projBin = proj->rebin(proj->getxMin(), proj->getxMax(), 
+                                           (unsigned)proj->getnBinX()/bin[1]);
+                    projErrBin = projErr->rebin(projErr->getxMin(), projErr->getxMax(), 
+                                           (unsigned)projErr->getnBinX()/bin[1]);
+                } else {
+                    projBin = proj->rebin(proj->getxMin(), proj->getxMax(), 
+                                           (unsigned)proj->getnBinX()/bin[0]);
+                    projErrBin = projErr->rebin(projErr->getxMin(), projErr->getxMax(), 
+                                           (unsigned)projErr->getnBinX()/bin[0]);
+                }
+
+            } else
+                throw GenError("HisDrrHisto::process2D : Wrong binning size.");
+
+            (*proj) =(*projBin);
+            (*projErr) =(*projErrBin);
+            
+            delete projBin;
+            delete projErrBin;
+        }
+
+        unsigned sz = proj->getnBinX();
+        for (unsigned i = 0; i < sz; ++i)
+            cout << proj->getX(i) << " " << (*proj)[i] << " " << sqrt((*projErr)[i]) << endl;
+
+        delete projErr;
+        delete proj;
+
+    } else {
+        // No gates case
+        
+        // Rebinning (if applicable)
+        if (options_->getBin()) {
+            Histogram2D* h2b;
+            vector<unsigned> bin;
+            options_->getBinning(bin);
+            if (bin[0] > 1 && bin[1] > 1)
+                h2b = h2->rebin( h2->getxMin(), h2->getxMax(), 
+                                h2->getyMin(), h2->getyMax(), 
+                                (unsigned)h2->getnBinX()/bin[0],
+                                (unsigned)h2->getnBinY()/bin[1] );
+            else
+                throw GenError("HisDrrHisto::process2D : Wrong binning size.");
+            (*h2) =(*h2b);
+            delete h2b;
+        }
+
+        unsigned szX = h2->getnBinX();
+        unsigned szY = h2->getnBinY();
+
+        for (unsigned x = 0; x < szX; ++x) {
+            for (unsigned y = 0; y < szY; ++y) {
+                cout << h2->getX(x) << " " << h2->getY(y)  
+                     << " " << (*h2)(x,y) << endl;
+            }
+            cout << endl;
+        }
+        //end no gates
+    }
+    //*******************************************************
+/*
     if (options_->getGy()) {
         //--gy
         vector<double> resultX;
@@ -161,9 +285,9 @@ void HisDrrHisto::process2D() {
                     vector<unsigned> bin;
                     options_->getBinning(bin);
                     if (bin[0] > 1) {
-                        h1gb = h1g->rebin1D(h1g->getxMin(), h1g->getxMax(), 
+                        h1gb = h1g->rebin(h1g->getxMin(), h1g->getxMax(), 
                                             (unsigned)h1g->getnBinX()/bin[0]);
-                        h1bb = h1b->rebin1D(h1b->getxMin(), h1b->getxMax(), 
+                        h1bb = h1b->rebin(h1b->getxMin(), h1b->getxMax(), 
                                             (unsigned)h1b->getnBinX()/bin[0]);
                     } else
                         throw GenError("HisDrrHisto::process1D : Wrong binning size.");
@@ -209,11 +333,11 @@ void HisDrrHisto::process2D() {
                     vector<unsigned> bin;
                     options_->getBinning(bin);
                     if (bin[0] > 1) {
-                        h1gb = h1g->rebin1D(h1g->getxMin(), h1g->getxMax(), 
+                        h1gb = h1g->rebin(h1g->getxMin(), h1g->getxMax(), 
                                             (unsigned)h1g->getnBinX()/bin[0]);
-                        h1b1b = h1b1->rebin1D(h1b1->getxMin(), h1b1->getxMax(), 
+                        h1b1b = h1b1->rebin(h1b1->getxMin(), h1b1->getxMax(), 
                                             (unsigned)h1b1->getnBinX()/bin[0]);
-                        h1b2b = h1b2->rebin1D(h1b2->getxMin(), h1b2->getxMax(), 
+                        h1b2b = h1b2->rebin(h1b2->getxMin(), h1b2->getxMax(), 
                                             (unsigned)h1b2->getnBinX()/bin[0]);
                     } else
                         throw GenError("HisDrrHisto::process1D : Wrong binning size.");
@@ -252,7 +376,7 @@ void HisDrrHisto::process2D() {
                 vector<unsigned> bin;
                 options_->getBinning(bin);
                 if (bin[0] > 1) {
-                    h1gb = h1g->rebin1D(h1g->getxMin(), h1g->getxMax(), 
+                    h1gb = h1g->rebin(h1g->getxMin(), h1g->getxMax(), 
                                         (unsigned)h1g->getnBinX()/bin[0]);
                 } else
                     throw GenError("HisDrrHisto::process1D : Wrong binning size.");
@@ -305,9 +429,9 @@ void HisDrrHisto::process2D() {
                     vector<unsigned> bin;
                     options_->getBinning(bin);
                     if (bin[0] > 1) {
-                        h1gb = h1g->rebin1D(h1g->getxMin(), h1g->getxMax(), 
+                        h1gb = h1g->rebin(h1g->getxMin(), h1g->getxMax(), 
                                             (unsigned)h1g->getnBinX()/bin[0]);
-                        h1bb = h1b->rebin1D(h1b->getxMin(), h1b->getxMax(), 
+                        h1bb = h1b->rebin(h1b->getxMin(), h1b->getxMax(), 
                                             (unsigned)h1b->getnBinX()/bin[0]);
                     } else
                         throw GenError("HisDrrHisto::process1D : Wrong binning size.");
@@ -354,11 +478,11 @@ void HisDrrHisto::process2D() {
                     vector<unsigned> bin;
                     options_->getBinning(bin);
                     if (bin[0] > 1) {
-                        h1gb = h1g->rebin1D(h1g->getxMin(), h1g->getxMax(), 
+                        h1gb = h1g->rebin(h1g->getxMin(), h1g->getxMax(), 
                                             (unsigned)h1g->getnBinX()/bin[0]);
-                        h1b1b = h1b1->rebin1D(h1b1->getxMin(), h1b1->getxMax(), 
+                        h1b1b = h1b1->rebin(h1b1->getxMin(), h1b1->getxMax(), 
                                             (unsigned)h1b1->getnBinX()/bin[0]);
-                        h1b2b = h1b2->rebin1D(h1b2->getxMin(), h1b2->getxMax(), 
+                        h1b2b = h1b2->rebin(h1b2->getxMin(), h1b2->getxMax(), 
                                             (unsigned)h1b2->getnBinX()/bin[0]);
                     } else
                         throw GenError("HisDrrHisto::process1D : Wrong binning size.");
@@ -397,7 +521,7 @@ void HisDrrHisto::process2D() {
                 vector<unsigned> bin;
                 options_->getBinning(bin);
                 if (bin[0] > 1) {
-                    h1gb = h1g->rebin1D(h1g->getxMin(), h1g->getxMax(), 
+                    h1gb = h1g->rebin(h1g->getxMin(), h1g->getxMax(), 
                                         (unsigned)h1g->getnBinX()/bin[0]);
                 } else
                     throw GenError("HisDrrHisto::process1D : Wrong binning size.");
@@ -432,7 +556,7 @@ void HisDrrHisto::process2D() {
             vector<unsigned> bin;
             options_->getBinning(bin);
             if (bin[0] > 1 && bin[1] > 1)
-                h2b = h2->rebin2D( h2->getxMin(), h2->getxMax(), 
+                h2b = h2->rebin( h2->getxMin(), h2->getxMax(), 
                                 h2->getyMin(), h2->getyMax(), 
                                 (unsigned)h2->getnBinX()/bin[0],
                                 (unsigned)h2->getnBinY()/bin[1] );
@@ -454,6 +578,7 @@ void HisDrrHisto::process2D() {
         }
         //end no gates
     } 
+*/
 
     delete histogram;
 }

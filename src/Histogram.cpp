@@ -157,11 +157,11 @@ void Histogram1D::set (unsigned ix, long value) {
         throw ArrayError("Histogram1D::set Matrix subscript out of bounds"); 
 }
         
-Histogram1D* Histogram1D::rebin1D (double xMin, double xMax,
-                                   unsigned nBinX) const {
+Histogram1D* Histogram1D::rebin (double xMin, double xMax,
+                                 unsigned nBinX) const {
     
     if (nBinX < 1 )
-        throw GenError("rebin1D: number of bins cannot be less then 1");
+        throw GenError("Histogram1D::rebin: number of bins cannot be less then 1");
 
     double binW = (xMax - xMin) / double(nBinX);   
     double underflow = 0.0;
@@ -428,12 +428,12 @@ void Histogram2D::transpose () {
     nBinX_ = nBinY;
 }
 
-Histogram2D* Histogram2D::rebin2D ( double xMin, double xMax,
-                                    double yMin, double yMax,
-                                    unsigned nBinX, unsigned nBinY) const {
+Histogram2D* Histogram2D::rebin ( double xMin, double xMax,
+                                  double yMin, double yMax,
+                                  unsigned nBinX, unsigned nBinY) const {
     
     if (nBinX < 1 || nBinY < 1)
-        throw GenError("rebin2D: number of bins cannot be less then 1");
+        throw GenError("Histogram2D::rebin: number of bins cannot be less then 1");
     double binWX = (xMax - xMin) / double(nBinX);   
     double binWY = (yMax - yMin) / double(nBinY);   
 

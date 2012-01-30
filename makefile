@@ -1,18 +1,18 @@
 CPP = g++
 CPPFLAGS = -Wall
 #Source dir
-SDIR = 
+SDIR = src
+#Header dir
+HDIR = include
 
 #Rule to make .o from .cpp files
 %.o: $(SDIR)/%.cpp
-	$(CPP) $(CPPFLAGS) -c $< -o $(SDIR)/$@
+	$(CPP) $(CPPFLAGS) -I $(HDIR) -c $< -o $@
 		
-all: readhis test
+all: readhis 
 
-readhis: readhis.o HisDrr.o Histogram.o HisDrrHisto.o Options.o
-	$(CPP) $(CPPFLAGS) -o $@ readhis.o HisDrr.o Histogram.o HisDrrHisto.o Options.o
+readhis: readhis.o HisDrr.o Histogram.o HisDrrHisto.o Options.o Exceptions.o
+	$(CPP) $(CPPFLAGS) -o $@ readhis.o HisDrr.o Histogram.o HisDrrHisto.o Options.o Exceptions.o
 
-test: test.o Histogram.o
-	$(CPP) $(CPPFLAGS) -o $@ Histogram.o test.o
 clean: 
-	rm -f *.o *~ readhis test
+	rm -f *.o *~ include/*~ src/*~ readhis

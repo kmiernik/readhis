@@ -4,8 +4,8 @@
 * Definition file for HisDrr class 
 */
 
-#ifndef HHISDRR
-#define HHISDRR
+#ifndef HISDRR_H
+#define HISDRR_H
 
 #include <vector>
 #include <string>

@@ -1,5 +1,5 @@
-#ifndef HOPTIONS
-#define HOPTIONS
+#ifndef OPTIONS_H
+#define OPTIONS_H
 
 #include <vector>
 

@@ -4,8 +4,8 @@
 * Definition file for His_drr class 
 */
 
-#ifndef HDRRBLOCK
-#define HDRRBLOCK
+#ifndef DRRBLOCK_H
+#define DRRBLOCK_H
 
 using namespace std;
 
