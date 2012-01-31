@@ -1,7 +1,9 @@
 /*
-* K. Miernik (k.a.miernik@gmail.com) 2012
-* 
-*/
+ * Copyright Krzysztof Miernik 2012
+ * k.a.miernik@gmail.com 
+ *
+ * Distributed under GNU General Public Licence v3
+ */
 
 #ifndef DRRBLOCK_H
 #define DRRBLOCK_H
@@ -63,9 +65,11 @@ struct DrrHisRecord {
  * drr file (block of 128 contains 32 record -> 4 bytes long id's)
  */
 struct DrrHisRecordExtended : DrrHisRecord {
-    //! Histogram ID (unique)
+    /** Histogram ID */
     int hisID;
 
+    /** Copies DrrHisRecord to DrrHisRecordExtended,
+     * hisID is left uninitialized.*/
     DrrHisRecordExtended& operator=(const DrrHisRecord& right) {
         hisDim = right.hisDim;
         halfWords = right.halfWords;
@@ -91,6 +95,7 @@ struct DrrHisRecordExtended : DrrHisRecord {
         return *this;
   }
 
+  /**Operator = */
   DrrHisRecordExtended& operator=(const DrrHisRecordExtended& right) {
         hisID = right.hisID;
         hisDim = right.hisDim;

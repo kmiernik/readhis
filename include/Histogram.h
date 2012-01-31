@@ -1,6 +1,8 @@
 /*
- * K. Miernik (k.a.miernik@gmail.com) 2012
+ * Copyright Krzysztof Miernik 2012
+ * k.a.miernik@gmail.com 
  *
+ * Distributed under GNU General Public Licence v3
  */
 
 #ifndef HISTOGRAM_H
@@ -25,6 +27,7 @@ using namespace std;
  */
 class Histogram {
     public:
+        /** Ctor. */
         Histogram  (double xMin,  double xMax,
                     unsigned nBinX, string hisId);
 
@@ -148,14 +151,21 @@ inline double   Histogram::getXhigh (unsigned ix) const {
  */
 class Histogram1D : public Histogram {
     public:
+        /** Ctor */
         Histogram1D (double xMin,  double xMax,
                      unsigned nBinX, string hisId);
 
         /** Overloaded pure virtual from base class. Returns 1.*/
         unsigned short getDim() const;
 
+        /** Adds n counts to bin where x is located. Over- and
+         * underflows goes to overflow_ and underflow_ fields.*/
         virtual void add (double x, long n = 1);
+
+        /** Returns number of counts in bin number ix */
         virtual long get (unsigned ix) const;
+
+        /** Sets number of counts in bin number ix to value.*/
         virtual void set (unsigned ix, long value);
         
         /** Returns rebinned histogram (and ownership to it!).
@@ -183,11 +193,15 @@ class Histogram1D : public Histogram {
          * histogram elements. Histograms nBinX, xMin and xMax must be the same. */
         virtual Histogram1D& operator-=(const Histogram1D& right); 
 
-        /** Returns histogram wheere all elements of histogram are multiplied by right. */
+        /** Returns histogram where all elements of histogram are multiplied by right. */
         virtual const Histogram1D operator*(int right) const;
 
-        /** Returns histogram wheere all elements of histogram are multiplied by right. */
+        /** Returns histogram where all elements are sum of elements of
+         * two histograms. Histogram nBinX, xMin, xMax must be the same. */
         virtual const Histogram1D operator+(const Histogram1D& right) const; 
+
+        /** Returns histogram where all elements are difference of elements of
+         * two histograms. Histogram nBinX, xMin, xMax must be the same. */
         virtual const Histogram1D operator-(const Histogram1D& right) const; 
 
         /** Access to elements by their index.*/
@@ -206,10 +220,12 @@ class Histogram1D : public Histogram {
 /** Two dimensional histogram holding 'long' per bin.*/
 class Histogram2D : public Histogram {
     public:
+        /** Ctor.*/
         Histogram2D (double xMin,    double xMax,
                      double yMin,    double yMax,
                      unsigned nBinX, unsigned nBinY,
                      string hisId);
+
         /** Overloaded pure virutal from base class. Returns 2.*/
         unsigned short getDim() const;
 
@@ -235,7 +251,7 @@ class Histogram2D : public Histogram {
         unsigned getiY (double y) const;
 
         /** Returns low edge of bin number iy */
-        inline double getYlow (unsigned iy) const;k
+        inline double getYlow (unsigned iy) const;
 
         /** Returns high edge of bin number iy */
         inline double getYhigh (unsigned iy) const;
@@ -269,14 +285,33 @@ class Histogram2D : public Histogram {
                             double yMin, double yMax,
                             unsigned nBinX, unsigned nBinY) const;
 
+        /** lhs lstogram will be overwritten by rhs. */
         virtual Histogram2D& operator=(const Histogram2D&);
 
+        /** All elements of histogram will be multiplied by right integer. */
         virtual Histogram2D& operator*=(int right); 
+
+        /** All elements of histogram will be incremented by value of rhs
+         * histogram elements.
+         * Histograms nBinX, nBinY, xMin, xMax, yMin and yMax must be the same. */
         virtual Histogram2D& operator+=(const Histogram2D& right); 
+        
+        /** All elements of histogram will be decremented by value of rhs
+         * histogram elements.
+         * Histograms nBinX, nBinY, xMin, xMax, yMin and yMax must be the same. */
         virtual Histogram2D& operator-=(const Histogram2D& right); 
 
+        /** Returns histogram where all elements of histogram are multiplied by right. */
         virtual const Histogram2D operator*(int right) const;
+
+        /** Returns histogram where all elements are sum of elements of
+         * two histograms.
+         * Histograms nBinX, nBinY, xMin, xMax, yMin and yMax must be the same. */
         virtual const Histogram2D operator+(const Histogram2D& right) const; 
+
+        /** Returns histogram where all elements are difference of elements of
+         * two histograms.
+         * Histograms nBinX, nBinY, xMin, xMax, yMin and yMax must be the same. */
         virtual const Histogram2D operator-(const Histogram2D& right) const; 
 
         /** Access to elements by their index.*/

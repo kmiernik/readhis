@@ -1,8 +1,9 @@
 /*
-* K. Miernik (k.a.miernik@gmail.com)
-* 
-* Definition file for HisDrr class 
-*/
+ * Copyright Krzysztof Miernik 2012
+ * k.a.miernik@gmail.com 
+ *
+ * Distributed under GNU General Public Licence v3
+ */
 
 #ifndef HISDRR_H
 #define HISDRR_H
@@ -19,9 +20,16 @@ using namespace std;
  * structure of DrrHisRecord.
  */
 struct SimpleDrrBlock {
+    /** Histogram id. */
     int hisID;
+
+    /** Number of half-words (2 bytes) per channel */
     short halfWords;
+
+    /** Histogram lengths (X, Y) */
     short scaled[2];
+
+    /** Histogram title.*/
     string title;
 };
 
@@ -37,13 +45,13 @@ public:
      * and passing fstreams creating them on heap (new).
      * Ones is passed the HisDrr takes the ownership to pointers.
      * Dtor will close files and delete pointers.*/
-    virtual HisDrr(fstream* drr, fstream* his);
+    HisDrr(fstream* drr, fstream* his);
 
     /** Constructor taking names and opening fstreams. */
-    virtual HisDrr(const string &drr, const string &his);
+    HisDrr(const string &drr, const string &his);
 
     /** Constructor creating and opening new his and drr using definition from input file. */
-    virtual HisDrr(const string &drr, const string &his, const string &input);
+    HisDrr(const string &drr, const string &his, const string &input);
 
     /** Dtor, closing files and deleting memory. */
     virtual ~HisDrr() {
@@ -69,7 +77,7 @@ public:
     virtual void setValue(const int id, unsigned pos, unsigned value);
 
     /** Replaces in histogram 'id' point 'i' by 'value'. The 2-bytes long word version. */
-    virtual void setValue(const int id, unsigned pos, unsigned value);
+    virtual void setValue(const int id, unsigned pos, unsigned short value);
 
     /** Replaces histogram id values by ones given in a vector. The 4-bytes long word version.  */
     virtual void setValue(const int id, vector<unsigned> &value);

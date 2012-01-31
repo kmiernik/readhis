@@ -1,6 +1,0 @@
-#ID     WORDS   CH X    CH Y    TITLE
-100     2       16384   0      Very long title which would be cut to 40 character anyway 
-101     1       16384   0      Slightly shorter title 
-#And this is a comment line
-102     1       4096   4096      Even shorter 
-103     1       1024   0

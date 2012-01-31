@@ -1,6 +1,8 @@
 /*
- * K. Miernik (k.a.miernik@gmail.com) 2012
+ * Copyright Krzysztof Miernik 2012
+ * k.a.miernik@gmail.com 
  *
+ * Distributed under GNU General Public Licence v3
  */
 
 #include <vector>
@@ -462,7 +464,7 @@ void HisDrr::zeroHistogram(int id) {
     }
 }
 
-void HisDrr::setValue(const int id, unsigned int pos, unsigned int value){
+void HisDrr::setValue(const int id, unsigned pos, unsigned value){
     // First we search if histogram id exists
     int index = -1;
     for (unsigned int i = 0; i < hisList.size(); ++i)
@@ -506,7 +508,7 @@ void HisDrr::setValue(const int id, unsigned int pos, unsigned int value){
 
 }
 
-void HisDrr::setValue(const int id, unsigned int pos, unsigned short value){
+void HisDrr::setValue(const int id, unsigned pos, unsigned short value){
     // First we search if histogram id exists
     int index = -1;
     for (unsigned int i = 0; i < hisList.size(); ++i)
@@ -549,7 +551,7 @@ void HisDrr::setValue(const int id, unsigned int pos, unsigned short value){
     }
 }
 
-void HisDrr::setValue(const int id, vector<unsigned int> &value){
+void HisDrr::setValue(const int id, vector<unsigned> &value){
     // First we search if histogram id exists
     int index = -1;
     for (unsigned int i = 0; i < hisList.size(); ++i)
