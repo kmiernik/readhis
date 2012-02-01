@@ -6,6 +6,11 @@ Author: Krzysztof Miernik, 2012
 Program for reading histograms from HIS/DRR file format (upak library), and
 converting data to ascii format.
 
+See html/index.html for documentation or run
+ $ doxygen readhis.doxy
+for documentation generation (requires doxygen installed).
+
 Distributed under GPL v3. 
 
-Please feel free to comment, send bug reports, features requests. Contributions also very welcome.
+Please feel free to comment, send bug reports or features requests. Source
+code contributions are also very welcome!
