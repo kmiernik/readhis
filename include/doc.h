@@ -16,6 +16,13 @@
  *  Program parses options given by user (Options class) and creates
  *  HisDrrHisto class which loads the data and puts them into cout.
  *
+ *  \section Installation
+ *  The provided makefile should compile code and create 'readhis' executable.
+ *  To run it simple type 'make'.
+ *  Complitation was tested on Linux Fedora 16 and Arch Linux using g++ 4.6.
+ *  Program depends only on C++ Standard Library so porting to other
+ *  operating systems should be easy.
+ *
  * \section Usage
  *       readhis [options] file.his   
  *     
