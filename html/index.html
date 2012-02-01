@@ -73,7 +73,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">readhis program </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>The purpose of this program is to load data histogram data from .his format (ORNL / DAMM). Program parses options given by user (<a class="el" href="classOptions.html" title="Class for storing options for readhis.">Options</a> class) and creates <a class="el" href="classHisDrrHisto.html" title="The main purpose of this class is to translate HisDrr data to Histogram, perform operations accordinh...">HisDrrHisto</a> class which loads the data and puts them into cout.</p>
+<div class="textblock"><p>The purpose of this program is to load histogram data from HIS/DRR file format (upak library), and convert them to ascii format. Program parses options given by user (<a class="el" href="classOptions.html" title="Class for storing options for readhis.">Options</a> class) and creates <a class="el" href="classHisDrrHisto.html" title="The main purpose of this class is to translate HisDrr data to Histogram, perform operations accordinh...">HisDrrHisto</a> class which loads the data and puts them into cout.</p>
 <h2><a class="anchor" id="Usage"></a>
 Usage</h2>
 <p>readhis [options] file.his</p>
@@ -82,23 +82,51 @@ Description</h2>
 <p>Program reads his file using binary description from drr file. Both files are required to be present in the specified path and with the same base name (e.g. t1.his and t1.drr). Result is send to standard output, use redirection in case you want to save it to file.</p>
 <h2><a class="anchor" id="Options"></a>
 Options</h2>
-<p>--id : short (-i), selects histogram id required by other options unless stated otherwise.</p>
-<p>--gx x0,x1 : short (-x), 2D histograms only, requires two integer arguments separated by coma. Sets projection on X axis, starting from column x0 to x1 (including both)</p>
-<p>--gy x0,x1 : short (-y), as above, projection on Y axis</p>
-<p>--bg x0,x1 : short (-b), 2D histograms only, only with gx or gy option. Sets gate for background subtraction, from x0 to x1 (including both).</p>
-<p>--sbg x0,x1,x2,x3 : short (-s), 2D histograms only, only with gx or gy option. Same as above exept that gate is split into two parts x0 to x1 and x2 to x3. --bin bx[,by] : short (-B), defines number of histogram bins to join. For 2D histogram if only one argument is given by=bx is assumed. Bin size must be &gt; 1.</p>
-<p>--zero : short (-z), suppresses bins with zero counts in output</p>
-<p>--info : short (-I), displays detailed information on histogram</p>
-<p>--list : short (-l), does not requires id. Displays list of histograms present in the file.</p>
-<p>--List : short (-L), does not requires id. As above, additionally marks empty histograms and histogram dimensions.</p>
-<p>--help : displays this help</p>
-<h2><a class="anchor" id="Logic"></a>
-graph</h2>
+<ul>
+<li>--id : short (-i), selects histogram id required by other options unless stated otherwise.</li>
+</ul>
+<ul>
+<li>--gx x0,x1 : short (-x), 2D histograms only, requires two integer arguments separated by coma. Sets projection on X axis, starting from column x0 to x1 (including both)</li>
+</ul>
+<ul>
+<li>--gy x0,x1 : short (-y), as above, projection on Y axis</li>
+</ul>
+<ul>
+<li>--bg x0,x1 : short (-b), 2D histograms only, only with gx or gy option. Sets gate for background subtraction, from x0 to x1 (including both).</li>
+</ul>
+<ul>
+<li>--sbg x0,x1,x2,x3 : short (-s), 2D histograms only, only with gx or gy option. Same as above exept that gate is split into two parts x0 to x1 and x2 to x3.</li>
+</ul>
+<ul>
+<li>--bin bx[,by] : short (-B), defines number of histogram bins to join. For 2D histogram if only one argument is given by=bx is assumed. At least one bin size must be &gt; 1.</li>
+</ul>
+<ul>
+<li>--zero : short (-z), suppresses bins with zero counts in output</li>
+</ul>
+<ul>
+<li>--info : short (-I), displays detailed information on histogram</li>
+</ul>
+<ul>
+<li>--list : short (-l), does not requires id. Displays list of histograms present in the file.</li>
+</ul>
+<ul>
+<li>--List : short (-L), does not requires id. As above, additionally marks empty histograms and histogram dimensions.</li>
+</ul>
+<ul>
+<li>--help : displays help</li>
+</ul>
+<h2><a class="anchor" id="Graph"></a>
+Graph</h2>
 <p>This graph explains the logic of program </p>
 <div class="image">
-<img src="readhis_graph.svg" alt="readhis_graph.svg"/>
+<img src="readhis_graph.png" alt="readhis_graph.png"/>
 </div>
- </div></div><!-- contents -->
+<h2><a class="anchor" id="Copyrights"></a>
+Copyrights</h2>
+<p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program. If not, see &lt;<a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;. </p>
+</div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -116,7 +144,7 @@ graph</h2>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 31 2012 06:49:35 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 31 2012 22:05:33 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

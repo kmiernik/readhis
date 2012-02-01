@@ -90,7 +90,8 @@ void help() {
     cout << "                      x2 to x3." << endl;
     cout << "  --bin bx[,by] : short (-B), defines number of histogram bins " << endl;
     cout << "                  to join. For 2D histogram if only one argument " << endl;
-    cout << "                  is given by=bx is assumed. Bin size must be > 1." << endl;
+    cout << "                  is given by=bx is assumed. At least one";
+    cout << "                  bin size must be > 1." << endl;
     cout << endl;
     cout << "  --zero : short (-z), suppresses bins with zero counts in output" << endl;
     cout << endl;

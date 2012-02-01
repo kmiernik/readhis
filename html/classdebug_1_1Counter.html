@@ -109,7 +109,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p><a class="el" href="classdebug_1_1Counter.html" title="Counter for simple debugging.">Counter</a> for simple debugging.  
  <a href="classdebug_1_1Counter.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="Exceptions_8h_source.html">Exceptions.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="Debug_8h_source.html">Debug.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -117,10 +117,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Ctor, text message passed as an option.  <a href="#a26a95e22970d5e4199a4bf767ae0f3a3"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdebug_1_1Counter.html#a9ba3b1be58a115fb1d90202b2a279799">add</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds one to subindex, then calls <a class="el" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show()</a>.  <a href="#a9ba3b1be58a115fb1d90202b2a279799"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdebug_1_1Counter.html#ab3e414012285d5b77055816fa5e7f77b">set</a> (const std::stringstream &amp;text)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds one to subindex, sets text to passed stringstream and calls <a class="el" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show()</a>.  <a href="#ab3e414012285d5b77055816fa5e7f77b"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdebug_1_1Counter.html#a22803bd26971e5346f9c988250d9de5a">set</a> (const std::string &amp;text)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds one to subindex, sets text to passed string and calls <a class="el" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show()</a>.  <a href="#a22803bd26971e5346f9c988250d9de5a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdebug_1_1Counter.html#a39623b5fec140d8a0b72bc6426fc3a4f">set</a> (std::stringstream &amp;text, bool clear=true)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds one to subindex, sets text to passed stringstream and calls <a class="el" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show()</a>.  <a href="#a39623b5fec140d8a0b72bc6426fc3a4f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdebug_1_1Counter.html#a5956442ffc960d59456d478020ece716">set</a> (const std::string &amp;text, bool clear=true)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds one to subindex, sets text to passed string and calls <a class="el" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show()</a>.  <a href="#a5956442ffc960d59456d478020ece716"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a">show</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints to cout the counter number, index and message.  <a href="#ad77dafe5fdf484f6db838cf7af36834a"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
@@ -136,6 +136,11 @@ Static Private Attributes</h2></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classdebug_1_1Counter.html" title="Counter for simple debugging.">Counter</a> for simple debugging. </p>
+<p>Shows message on any action. Main counter is static so you may create many instances across the code. The subindex helps to trace problematic brake points. The optional text may be passed as a stringstream, so it's easy to pass variables etc.</p>
+<p>Example: <a class="el" href="classdebug_1_1Counter.html" title="Counter for simple debugging.">debug::Counter</a> cnt; stringstream ss;</p>
+<p>//... some code</p>
+<p>ss &lt;&lt; "sz =  " &lt;&lt; sz; cnt.set(ss);</p>
+<p>for (int i = 0; i &lt; sz; ++i) { cnt.add(); //... code } </p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a26a95e22970d5e4199a4bf767ae0f3a3"></a><!-- doxytag: member="debug::Counter::Counter" ref="a26a95e22970d5e4199a4bf767ae0f3a3" args="(const std::string &amp;text=&quot;&quot;)" -->
 <div class="memitem">
@@ -175,41 +180,63 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab3e414012285d5b77055816fa5e7f77b"></a><!-- doxytag: member="debug::Counter::set" ref="ab3e414012285d5b77055816fa5e7f77b" args="(const std::stringstream &amp;text)" -->
+<a class="anchor" id="a39623b5fec140d8a0b72bc6426fc3a4f"></a><!-- doxytag: member="debug::Counter::set" ref="a39623b5fec140d8a0b72bc6426fc3a4f" args="(std::stringstream &amp;text, bool clear=true)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdebug_1_1Counter.html#ab3e414012285d5b77055816fa5e7f77b">debug::Counter::set</a> </td>
+          <td class="memname">void <a class="el" href="classdebug_1_1Counter.html#a39623b5fec140d8a0b72bc6426fc3a4f">debug::Counter::set</a> </td>
           <td>(</td>
-          <td class="paramtype">const std::stringstream &amp;&#160;</td>
-          <td class="paramname"><em>text</em></td><td>)</td>
-          <td><code> [inline]</code></td>
+          <td class="paramtype">std::stringstream &amp;&#160;</td>
+          <td class="paramname"><em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>clear</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inline]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>Adds one to subindex, sets text to passed stringstream and calls <a class="el" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show()</a>. </p>
+<p>Argument clear set to true (default) clears stringstream and text field. </p>
 
 </div>
 </div>
-<a class="anchor" id="a22803bd26971e5346f9c988250d9de5a"></a><!-- doxytag: member="debug::Counter::set" ref="a22803bd26971e5346f9c988250d9de5a" args="(const std::string &amp;text)" -->
+<a class="anchor" id="a5956442ffc960d59456d478020ece716"></a><!-- doxytag: member="debug::Counter::set" ref="a5956442ffc960d59456d478020ece716" args="(const std::string &amp;text, bool clear=true)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdebug_1_1Counter.html#ab3e414012285d5b77055816fa5e7f77b">debug::Counter::set</a> </td>
+          <td class="memname">void <a class="el" href="classdebug_1_1Counter.html#a39623b5fec140d8a0b72bc6426fc3a4f">debug::Counter::set</a> </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>text</em></td><td>)</td>
-          <td><code> [inline]</code></td>
+          <td class="paramname"><em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>clear</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inline]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>Adds one to subindex, sets text to passed string and calls <a class="el" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show()</a>. </p>
+<p>Argument clear set to true (default) clears text field. </p>
 
 </div>
 </div>
@@ -279,8 +306,8 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>include/<a class="el" href="Exceptions_8h_source.html">Exceptions.h</a></li>
-<li>src/Exceptions.cpp</li>
+<li>include/<a class="el" href="Debug_8h_source.html">Debug.h</a></li>
+<li>src/Debug.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- window showing the filter options -->
@@ -300,7 +327,7 @@ Static Private Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 31 2012 06:49:35 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 31 2012 22:05:33 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

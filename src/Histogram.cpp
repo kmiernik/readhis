@@ -171,6 +171,7 @@ Histogram1D* Histogram1D::rebin (double xMin, double xMax,
         throw GenError("Histogram1D::rebin: number of bins cannot be less then 1");
 
     double binW = (xMax - xMin) / double(nBinX);   
+
     double underflow = 0.0;
     double overflow = 0.0;
     unsigned sz = values_.size();
@@ -444,7 +445,7 @@ Histogram2D* Histogram2D::rebin ( double xMin, double xMax,
     unsigned sz = values_.size();
     vector<double> values;
     values.resize(nBinX * nBinY, 0.0);
-
+    
     for (unsigned i = 0; i < sz; ++i) {
         vector<double> px;
         vector<double> py;
@@ -502,9 +503,9 @@ Histogram2D& Histogram2D::operator=(const Histogram2D& right){
     this->nBinX_= right.nBinX_;
     this->binWidthX_ = right.binWidthX_;
 
-    this->yMin_ = right.xMin_;
-    this->yMax_ = right.xMax_;
-    this->nBinY_= right.nBinX_;
+    this->yMin_ = right.yMin_;
+    this->yMax_ = right.yMax_;
+    this->nBinY_= right.nBinY_;
     this->binWidthY_ = right.binWidthY_;
 
     this->hisId_ = right.hisId_;

@@ -343,8 +343,6 @@ void HisDrr::loadDrr() {
     }
 }
 
-// Return by value version
-//vector<unsigned int> HisDrr::getHistogram(int id) {
 // Return by reference version
 void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
     // First we search if histogram id exists
@@ -354,7 +352,6 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
             index = i;
             break;
         }
-
     if (index < 0) {
         stringstream err;
         err << "HisDrr:12: Could not find spectrum id = " << id << " in drr file";

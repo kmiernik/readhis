@@ -130,7 +130,7 @@ bool Options::setSBg (bool isSBg, unsigned b0, unsigned b1,
 }
 bool Options::getBin() const { return isBin_; }
 bool Options::setBin (bool isBin, unsigned bx, unsigned by /*= 0*/) {
-    if (bx < 2 || by == 1)
+    if (bx <= 1 && by <= 1)
         return false;
 
     bin_.clear();

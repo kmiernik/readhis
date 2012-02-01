@@ -5,6 +5,6 @@
  * Distributed under GNU General Public Licence v3
  */
 
-#include "Exceptions.h"
+#include "Debug.h"
 
 int debug::Counter::counter_ = 0;

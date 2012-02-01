@@ -10,8 +10,6 @@
 
 #include <string>
 #include <iostream>
-#include <sstream>
-#include <cstdio>
 
 /**
 * Exception handler.
@@ -48,70 +46,15 @@ public:
     ArrayError(const std::string msg = 0) : GenError(msg) {}
 };
 
-namespace debug {
-
-    /**
-    * General function for requiriment check.
-    */
-    inline void require(bool requirement,
-                        const std::string& msg = "Requirement failed"){
-        if (!requirement) {
-            // fputs(msg.c_str(), stderr);
-            // fputs("\n", stderr);
-            throw GenError(msg);
-        }
+/**
+* General function for requiriment check.
+*/
+inline void require(bool requirement,
+                const std::string& msg = "Requirement failed"){
+    if (!requirement) {
+        throw GenError(msg);
     }
-    /**
-     * Counter for simple debugging.
-     */
-    class Counter {
-        public:
-            /** Ctor, text message passed as an option. */
-            Counter(const std::string& text = "") : text_(text) {
-                ++counter_;
-                index_ = 0;
-                show(); 
-            }
-
-            /** Adds one to subindex, then calls show().*/
-            void add() {
-                ++index_;
-                show();
-            }
-            
-            /** Adds one to subindex, sets text to passed stringstream and calls show(). */
-            void set(const std::stringstream& text) {
-                ++index_;
-                text_ = text.str();
-                show();
-            }
-
-            /** Adds one to subindex, sets text to passed string and calls show(). */
-            void set(const std::string& text) {
-                ++index_;
-                text_ = text;
-                show();
-            }
-
-            /** Prints to cout the counter number, index and message. */
-            void show() const { 
-                std::cout << "#C: " << counter_ << "." << index_ 
-                          << " : " << text_ << std::endl;
-            }
-            ~Counter() { }
-        private:
-            /** Counter number. */
-            static int counter_;
-
-            /** Sub index of counter, incremented by each call of add()
-             * and set.*/
-            int index_;
-
-            /** Optional text stored by counter. In a form of stringstream
-             * for easier passing values of variables etc.
-             */
-            std::string text_;
-    };
 }
+
 
 #endif
