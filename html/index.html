@@ -74,9 +74,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>The purpose of this program is to load histogram data from HIS/DRR file format (upak library), and convert them to ascii format. Program parses options given by user (<a class="el" href="classOptions.html" title="Class for storing options for readhis.">Options</a> class) and creates <a class="el" href="classHisDrrHisto.html" title="The main purpose of this class is to translate HisDrr data to Histogram, perform operations accordinh...">HisDrrHisto</a> class which loads the data and puts them into cout.</p>
+<p>Output contains data and calculated uncertainties. The comment lines in the output is marked by '#' character. These data come in plain text format, so it should be easy to plot them directly (I recommend gnuplot, which also uses '#' as comment characters) or import them into spreadsheet using LibreOffice Calc or similar.</p>
 <h2><a class="anchor" id="Installation"></a>
 Installation</h2>
-<p>The provided makefile should compile code and create 'readhis' executable. To run it simple type 'make'. Complitation was tested on Linux Fedora 16 and Arch Linux using g++ 4.6. Program depends only on C++ Standard Library so porting to other operating systems should be easy.</p>
+<p>The provided makefile should compile code and create 'readhis' executable. To run it simple type 'make'. Compilation was tested on Linux Fedora 16 and Arch Linux using g++ 4.6. Program depends on C++ Standard Library only, so porting to other operating systems should be easy.</p>
 <h2><a class="anchor" id="Usage"></a>
 Usage</h2>
 <p>readhis [options] file.his</p>
@@ -118,6 +119,24 @@ Options</h2>
 <ul>
 <li>--help : displays help</li>
 </ul>
+<h2><a class="anchor" id="Examples"></a>
+Examples</h2>
+<p>Let's suppose that we have data in run01.his and run01.drr files. The readhis and data are in the same directory. The following examples follow logic of examining the data.</p>
+<ol type="1">
+<li>Display list of all histograms $ readhis --list run01.his</li>
+<li>Display list of all histograms, for each show number of dimensions and mark which are empty $ readhis --List run01.his</li>
+<li>Display detailed information about histogram 1501 $ readhis --id 1501 --info run01.his</li>
+<li>Extract data for histogram 1501 into text file 1501.txt $ readhis --id 1501 run01.his &gt; 1501.txt</li>
+<li>As above but bin data, with bin size 3 $ readhis --id 1501 --bin 3 run01.his &gt; 1501.txt</li>
+<li>Display detailed information about 2 dimensional histogram 1734 $ readhis --id 1734 --info run01.his</li>
+<li>Extract data for histogram 1734 into text file 1734.txt $ readhis --id 1734 run01.his &gt; 1734.txt</li>
+<li>As above but request bin size in X axis 1, and bin size Y - 10 $ readhis --id 1734 --bin 1,10 run01.his &gt; 1734.txt</li>
+<li>Put gate on X axis (makes projection on Y axis) between channels 266 and 269 in histogram 1734. Put result into gate.txt text file. $ readhis -- id 1734 --gx 266,269 run01.his &gt; gate.txt</li>
+<li>As above but set gate for background removal between channels 272 and 275. $ readhis --id 1734 --gx 266,269 --bg 272,275 run01.his &gt; gate.txt</li>
+<li>As above but set background gate split into two parts (e.g on both sides of the peak) between channels 262 to 263 and 266 to 267 $ readhis --id 1734 --gx 266,269 --sbg 262,263,266,267 run01.his &gt; gate.txt</li>
+<li>Put gate on Y axis (makes projection on X axis) between channels 100 and 150. Put result on screen. $ readhis --id 1734 --gy 100,150 run01.his</li>
+<li>List all histograms in file run02.his and run02.drr, being placed in a different directory (e.g relative path is ../RUN02/) $ readhis --list ../RUN02/run02.his</li>
+</ol>
 <h2><a class="anchor" id="Graph"></a>
 Graph</h2>
 <p>This graph explains the logic of program </p>
@@ -147,7 +166,7 @@ Copyrights</h2>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 31 2012 22:44:53 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 1 2012 07:10:49 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
