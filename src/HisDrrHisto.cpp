@@ -39,15 +39,17 @@ void HisDrrHisto::runListMode(bool more) {
                     break;
                 }
             if (empty)
-                cout << list[i] << "E(" << info.hisDim << ")";
+                cout << "E" << list[i] << "E(" << info.hisDim << ")";
             else
-                cout << "\033[1;34m" << list[i] << "\033[0m" << "(" << info.hisDim << ")";
+                cout << list[i] << "(" << info.hisDim << ")";
+                //Removed because when redirected to file, looks ugly
+                //cout << "\033[1;34m" << list[i] << "\033[0m" << "(" << info.hisDim << ")";
         } else {
             cout << list[i];
         }
         
         cout << ", ";
-        if ((i+1) % 10 == 0)
+        if ((i+1) % 8 == 0)
             cout << endl;
 
     }
