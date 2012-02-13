@@ -139,7 +139,7 @@ void HisDrrHisto::process2D() {
     Histogram2D* h2 = dynamic_cast<Histogram2D*>(histogram);
 
     bool gx = options_->getGx();
-    bool gy = options_->getGx();
+    bool gy = options_->getGy();
     bool bg = options_->getBg();
     bool sbg = options_->getSBg();
     
