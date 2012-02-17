@@ -113,7 +113,7 @@ bool Options::setBg (bool isBg, unsigned b0, unsigned b1) {
 bool Options::getSBg() const { return isSBg_; }
 bool Options::setSBg (bool isSBg, unsigned b0, unsigned b1,
                                 unsigned b2, unsigned b3) {
-    if ( !(b3 > b2 && b2 > b1 && b1 > b0) )
+    if ( !(b3 >= b2 && b2 >= b1 && b1 >= b0) )
         return false;
 
     b_.clear();
