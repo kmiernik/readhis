@@ -15,4 +15,4 @@ readhis: readhis.o HisDrr.o Histogram.o HisDrrHisto.o Options.o Debug.o
 	$(CPP) $(CPPFLAGS) -o $@ readhis.o HisDrr.o Histogram.o HisDrrHisto.o Options.o Debug.o
 
 clean: 
-	rm -f *.o *~ include/*~ src/*~ readhis test
+	rm -f *.o *~ include/*~ src/*~ readhis

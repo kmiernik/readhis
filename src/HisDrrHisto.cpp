@@ -53,7 +53,7 @@ void HisDrrHisto::runListMode(bool more) {
             cout << endl;
 
     }
-    cout << "\033[0;30m\033[0m" << endl;
+    cout << endl;
 }
 
 void HisDrrHisto::runInfoMode() {
@@ -239,6 +239,10 @@ void HisDrrHisto::process2D() {
         }
 
         unsigned sz = proj->getnBinX();
+        //We assume here that 0 counts came from l = 1 Poisson distribution
+        for (unsigned i = 0; i < sz; ++i)
+            if ((*projErr)[i] == 0)
+                (*projErr)[i] = 1;
 
         cout << "#X  N  dN" << endl;
         for (unsigned i = 0; i < sz; ++i)
