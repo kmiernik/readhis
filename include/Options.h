@@ -9,6 +9,7 @@
 #define OPTIONS_H
 
 #include <vector>
+#include <string>
 /**
  * Class for storing options for readhis. Options are loaded from
  * command line by readhis and applied here. The HisDrrHisto requires 
@@ -33,57 +34,57 @@ class Options {
         bool getListMode() const;
 
         /** Sets list mode.*/
-        void setListMode (bool b); 
+        void setListMode (bool b = true); 
 
         /** Returns true if verbose list mode is set.*/
         bool getListModeZ() const;
 
         /** Sets verbose list mode. Unsets list mode if b = true.*/
-        void setListModeZ (bool b);
-
+        void setListModeZ (bool b = true);
 
         /** Returns true if info mode is set.*/
         bool getInfoMode() const;
 
         /** Sets info mode.*/
-        void setInfoMode (bool b);
+        void setInfoMode (bool b = true);
 
         /** Returns true if zero suppresion mode is set.*/
         bool getZeroSup() const;
 
         /** Sets zero suppresion mode.*/
-        void setZeroSup (bool b);
+        void setZeroSup (bool b = true);
         
         /** Returns true if gx flag is set.*/
         bool getGx() const;
 
         /** Sets gx flag, and gate limits. Makes gates limit check. Unsets gy if succesful. */
-        bool setGx (bool isGx, unsigned g0, unsigned g1);
+        bool setGx (unsigned g0, unsigned g1, bool isGx = true);
 
         /** Returns true if gy flag is set .*/
         bool getGy() const;
 
         /** Sets gy flag, and gate limits. Makes gates limit check. Unsets gx if succesful. */
-        bool setGy (bool isGy, unsigned g0, unsigned g1);
+        bool setGy (unsigned g0, unsigned g1, bool isGy = true);
 
         /** Returns true if bg flag is set.*/
         bool getBg() const;
 
         /** Sets bg flag, and gate limits. Makes gates limit check. Unsets sbg if succesful. */
-        bool setBg (bool isBg, unsigned b0, unsigned b1);
+        bool setBg (unsigned b0, unsigned b1, bool isBg = true);
         
         /** Returns true if sbg flag is set.*/
         bool getSBg() const;
 
         /** Sets sbg flag, and gate limits. Makes gates limit check. Unsets bg if succesful. */
-        bool setSBg (bool isSBg, unsigned b0, unsigned b1,
-                                 unsigned b2, unsigned b3);
+        bool setSBg ( unsigned b0, unsigned b1,
+                      unsigned b2, unsigned b3, 
+                      bool isSBg = true);
         
         /** Returns true if bin flag is set.*/
         bool getBin() const;
 
         /** Sets binning size. If only b0 is passed, the b1 is equal to b0.*/
-        bool setBin (bool isBin, unsigned b0, unsigned b1 = 0);
+        bool setBin (unsigned b0, unsigned b1 = 0, bool isBin = true);
 
         /** Returns by reference vector containing gates.*/
         void getGate(std::vector<unsigned>& rtn) const;
@@ -94,6 +95,17 @@ class Options {
         /** Returns by reference vector containing binning size.*/
         void getBinning(std::vector<unsigned>& rtn) const;
 
+        /** Sets polygon gate defined in polygonFile.
+         * If isGx is set true, projection will be made on Y axis (gate on X)
+         * if false projection will be on X axis (gate on Y)
+         */
+        void setPolygon (std::string polygonFile, bool isGx, bool isPg = true);
+
+        /** Returns true if --pg is set. */
+        bool getPg() const;
+        
+        /** Returns name of polygon definition file. */
+        std::string getPolygon() const;
 
     private:
         /** Histogram id.*/
@@ -144,6 +156,12 @@ class Options {
 
         /** For --bin. Stores binning size.*/
         std::vector<unsigned> bin_;
+
+        /** For --pol (polygon gate). */
+        bool isPg_;
+
+        /** Polygon definition file */
+        std::string polygonFile_;
 };
 
 #endif

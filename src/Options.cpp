@@ -19,6 +19,8 @@ Options::Options() {
     isGy_ = false;
     isBg_ = false;
     isSBg_ = false;
+    isPg_ = false;
+    polygonFile_ = "";
 }
 
 unsigned Options::getHisId () const { return hisId_; }
@@ -35,7 +37,7 @@ bool Options::setHisId (unsigned hisId) {
 bool Options::isIdSet() const { return isIdSet_; }
 
 bool Options::getListMode() const { return isListMode_; }
-void Options::setListMode (bool b) { 
+void Options::setListMode (bool b /*=true*/) { 
     if (b) {
         isListModeZ_ = false;
         isListMode_ = true;
@@ -46,7 +48,7 @@ void Options::setListMode (bool b) {
 }
 
 bool Options::getListModeZ() const { return isListModeZ_; }
-void Options::setListModeZ (bool b) { 
+void Options::setListModeZ (bool b /*=true*/) { 
     if (b) {
         isListMode_ = false;
         isListModeZ_ = true;
@@ -56,14 +58,14 @@ void Options::setListModeZ (bool b) {
 }
 
 bool Options::getInfoMode() const { return isInfoMode_; }
-void Options::setInfoMode (bool b) { isInfoMode_ = b; }
+void Options::setInfoMode (bool b /*=true*/) { isInfoMode_ = b; }
 
 
 bool Options::getZeroSup() const { return isZeroSup_; }
-void Options::setZeroSup (bool b) { isZeroSup_ = b; }
+void Options::setZeroSup (bool b /*=true*/) { isZeroSup_ = b; }
 
 bool Options::getGx() const { return isGx_; }
-bool Options::setGx (bool isGx, unsigned g0, unsigned g1) {
+bool Options::setGx (unsigned g0, unsigned g1, bool isGx /*=true*/) {
     if (g0 > g1)
         return false;
     g_.clear();
@@ -78,7 +80,7 @@ bool Options::setGx (bool isGx, unsigned g0, unsigned g1) {
 }
 
 bool Options::getGy() const { return isGy_; }
-bool Options::setGy (bool isGy, unsigned g0, unsigned g1) {
+bool Options::setGy (unsigned g0, unsigned g1, bool isGy /*=true*/) {
     if (g0 > g1)
         return false;
     g_.clear();
@@ -95,7 +97,7 @@ bool Options::setGy (bool isGy, unsigned g0, unsigned g1) {
 }
 
 bool Options::getBg() const { return isBg_; }
-bool Options::setBg (bool isBg, unsigned b0, unsigned b1) {
+bool Options::setBg (unsigned b0, unsigned b1, bool isBg /*=true*/) {
     if (b0 > b1)
         return false;
 
@@ -111,8 +113,9 @@ bool Options::setBg (bool isBg, unsigned b0, unsigned b1) {
 }
 
 bool Options::getSBg() const { return isSBg_; }
-bool Options::setSBg (bool isSBg, unsigned b0, unsigned b1,
-                                unsigned b2, unsigned b3) {
+bool Options::setSBg (unsigned b0, unsigned b1,
+                      unsigned b2, unsigned b3,
+                      bool isSBg /*=true*/) {
     if ( !(b3 >= b2 && b2 >= b1 && b1 >= b0) )
         return false;
 
@@ -129,7 +132,7 @@ bool Options::setSBg (bool isSBg, unsigned b0, unsigned b1,
     return true;
 }
 bool Options::getBin() const { return isBin_; }
-bool Options::setBin (bool isBin, unsigned bx, unsigned by /*= 0*/) {
+bool Options::setBin (unsigned bx, unsigned by /*= 0*/, bool isBin /*=true*/) {
     if (bx <= 1 && by <= 1)
         return false;
 
@@ -170,3 +173,22 @@ void Options::getBinning(std::vector<unsigned>& rtn) const {
         rtn.push_back(bin_[i]);
 }
 
+void Options::setPolygon (std::string polygonFile, bool isGx, bool isPg /*=true*/) {
+    isPg_ = isPg;
+    if (isPg) {
+        polygonFile_ = polygonFile;
+        if (isGx) {
+            isGx_ = true;
+            isGy_ = false;
+        } else {
+            isGx_ = false;
+            isGy_ = true;
+        }
+    }
+}
+
+bool Options::getPg() const { return isPg_; }
+        
+std::string Options::getPolygon() const {
+    return polygonFile_;
+}

@@ -26,13 +26,14 @@
  *  \section Installation
  *  The provided makefile should compile code and create 'readhis' executable.
  *  To run it simple type 'make'.
+ *  'make install' copies readhis to /usr/local/bin path for system wide access
  *  Compilation was tested on Linux Fedora 16 and Arch Linux using g++ 4.6.
  *  Program depends on C++ Standard Library only, so porting to other
  *  operating systems should be easy.
  *
  * \section Usage
  *       readhis [options] file.his
- *     
+ *
  * \section Description  
  *       Program reads his file using binary description from drr file.  
  *       Both files are required to be present in the specified path   
@@ -41,42 +42,88 @@
  *       in case you want to save it to file.  
  *     
  * \section Options  
- *    -   --id : short (-i), selects histogram id   
- *              required by other options unless stated otherwise.   
- *     
- *    -  --gx x0,x1 : short (-x), 2D histograms only, requires two   
- *                    integer arguments separated by coma. Sets   
- *                    projection on X axis, starting from column x0 to x1  
- *                    (including both)  
- *     
- *    -   --gy x0,x1 : short (-y), as above, projection on Y axis   
- *     
- *    -   --bg x0,x1 : short (-b), 2D histograms only, only with gx or   
- *                    gy option. Sets gate for background subtraction,   
- *                    from x0 to x1 (including both).   
- *     
- *    -   --sbg x0,x1,x2,x3 : short (-s), 2D histograms only, only with   
- *                           gx or gy option. Same as above exept that    
- *                           gate is split into two parts x0 to x1 and  
- *                           x2 to x3.  
- *
- *    -   --bin bx[,by] : short (-B), defines number of histogram bins   
- *                       to join. For 2D histogram if only one argument   
- *                       is given by=bx is assumed. At least one bin size
- *                       must be > 1.  
- *     
- *    -   --zero : short (-z), suppresses bins with zero counts in output  
- *     
- *    -   --info : short (-I), displays detailed information on histogram  
- *     
- *    -  --list : short (-l), does not requires id. Displays list of  
- *                histograms present in the file.   
- *     
- *    -  --List : short (-L), does not requires id. As above,   
- *                additionally marks empty histograms and histogram dimensions.
- *     
- *    -  --help  : displays help   
+ * 	Option:	--id
+ * 	Short: -i
+ * 	Description: 
+ * 		Selects histogram id, required by all other options unless 
+ * 		stated otherwise. 
  * 
+ * 	Option:	--gx AND (x0,x1 OR filename OR filename,id)
+ * 	Short: -x
+ * 	Description: 
+ * 		For 2D histograms only, requires two integer arguments 
+ * 		separated by coma. Sets projection on Y axis (gate on X). 
+ * 		starting from column x0 to x1 (including both). If filename 
+ * 		is given, the file must be a text file defining polygon, 
+ * 		using the following format: 
+ *
+ * 		#Comment line 
+ * 		x0 y0 
+ * 		x1 y1 
+ * 		(...) 
+ * 		
+ * 		at least 3 points are required. 
+ *
+ * 		If filename,id syntax is used, the file must be a BAN 
+ * 		(damm) file, and id is a damm banana id to be used. 
+ * 
+ * 	Option:	--gy AND (y0,y1 OR filename OR filename,id)
+ * 	Short: -y
+ * 	Description: 
+ * 		As above, exept that projection is made on X axis (gate on 
+ * 		Y). 
+ * 
+ * 	Option:	--bg AND x0,x1
+ * 	Short: -b
+ * 	Description: 
+ * 		For 2D histograms only, only with --gx or --gy. requires 
+ * 		two integer arguments separated by coma. Sets gate for 
+ * 		background subtraction from channel containing x0 to x1 
+ * 		(including both). 
+ * 
+ * 	Option:	--sbg AND x0,x1,x2,x3
+ * 	Short: -b
+ * 	Description: 
+ * 		For 2D histograms only, only with --gx or --gy. Same as 
+ * 		above exept that gate is split into two parts x0 to x1 and 
+ * 		x2 to x3. 
+ * 
+ * 	Option:	--bin AND (bx OR bx,by)
+ * 	Short: -B
+ * 	Description: 
+ * 		Defines number of histogram bins to join. For 2D histogram 
+ * 		if only one argument is given by = bx is assumed. At least 
+ * 		one bin size must be > 1. 
+ * 
+ * 	Option:	--zero
+ * 	Short: -z
+ * 	Description: 
+ * 		Suppresses bins with zero counts in output (1D Histograms 
+ * 		only) 
+ * 
+ * 	Option:	--info
+ * 	Short: -I
+ * 	Description: 
+ * 		Displays detailed information on histogram. 
+ * 
+ * 	Option:	--list
+ * 	Short: -l
+ * 	Description: 
+ * 		Does not require histogram id. Displays list of all 
+ * 		histograms present in a given file. 
+ * 
+ * 	Option:	--List
+ * 	Short: -L
+ * 	Description: 
+ * 		Does not require histogram id. As above except that 
+ * 		displays number of dimensions for each histogram and marks 
+ * 		empty histograms with 'E' letter next to id. 
+ * 
+ * 	Option:	--help
+ * 	Short: -h
+ * 	Description: 
+ * 		Shows help. 
+ *       
  * \section Examples
  *  Let's suppose that we have data in run01.his and run01.drr files. The
  *  readhis and data are in the same directory. The following examples follow
@@ -110,6 +157,12 @@
  *  -# Put gate on Y axis (makes projection on X axis) between channels 100
  *     and 150. Put result on screen.
  *     $ readhis --id 1734 --gy 100,150 run01.his
+ *  -# Put gate on Y axis (makes projection on X axis) using pol.txt file with
+ *     polygon gate definition. Put result to ban01.txt file
+ *     $ readhis --id 1734 --gy pol.txt run01.his > ban01.txt
+ *  -# Put gate on Y axis (makes projection on X axis) using pol.ban file
+ *     generated by damm, select banana id 1. Put result to ban02.txt.
+ *     $ readhis --id 1734 --gy pol.ban,1 run01.his > ban02.txt
  *  -# List all histograms in file run02.his and run02.drr, being placed in 
  *     a different directory (e.g relative path is ../RUN02/)
  *     $ readhis --list ../RUN02/run02.his
@@ -132,4 +185,4 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ 

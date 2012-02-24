@@ -13,6 +13,7 @@
 #include "Exceptions.h"
 #include "Options.h"
 #include "HisDrrHisto.h"
+#include "Polygon.h"
 
 using namespace std;
 
@@ -142,8 +143,9 @@ void HisDrrHisto::process2D() {
     bool gy = options_->getGy();
     bool bg = options_->getBg();
     bool sbg = options_->getSBg();
+    bool pg = options_->getPg();
     
-    if (gx || gy){
+    if ( (gx || gy) && !pg ){
         // Resulting projection
         Histogram1D* proj;
         // Uncertainities are going to be stored in a separate histogram
@@ -251,6 +253,54 @@ void HisDrrHisto::process2D() {
         delete projErr;
         delete proj;
 
+    } else if ( (gx || gy) && pg ) {
+        // Polygon gate
+        Polygon* polgate;
+
+        string polFile = options_->getPolygon();
+        int coma = polFile.find_last_of(",");
+        if (coma != (int)string::npos ) {
+            string file = polFile.substr(0, coma);
+            string id = polFile.substr(coma + 1);
+            cout << "# BAN file " << file << " ban id " << id << endl;
+            polgate = new Polygon(file, atoi(id.c_str()));
+        } else {
+            polgate = new Polygon(polFile);
+        }
+
+        unsigned szX = h2->getnBinX();
+        unsigned szY = h2->getnBinY();
+       
+        double min = 0;
+        double max = 0;
+        unsigned pSz = 0;
+        if (gx) {
+            min = h2->getyMin();
+            max = h2->getyMax();
+            pSz = szY;
+        } else {
+            min = h2->getxMin();
+            max = h2->getxMax();
+            pSz = szX;
+        }
+        Histogram1D* proj = new Histogram1D(min, max, pSz, "");
+
+        for (unsigned x = 0; x < szX; ++x)
+        for (unsigned y = 0; y < szY; ++y) {
+            if (polgate->pointIn(h2->getX(x), h2->getY(y)) ) {
+                if (gx)
+                    proj->add(y, (*h2)(x,y));
+                else
+                    proj->add(x, (*h2)(x,y));
+            }
+        }
+
+        cout << "#X  N  dN" << endl;
+        for (unsigned i = 0; i < pSz; ++i)
+            cout << proj->getX(i) << " " << (*proj)[i] << " " << sqrt((*proj)[i]) << endl;
+                    
+        delete proj;
+        delete polgate;
     } else {
         // No gates case
         
