@@ -171,3 +171,27 @@ bool Polygon::pointIn(double xp, double yp) {
     else
         return true;
 }
+
+bool Polygon::rectangle(double& xlow, double& ylow,
+                        double& xhigh, double& yhigh) {
+    unsigned sz = vertices_.size();
+    if (sz == 0)
+        return false;
+    
+    xlow = vertices_[0].x;
+    ylow = vertices_[0].y;
+    xhigh = vertices_[0].x;
+    yhigh = vertices_[0].y;
+    for (unsigned i = 1; i < sz; ++i) {
+        if (vertices_[i].x < xlow)
+            xlow = vertices_[i].x;
+        if (vertices_[i].y < ylow)
+            ylow = vertices_[i].y;
+        if (vertices_[i].x > xhigh)
+            xhigh = vertices_[i].x;
+        if (vertices_[i].y > yhigh)
+            yhigh = vertices_[i].y;
+    }
+    return true;
+
+}

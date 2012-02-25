@@ -13,6 +13,7 @@ var searchData=
   ['isinfomode_5f',['isInfoMode_',['../classOptions.html#a714ba458fddb5aa67b10df985f3598e8',1,'Options']]],
   ['islistmode_5f',['isListMode_',['../classOptions.html#a7e4f52bfb9cea48e19f055a366b068de',1,'Options']]],
   ['islistmodez_5f',['isListModeZ_',['../classOptions.html#a19befdf97dd33339f11ff6a8d126d0b0',1,'Options']]],
+  ['ispg_5f',['isPg_',['../classOptions.html#a7abc240cd2417fd8f67bb80f683941be',1,'Options']]],
   ['issbg_5f',['isSBg_',['../classOptions.html#a7d1eca44d63ca04f7794e7c5f38c4d5c',1,'Options']]],
   ['iszerosup_5f',['isZeroSup_',['../classOptions.html#aae44125e220b71ec91afa37b99c1d5d4',1,'Options']]]
 ];

@@ -77,7 +77,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Output contains data and calculated uncertainties. The comment lines in the output is marked by '#' character. These data come in plain text format, so it should be easy to plot them directly (I recommend gnuplot, which also uses '#' as comment characters) or import them into spreadsheet using LibreOffice Calc or similar.</p>
 <h2><a class="anchor" id="Installation"></a>
 Installation</h2>
-<p>The provided makefile should compile code and create 'readhis' executable. To run it simple type 'make'. Compilation was tested on Linux Fedora 16 and Arch Linux using g++ 4.6. Program depends on C++ Standard Library only, so porting to other operating systems should be easy.</p>
+<p>The provided makefile should compile code and create 'readhis' executable. To run it simple type 'make', 'make install' copies readhis to /usr/local/bin path for system wide access.</p>
+<p>Compilation was tested on Linux Fedora 16 and Arch Linux using g++ 4.6. Program depends on C++ Standard Library only, so porting to other operating systems should be easy.</p>
 <h2><a class="anchor" id="Usage"></a>
 Usage</h2>
 <p>readhis [options] file.his</p>
@@ -87,56 +88,140 @@ Description</h2>
 <h2><a class="anchor" id="Options"></a>
 Options</h2>
 <ul>
-<li>--id : short (-i), selects histogram id required by other options unless stated otherwise.</li>
+<li>Option: --id</li>
 </ul>
+<p>Short: -i</p>
+<p>Description:</p>
+<p>Selects histogram id, required by all other options unless stated otherwise.</p>
 <ul>
-<li>--gx x0,x1 : short (-x), 2D histograms only, requires two integer arguments separated by coma. Sets projection on X axis, starting from column x0 to x1 (including both)</li>
+<li>Option: --gx AND (x0,x1 OR filename OR filename,id)</li>
 </ul>
+<p>Short: -x</p>
+<p>Description:</p>
+<p>For 2D histograms only, requires two integer arguments separated by coma. Sets projection on Y axis (gate on X). starting from column x0 to x1 (including both). If filename is given, the file must be a text file defining polygon, using the following format:</p>
+<p>#Comment line</p>
+<p>x0 y0</p>
+<p>x1 y1</p>
+<p>(...)</p>
+<p>at least 3 points are required.</p>
+<p>If filename,id syntax is used, the file must be a BAN (damm) file, and id is a damm banana id to be used.</p>
 <ul>
-<li>--gy x0,x1 : short (-y), as above, projection on Y axis</li>
+<li>Option: --gy AND (y0,y1 OR filename OR filename,id)</li>
 </ul>
+<p>Short: -y</p>
+<p>Description:</p>
+<p>As above, exept that projection is made on X axis (gate on Y).</p>
 <ul>
-<li>--bg x0,x1 : short (-b), 2D histograms only, only with gx or gy option. Sets gate for background subtraction, from x0 to x1 (including both).</li>
+<li>Option: --bg AND x0,x1</li>
 </ul>
+<p>Short: -b</p>
+<p>Description:</p>
+<p>For 2D histograms only, only with --gx or --gy. requires two integer arguments separated by coma. Sets gate for background subtraction from channel containing x0 to x1 (including both).</p>
 <ul>
-<li>--sbg x0,x1,x2,x3 : short (-s), 2D histograms only, only with gx or gy option. Same as above exept that gate is split into two parts x0 to x1 and x2 to x3.</li>
+<li>Option: --sbg AND x0,x1,x2,x3</li>
 </ul>
+<p>Short: -b</p>
+<p>Description:</p>
+<p>For 2D histograms only, only with --gx or --gy. Same as above exept that gate is split into two parts x0 to x1 and x2 to x3.</p>
 <ul>
-<li>--bin bx[,by] : short (-B), defines number of histogram bins to join. For 2D histogram if only one argument is given by=bx is assumed. At least one bin size must be &gt; 1.</li>
+<li>Option: --bin AND (bx OR bx,by)</li>
 </ul>
+<p>Short: -B</p>
+<p>Description:</p>
+<p>Defines number of histogram bins to join. For 2D histogram if only one argument is given by = bx is assumed. At least one bin size must be &gt; 1.</p>
 <ul>
-<li>--zero : short (-z), suppresses bins with zero counts in output</li>
+<li>Option: --zero</li>
 </ul>
+<p>Short: -z</p>
+<p>Description:</p>
+<p>Suppresses bins with zero counts in output (1D Histograms only)</p>
 <ul>
-<li>--info : short (-I), displays detailed information on histogram</li>
+<li>Option: --info</li>
 </ul>
+<p>Short: -I</p>
+<p>Description:</p>
+<p>Displays detailed information on histogram.</p>
 <ul>
-<li>--list : short (-l), does not requires id. Displays list of histograms present in the file.</li>
+<li>Option: --list</li>
 </ul>
+<p>Short: -l</p>
+<p>Description:</p>
+<p>Does not require histogram id. Displays list of all histograms present in a given file.</p>
 <ul>
-<li>--List : short (-L), does not requires id. As above, additionally marks empty histograms and histogram dimensions.</li>
+<li>Option: --List</li>
 </ul>
+<p>Short: -L</p>
+<p>Description:</p>
+<p>Does not require histogram id. As above except that displays number of dimensions for each histogram and marks empty histograms with 'E' letter next to id.</p>
 <ul>
-<li>--help : displays help</li>
+<li>Option: --help</li>
 </ul>
+<p>Short: -h</p>
+<p>Description:</p>
+<p>Shows help.</p>
 <h2><a class="anchor" id="Examples"></a>
 Examples</h2>
 <p>Let's suppose that we have data in run01.his and run01.drr files. The readhis and data are in the same directory. The following examples follow logic of examining the data.</p>
-<ol type="1">
-<li>Display list of all histograms $ readhis --list run01.his</li>
-<li>Display list of all histograms, for each show number of dimensions and mark which are empty $ readhis --List run01.his</li>
-<li>Display detailed information about histogram 1501 $ readhis --id 1501 --info run01.his</li>
-<li>Extract data for histogram 1501 into text file 1501.txt $ readhis --id 1501 run01.his &gt; 1501.txt</li>
-<li>As above but bin data, with bin size 3 $ readhis --id 1501 --bin 3 run01.his &gt; 1501.txt</li>
-<li>Display detailed information about 2 dimensional histogram 1734 $ readhis --id 1734 --info run01.his</li>
-<li>Extract data for histogram 1734 into text file 1734.txt $ readhis --id 1734 run01.his &gt; 1734.txt</li>
-<li>As above but request bin size in X axis 1, and bin size Y - 10 $ readhis --id 1734 --bin 1,10 run01.his &gt; 1734.txt</li>
-<li>Put gate on X axis (makes projection on Y axis) between channels 266 and 269 in histogram 1734. Put result into gate.txt text file. $ readhis -- id 1734 --gx 266,269 run01.his &gt; gate.txt</li>
-<li>As above but set gate for background removal between channels 272 and 275. $ readhis --id 1734 --gx 266,269 --bg 272,275 run01.his &gt; gate.txt</li>
-<li>As above but set background gate split into two parts (e.g on both sides of the peak) between channels 262 to 263 and 266 to 267 $ readhis --id 1734 --gx 266,269 --sbg 262,263,266,267 run01.his &gt; gate.txt</li>
-<li>Put gate on Y axis (makes projection on X axis) between channels 100 and 150. Put result on screen. $ readhis --id 1734 --gy 100,150 run01.his</li>
-<li>List all histograms in file run02.his and run02.drr, being placed in a different directory (e.g relative path is ../RUN02/) $ readhis --list ../RUN02/run02.his</li>
-</ol>
+<ul>
+<li>Display list of all histograms</li>
+</ul>
+<p>$ readhis --list run01.his</p>
+<ul>
+<li>Display list of all histograms, for each show number of dimensions and mark which are empty</li>
+</ul>
+<p>$ readhis --List run01.his</p>
+<ul>
+<li>Display detailed information about histogram 1501</li>
+</ul>
+<p>$ readhis --id 1501 --info run01.his</p>
+<ul>
+<li>Extract data for histogram 1501 into text file 1501.txt</li>
+</ul>
+<p>$ readhis --id 1501 run01.his &gt; 1501.txt</p>
+<ul>
+<li>As above but bin data, with bin size 3</li>
+</ul>
+<p>$ readhis --id 1501 --bin 3 run01.his &gt; 1501.txt</p>
+<ul>
+<li>Display detailed information about 2 dimensional histogram 1734</li>
+</ul>
+<p>$ readhis --id 1734 --info run01.his</p>
+<ul>
+<li>Extract data for histogram 1734 into text file 1734.txt</li>
+</ul>
+<p>$ readhis --id 1734 run01.his &gt; 1734.txt</p>
+<ul>
+<li>As above but request bin size in X axis 1, and bin size Y - 10</li>
+</ul>
+<p>$ readhis --id 1734 --bin 1,10 run01.his &gt; 1734.txt</p>
+<ul>
+<li>Put gate on X axis (makes projection on Y axis) between channels 266 and 269 in histogram 1734. Put result into gate.txt text file.</li>
+</ul>
+<p>$ readhis -- id 1734 --gx 266,269 run01.his &gt; gate.txt</p>
+<ul>
+<li>As above but set gate for background removal between channels 272 and 275.</li>
+</ul>
+<p>$ readhis --id 1734 --gx 266,269 --bg 272,275 run01.his &gt; gate.txt</p>
+<ul>
+<li>As above but set background gate split into two parts (e.g on both sides of the peak) between channels 262 to 263 and 266 to 267</li>
+</ul>
+<p>$ readhis --id 1734 --gx 266,269 --sbg 262,263,266,267 run01.his &gt; gate.txt</p>
+<ul>
+<li>Put gate on Y axis (makes projection on X axis) between channels 100 and 150. Put result on screen.</li>
+</ul>
+<p>$ readhis --id 1734 --gy 100,150 run01.his</p>
+<ul>
+<li>Put gate on Y axis (makes projection on X axis) using pol.txt file with polygon gate definition. Put result to ban01.txt file</li>
+</ul>
+<p>$ readhis --id 1734 --gy pol.txt run01.his &gt; ban01.txt</p>
+<ul>
+<li>Put gate on Y axis (makes projection on X axis) using pol.ban file generated by damm, select banana id 1. Put result to ban02.txt.</li>
+</ul>
+<p>$ readhis --id 1734 --gy pol.ban,1 run01.his &gt; ban02.txt</p>
+<ul>
+<li>List all histograms in file run02.his and run02.drr, placed in a different directory (relative path is ../RUN02/)</li>
+</ul>
+<p>$ readhis --list ../RUN02/run02.his</p>
 <h2><a class="anchor" id="Graph"></a>
 Graph</h2>
 <p>This graph explains the logic of program </p>
@@ -166,7 +251,7 @@ Copyrights</h2>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Feb 1 2012 07:10:49 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 24 2012 23:10:31 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

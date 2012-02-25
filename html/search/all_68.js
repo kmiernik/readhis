@@ -9,7 +9,7 @@ var searchData=
   ['hisid',['hisID',['../structDrrHisRecordExtended.html#a318fdd6b26b38db10b23b87d029f5dbd',1,'DrrHisRecordExtended::hisID()'],['../structSimpleDrrBlock.html#a6e485e585dce571f71c5cec5f32aeb27',1,'SimpleDrrBlock::hisID()']]],
   ['hisid_5f',['hisId_',['../classHistogram.html#a94c0ff9c867406b03015f34d205ad4c8',1,'Histogram::hisId_()'],['../classOptions.html#a859926655387880639845985c6951952',1,'Options::hisId_()']]],
   ['hislist',['hisList',['../classHisDrr.html#af689a051d01310c836e0b4ff315b72bb',1,'HisDrr']]],
-  ['histogram',['Histogram',['../classHistogram.html',1,'Histogram'],['../classHisDrrHisto.html#aff377482e49396cdd3fa48c816a9f4c8',1,'HisDrrHisto::histogram()'],['../classHistogram.html#aadf32cb4a5f045681965fba0fb2da2c0',1,'Histogram::Histogram()']]],
+  ['histogram',['Histogram',['../classHistogram.html',1,'Histogram'],['../classHistogram.html#aadf32cb4a5f045681965fba0fb2da2c0',1,'Histogram::Histogram()'],['../classHisDrrHisto.html#aff377482e49396cdd3fa48c816a9f4c8',1,'HisDrrHisto::histogram()']]],
   ['histogram1d',['Histogram1D',['../classHistogram1D.html',1,'Histogram1D'],['../classHistogram1D.html#a49dbca57687f45df5147e491ad8bdd8b',1,'Histogram1D::Histogram1D()']]],
   ['histogram2d',['Histogram2D',['../classHistogram2D.html',1,'Histogram2D'],['../classHistogram2D.html#a1fb7b39ac3c9fdbd7c36d63243c24da6',1,'Histogram2D::Histogram2D()']]]
 ];

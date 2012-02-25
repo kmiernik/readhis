@@ -285,8 +285,17 @@ void HisDrrHisto::process2D() {
         }
         Histogram1D* proj = new Histogram1D(min, max, pSz, "");
 
-        for (unsigned x = 0; x < szX; ++x)
-        for (unsigned y = 0; y < szY; ++y) {
+        double xlow, ylow, xhigh, yhigh;
+        polgate->rectangle(xlow, ylow, xhigh, yhigh);
+
+        // getiX and getiY safely return 0 or xmax if out of histogram range
+        unsigned xmin = h2->getiX(xlow);
+        unsigned xmax = h2->getiX(xhigh);
+        unsigned ymin = h2->getiY(ylow);
+        unsigned ymax = h2->getiY(yhigh);
+
+        for (unsigned x = xmin; x < xmax; ++x)
+        for (unsigned y = ymin; y < ymax; ++y) {
             if (polgate->pointIn(h2->getX(x), h2->getY(y)) ) {
                 if (gx)
                     proj->add(y, (*h2)(x,y));
@@ -296,8 +305,13 @@ void HisDrrHisto::process2D() {
         }
 
         cout << "#X  N  dN" << endl;
-        for (unsigned i = 0; i < pSz; ++i)
-            cout << proj->getX(i) << " " << (*proj)[i] << " " << sqrt((*proj)[i]) << endl;
+        for (unsigned i = 0; i < pSz; ++i) {
+            cout << proj->getX(i) << " " << (*proj)[i];
+            if ((*proj)[i] == 0)
+                cout << " " << 1 << endl;
+            else
+                cout << " " << sqrt((*proj)[i]) << endl;
+        }
                     
         delete proj;
         delete polgate;

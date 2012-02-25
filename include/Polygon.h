@@ -49,6 +49,10 @@ class Polygon {
         /** Checks if given point (xp, yp) is inside polygon (returns true).*/
         bool pointIn(double xp, double yp);
 
+        /** Returns rectangle in which polygon is included. Rectangle edges
+         * are perpendicular to X and Y axes of carthesian coordinage system. */
+        bool rectangle(double& xlow, double& ylow, double& xhigh, double& yhigh);
+
     private:
         /** Vector of Point objects setting the vertices of polygon. */
         std::vector< Point > vertices_;

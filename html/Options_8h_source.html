@@ -89,92 +89,102 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00009"></a>00009 <span class="preprocessor"></span><span class="preprocessor">#define OPTIONS_H</span>
 <a name="l00010"></a>00010 <span class="preprocessor"></span>
 <a name="l00011"></a>00011 <span class="preprocessor">#include &lt;vector&gt;</span>
-<a name="l00018"></a><a class="code" href="classOptions.html">00018</a> <span class="keyword">class </span><a class="code" href="classOptions.html" title="Class for storing options for readhis.">Options</a> {
-<a name="l00019"></a>00019     <span class="keyword">public</span>:
-<a name="l00021"></a>00021         <a class="code" href="classOptions.html#ab72fb640172a6109e34c8a5366563753" title="Ctor.">Options</a>();
-<a name="l00022"></a>00022 
-<a name="l00024"></a>00024         <span class="keywordtype">unsigned</span> <a class="code" href="classOptions.html#a48c7ca0fbb2676b990aa85bb8bc55229" title="Returns histogram id.">getHisId</a> () <span class="keyword">const</span> ;
-<a name="l00025"></a>00025 
-<a name="l00027"></a>00027         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#ad2e412298b0afcad98eacd79de8e334f" title="Sets histogram id.">setHisId</a> (<span class="keywordtype">unsigned</span> hisId);
-<a name="l00028"></a>00028 
-<a name="l00030"></a>00030         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a63c324045977a109750cc26125b1da9c" title="Returns true id hisId_ is set correctly.">isIdSet</a>() <span class="keyword">const</span>;
-<a name="l00031"></a>00031 
-<a name="l00033"></a>00033         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a3ad8d75df151fb244c4d3e7e3a569410" title="Returns true is list mode is set.">getListMode</a>() <span class="keyword">const</span>;
-<a name="l00034"></a>00034 
-<a name="l00036"></a>00036         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#a4ece34f0505541d6d2f0afc9bcb67c82" title="Sets list mode.">setListMode</a> (<span class="keywordtype">bool</span> b); 
-<a name="l00037"></a>00037 
-<a name="l00039"></a>00039         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#ac51e210ea9fa3cdfa86a0d22c522b3d3" title="Returns true if verbose list mode is set.">getListModeZ</a>() <span class="keyword">const</span>;
-<a name="l00040"></a>00040 
-<a name="l00042"></a>00042         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#a0c93f14ebe6d15bc9464886079eecb9e" title="Sets verbose list mode.">setListModeZ</a> (<span class="keywordtype">bool</span> b);
-<a name="l00043"></a>00043 
+<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;string&gt;</span>
+<a name="l00019"></a><a class="code" href="classOptions.html">00019</a> <span class="keyword">class </span><a class="code" href="classOptions.html" title="Class for storing options for readhis.">Options</a> {
+<a name="l00020"></a>00020     <span class="keyword">public</span>:
+<a name="l00022"></a>00022         <a class="code" href="classOptions.html#ab72fb640172a6109e34c8a5366563753" title="Ctor.">Options</a>();
+<a name="l00023"></a>00023 
+<a name="l00025"></a>00025         <span class="keywordtype">unsigned</span> <a class="code" href="classOptions.html#a48c7ca0fbb2676b990aa85bb8bc55229" title="Returns histogram id.">getHisId</a> () <span class="keyword">const</span> ;
+<a name="l00026"></a>00026 
+<a name="l00028"></a>00028         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#ad2e412298b0afcad98eacd79de8e334f" title="Sets histogram id.">setHisId</a> (<span class="keywordtype">unsigned</span> hisId);
+<a name="l00029"></a>00029 
+<a name="l00031"></a>00031         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a63c324045977a109750cc26125b1da9c" title="Returns true id hisId_ is set correctly.">isIdSet</a>() <span class="keyword">const</span>;
+<a name="l00032"></a>00032 
+<a name="l00034"></a>00034         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a3ad8d75df151fb244c4d3e7e3a569410" title="Returns true is list mode is set.">getListMode</a>() <span class="keyword">const</span>;
+<a name="l00035"></a>00035 
+<a name="l00037"></a>00037         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#ac0d398ac041bef082756b2898288a04a" title="Sets list mode.">setListMode</a> (<span class="keywordtype">bool</span> b = <span class="keyword">true</span>); 
+<a name="l00038"></a>00038 
+<a name="l00040"></a>00040         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#ac51e210ea9fa3cdfa86a0d22c522b3d3" title="Returns true if verbose list mode is set.">getListModeZ</a>() <span class="keyword">const</span>;
+<a name="l00041"></a>00041 
+<a name="l00043"></a>00043         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#a2c647ac74bf0a1cff1989984d7b478bc" title="Sets verbose list mode.">setListModeZ</a> (<span class="keywordtype">bool</span> b = <span class="keyword">true</span>);
 <a name="l00044"></a>00044 
 <a name="l00046"></a>00046         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a1367b05adb33703c175a2cdc7556dfeb" title="Returns true if info mode is set.">getInfoMode</a>() <span class="keyword">const</span>;
 <a name="l00047"></a>00047 
-<a name="l00049"></a>00049         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#ab42fea6d7dcb4b7b8f118ad337c90ed1" title="Sets info mode.">setInfoMode</a> (<span class="keywordtype">bool</span> b);
+<a name="l00049"></a>00049         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#a40ca033d1b16d47e1a7d6679b4100b1b" title="Sets info mode.">setInfoMode</a> (<span class="keywordtype">bool</span> b = <span class="keyword">true</span>);
 <a name="l00050"></a>00050 
 <a name="l00052"></a>00052         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#ac8022648216dbd5cfd85771c7f23c555" title="Returns true if zero suppresion mode is set.">getZeroSup</a>() <span class="keyword">const</span>;
 <a name="l00053"></a>00053 
-<a name="l00055"></a>00055         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#a2919f8f34c562d6b52452e5fdce744a2" title="Sets zero suppresion mode.">setZeroSup</a> (<span class="keywordtype">bool</span> b);
+<a name="l00055"></a>00055         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#a9af5ea20bc73e73c0bb51ff12304e99c" title="Sets zero suppresion mode.">setZeroSup</a> (<span class="keywordtype">bool</span> b = <span class="keyword">true</span>);
 <a name="l00056"></a>00056         
 <a name="l00058"></a>00058         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#aedc43cf50ffc259da4df87fc4a50a403" title="Returns true if gx flag is set.">getGx</a>() <span class="keyword">const</span>;
 <a name="l00059"></a>00059 
-<a name="l00061"></a>00061         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a3fbbb82ddcfb1c4e2f564e04ae40708c" title="Sets gx flag, and gate limits.">setGx</a> (<span class="keywordtype">bool</span> isGx, <span class="keywordtype">unsigned</span> g0, <span class="keywordtype">unsigned</span> g1);
+<a name="l00061"></a>00061         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a95d41f87d698c61c0e4cce3b9443588a" title="Sets gx flag, and gate limits.">setGx</a> (<span class="keywordtype">unsigned</span> g0, <span class="keywordtype">unsigned</span> g1, <span class="keywordtype">bool</span> isGx = <span class="keyword">true</span>);
 <a name="l00062"></a>00062 
 <a name="l00064"></a>00064         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a68b098de724e4b51b9d4ddd7bfa3b278" title="Returns true if gy flag is set .">getGy</a>() <span class="keyword">const</span>;
 <a name="l00065"></a>00065 
-<a name="l00067"></a>00067         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a96220ced31751842e2d9e18d90b783e4" title="Sets gy flag, and gate limits.">setGy</a> (<span class="keywordtype">bool</span> isGy, <span class="keywordtype">unsigned</span> g0, <span class="keywordtype">unsigned</span> g1);
+<a name="l00067"></a>00067         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a058718fa0fe04179987453e35ba8d138" title="Sets gy flag, and gate limits.">setGy</a> (<span class="keywordtype">unsigned</span> g0, <span class="keywordtype">unsigned</span> g1, <span class="keywordtype">bool</span> isGy = <span class="keyword">true</span>);
 <a name="l00068"></a>00068 
 <a name="l00070"></a>00070         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#ad9b582c87170dd2f84ca05652c24e165" title="Returns true if bg flag is set.">getBg</a>() <span class="keyword">const</span>;
 <a name="l00071"></a>00071 
-<a name="l00073"></a>00073         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a52f9db201c43007786b5ba332f72e2bb" title="Sets bg flag, and gate limits.">setBg</a> (<span class="keywordtype">bool</span> isBg, <span class="keywordtype">unsigned</span> b0, <span class="keywordtype">unsigned</span> b1);
+<a name="l00073"></a>00073         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a59d906bb06a4f8863def3dab810e4778" title="Sets bg flag, and gate limits.">setBg</a> (<span class="keywordtype">unsigned</span> b0, <span class="keywordtype">unsigned</span> b1, <span class="keywordtype">bool</span> isBg = <span class="keyword">true</span>);
 <a name="l00074"></a>00074         
 <a name="l00076"></a>00076         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#adefcfee1cfc32d44ce1d10e44920f418" title="Returns true if sbg flag is set.">getSBg</a>() <span class="keyword">const</span>;
 <a name="l00077"></a>00077 
-<a name="l00079"></a>00079         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a305fffab16f84c99e1b3b2cae0c55c1b" title="Sets sbg flag, and gate limits.">setSBg</a> (<span class="keywordtype">bool</span> isSBg, <span class="keywordtype">unsigned</span> b0, <span class="keywordtype">unsigned</span> b1,
-<a name="l00080"></a>00080                                  <span class="keywordtype">unsigned</span> b2, <span class="keywordtype">unsigned</span> b3);
-<a name="l00081"></a>00081         
-<a name="l00083"></a>00083         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a6844edd66c8170958b71cdb6874d4118" title="Returns true if bin flag is set.">getBin</a>() <span class="keyword">const</span>;
-<a name="l00084"></a>00084 
-<a name="l00086"></a>00086         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#aca30a63d5c95d5a61bfc01670f747be4" title="Sets binning size.">setBin</a> (<span class="keywordtype">bool</span> isBin, <span class="keywordtype">unsigned</span> b0, <span class="keywordtype">unsigned</span> b1 = 0);
-<a name="l00087"></a>00087 
-<a name="l00089"></a>00089         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#a598694467b3cba513201ac98ff6a22ea" title="Returns by reference vector containing gates.">getGate</a>(std::vector&lt;unsigned&gt;&amp; rtn) <span class="keyword">const</span>;
-<a name="l00090"></a>00090 
-<a name="l00092"></a>00092         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#a7c0a92e51c5943476374e3827867366d" title="Returns by reference vector containing background gates.">getBgGate</a>(std::vector&lt;unsigned&gt;&amp; rtn) <span class="keyword">const</span>;
-<a name="l00093"></a>00093 
-<a name="l00095"></a>00095         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#afc183ba59e74bde281b3b5679505df1d" title="Returns by reference vector containing binning size.">getBinning</a>(std::vector&lt;unsigned&gt;&amp; rtn) <span class="keyword">const</span>;
-<a name="l00096"></a>00096 
+<a name="l00079"></a>00079         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#aefdb77dcd302cfa4fb5d727be8dfc59e" title="Sets sbg flag, and gate limits.">setSBg</a> ( <span class="keywordtype">unsigned</span> b0, <span class="keywordtype">unsigned</span> b1,
+<a name="l00080"></a>00080                       <span class="keywordtype">unsigned</span> b2, <span class="keywordtype">unsigned</span> b3, 
+<a name="l00081"></a>00081                       <span class="keywordtype">bool</span> isSBg = <span class="keyword">true</span>);
+<a name="l00082"></a>00082         
+<a name="l00084"></a>00084         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a6844edd66c8170958b71cdb6874d4118" title="Returns true if bin flag is set.">getBin</a>() <span class="keyword">const</span>;
+<a name="l00085"></a>00085 
+<a name="l00087"></a>00087         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#ae64ea20ba505b89bf8e4b498b7c522a8" title="Sets binning size.">setBin</a> (<span class="keywordtype">unsigned</span> b0, <span class="keywordtype">unsigned</span> b1 = 0, <span class="keywordtype">bool</span> isBin = <span class="keyword">true</span>);
+<a name="l00088"></a>00088 
+<a name="l00090"></a>00090         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#a598694467b3cba513201ac98ff6a22ea" title="Returns by reference vector containing gates.">getGate</a>(std::vector&lt;unsigned&gt;&amp; rtn) <span class="keyword">const</span>;
+<a name="l00091"></a>00091 
+<a name="l00093"></a>00093         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#a7c0a92e51c5943476374e3827867366d" title="Returns by reference vector containing background gates.">getBgGate</a>(std::vector&lt;unsigned&gt;&amp; rtn) <span class="keyword">const</span>;
+<a name="l00094"></a>00094 
+<a name="l00096"></a>00096         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#afc183ba59e74bde281b3b5679505df1d" title="Returns by reference vector containing binning size.">getBinning</a>(std::vector&lt;unsigned&gt;&amp; rtn) <span class="keyword">const</span>;
 <a name="l00097"></a>00097 
-<a name="l00098"></a>00098     <span class="keyword">private</span>:
-<a name="l00100"></a><a class="code" href="classOptions.html#a859926655387880639845985c6951952">00100</a>         <span class="keywordtype">unsigned</span> <a class="code" href="classOptions.html#a859926655387880639845985c6951952" title="Histogram id.">hisId_</a>;
-<a name="l00101"></a>00101 
-<a name="l00103"></a><a class="code" href="classOptions.html#a0b9f24ced27816de56b9e37e98d61a61">00103</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a0b9f24ced27816de56b9e37e98d61a61" title="Is true when hisId_ is set.">isIdSet_</a>;
-<a name="l00104"></a>00104 
-<a name="l00106"></a><a class="code" href="classOptions.html#a7e4f52bfb9cea48e19f055a366b068de">00106</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a7e4f52bfb9cea48e19f055a366b068de">isListMode_</a>;
-<a name="l00107"></a>00107 
-<a name="l00109"></a><a class="code" href="classOptions.html#a19befdf97dd33339f11ff6a8d126d0b0">00109</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a19befdf97dd33339f11ff6a8d126d0b0">isListModeZ_</a>;
-<a name="l00110"></a>00110 
-<a name="l00112"></a><a class="code" href="classOptions.html#a714ba458fddb5aa67b10df985f3598e8">00112</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a714ba458fddb5aa67b10df985f3598e8" title="Info mode outputs detailed histogram infomation instead of data.">isInfoMode_</a>;
-<a name="l00113"></a>00113         
-<a name="l00116"></a><a class="code" href="classOptions.html#aae44125e220b71ec91afa37b99c1d5d4">00116</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#aae44125e220b71ec91afa37b99c1d5d4" title="Zero suppresion flag means that for 1D histogram when number of count in a bin is 0 it will be skippe...">isZeroSup_</a>;
-<a name="l00117"></a>00117 
-<a name="l00121"></a><a class="code" href="classOptions.html#ab23c685d2a6844f42490c2f771df2075">00121</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#ab23c685d2a6844f42490c2f771df2075">isGx_</a>;
+<a name="l00102"></a>00102         <span class="keywordtype">void</span> <a class="code" href="classOptions.html#ace2c49b8c3dedf216ac48871279a9d1f" title="Sets polygon gate defined in polygonFile.">setPolygon</a> (std::string polygonFile, <span class="keywordtype">bool</span> isGx, <span class="keywordtype">bool</span> isPg = <span class="keyword">true</span>);
+<a name="l00103"></a>00103 
+<a name="l00105"></a>00105         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a70c0e194fc01b6f83b1b9b7949469480" title="Returns true if --pg is set.">getPg</a>() <span class="keyword">const</span>;
+<a name="l00106"></a>00106         
+<a name="l00108"></a>00108         std::string <a class="code" href="classOptions.html#abbc21db4e77e112b4d211e201a626fa1" title="Returns name of polygon definition file.">getPolygon</a>() <span class="keyword">const</span>;
+<a name="l00109"></a>00109 
+<a name="l00110"></a>00110     <span class="keyword">private</span>:
+<a name="l00112"></a><a class="code" href="classOptions.html#a859926655387880639845985c6951952">00112</a>         <span class="keywordtype">unsigned</span> <a class="code" href="classOptions.html#a859926655387880639845985c6951952" title="Histogram id.">hisId_</a>;
+<a name="l00113"></a>00113 
+<a name="l00115"></a><a class="code" href="classOptions.html#a0b9f24ced27816de56b9e37e98d61a61">00115</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a0b9f24ced27816de56b9e37e98d61a61" title="Is true when hisId_ is set.">isIdSet_</a>;
+<a name="l00116"></a>00116 
+<a name="l00118"></a><a class="code" href="classOptions.html#a7e4f52bfb9cea48e19f055a366b068de">00118</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a7e4f52bfb9cea48e19f055a366b068de">isListMode_</a>;
+<a name="l00119"></a>00119 
+<a name="l00121"></a><a class="code" href="classOptions.html#a19befdf97dd33339f11ff6a8d126d0b0">00121</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a19befdf97dd33339f11ff6a8d126d0b0">isListModeZ_</a>;
 <a name="l00122"></a>00122 
-<a name="l00126"></a><a class="code" href="classOptions.html#afd7500c7258789c737ebd515c3b71cd0">00126</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#afd7500c7258789c737ebd515c3b71cd0">isGy_</a>;
-<a name="l00127"></a>00127 
-<a name="l00129"></a><a class="code" href="classOptions.html#af4650c5b2fc6dc4b8ac680a87a1a4948">00129</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#af4650c5b2fc6dc4b8ac680a87a1a4948">isBg_</a>;
-<a name="l00130"></a>00130 
-<a name="l00134"></a><a class="code" href="classOptions.html#a7d1eca44d63ca04f7794e7c5f38c4d5c">00134</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a7d1eca44d63ca04f7794e7c5f38c4d5c">isSBg_</a>;
-<a name="l00135"></a>00135 
-<a name="l00137"></a><a class="code" href="classOptions.html#abb69bae397dfef9c88976f2f5d410c16">00137</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#abb69bae397dfef9c88976f2f5d410c16">isBin_</a>;
-<a name="l00138"></a>00138 
-<a name="l00140"></a><a class="code" href="classOptions.html#a4218a67eed6b3d4622f03e103ae30e17">00140</a>         std::vector&lt;unsigned&gt; <a class="code" href="classOptions.html#a4218a67eed6b3d4622f03e103ae30e17" title="For --gx or --gy.">g_</a>;
-<a name="l00141"></a>00141 
-<a name="l00143"></a><a class="code" href="classOptions.html#aa74ae26f1b5cfef1c7ff29d2b4e2661f">00143</a>         std::vector&lt;unsigned&gt; <a class="code" href="classOptions.html#aa74ae26f1b5cfef1c7ff29d2b4e2661f" title="For --bg or --sbg.">b_</a>;
-<a name="l00144"></a>00144 
-<a name="l00146"></a><a class="code" href="classOptions.html#ab2ec7f27e933f3f6b1a3368b655be7a5">00146</a>         std::vector&lt;unsigned&gt; <a class="code" href="classOptions.html#ab2ec7f27e933f3f6b1a3368b655be7a5" title="For --bin.">bin_</a>;
-<a name="l00147"></a>00147 };
-<a name="l00148"></a>00148 
-<a name="l00149"></a>00149 <span class="preprocessor">#endif</span>
+<a name="l00124"></a><a class="code" href="classOptions.html#a714ba458fddb5aa67b10df985f3598e8">00124</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a714ba458fddb5aa67b10df985f3598e8" title="Info mode outputs detailed histogram infomation instead of data.">isInfoMode_</a>;
+<a name="l00125"></a>00125         
+<a name="l00128"></a><a class="code" href="classOptions.html#aae44125e220b71ec91afa37b99c1d5d4">00128</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#aae44125e220b71ec91afa37b99c1d5d4" title="Zero suppresion flag means that for 1D histogram when number of count in a bin is 0 it will be skippe...">isZeroSup_</a>;
+<a name="l00129"></a>00129 
+<a name="l00133"></a><a class="code" href="classOptions.html#ab23c685d2a6844f42490c2f771df2075">00133</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#ab23c685d2a6844f42490c2f771df2075">isGx_</a>;
+<a name="l00134"></a>00134 
+<a name="l00138"></a><a class="code" href="classOptions.html#afd7500c7258789c737ebd515c3b71cd0">00138</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#afd7500c7258789c737ebd515c3b71cd0">isGy_</a>;
+<a name="l00139"></a>00139 
+<a name="l00141"></a><a class="code" href="classOptions.html#af4650c5b2fc6dc4b8ac680a87a1a4948">00141</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#af4650c5b2fc6dc4b8ac680a87a1a4948">isBg_</a>;
+<a name="l00142"></a>00142 
+<a name="l00146"></a><a class="code" href="classOptions.html#a7d1eca44d63ca04f7794e7c5f38c4d5c">00146</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a7d1eca44d63ca04f7794e7c5f38c4d5c">isSBg_</a>;
+<a name="l00147"></a>00147 
+<a name="l00149"></a><a class="code" href="classOptions.html#abb69bae397dfef9c88976f2f5d410c16">00149</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#abb69bae397dfef9c88976f2f5d410c16">isBin_</a>;
+<a name="l00150"></a>00150 
+<a name="l00152"></a><a class="code" href="classOptions.html#a4218a67eed6b3d4622f03e103ae30e17">00152</a>         std::vector&lt;unsigned&gt; <a class="code" href="classOptions.html#a4218a67eed6b3d4622f03e103ae30e17" title="For --gx or --gy.">g_</a>;
+<a name="l00153"></a>00153 
+<a name="l00155"></a><a class="code" href="classOptions.html#aa74ae26f1b5cfef1c7ff29d2b4e2661f">00155</a>         std::vector&lt;unsigned&gt; <a class="code" href="classOptions.html#aa74ae26f1b5cfef1c7ff29d2b4e2661f" title="For --bg or --sbg.">b_</a>;
+<a name="l00156"></a>00156 
+<a name="l00158"></a><a class="code" href="classOptions.html#ab2ec7f27e933f3f6b1a3368b655be7a5">00158</a>         std::vector&lt;unsigned&gt; <a class="code" href="classOptions.html#ab2ec7f27e933f3f6b1a3368b655be7a5" title="For --bin.">bin_</a>;
+<a name="l00159"></a>00159 
+<a name="l00161"></a><a class="code" href="classOptions.html#a7abc240cd2417fd8f67bb80f683941be">00161</a>         <span class="keywordtype">bool</span> <a class="code" href="classOptions.html#a7abc240cd2417fd8f67bb80f683941be" title="For --pol (polygon gate).">isPg_</a>;
+<a name="l00162"></a>00162 
+<a name="l00164"></a><a class="code" href="classOptions.html#abfc44e311ef0f5c45dc1eafd40232898">00164</a>         std::string <a class="code" href="classOptions.html#abfc44e311ef0f5c45dc1eafd40232898" title="Polygon definition file.">polygonFile_</a>;
+<a name="l00165"></a>00165 };
+<a name="l00166"></a>00166 
+<a name="l00167"></a>00167 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -193,7 +203,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Feb 1 2012 07:10:49 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 24 2012 23:10:31 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

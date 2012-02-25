@@ -78,67 +78,74 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">include/Debug.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef DEBUGH</span>
-<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define DEBUGH</span>
-<a name="l00003"></a>00003 <span class="preprocessor"></span>
-<a name="l00004"></a>00004 <span class="preprocessor">#include &lt;string&gt;</span>
-<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;iostream&gt;</span>
-<a name="l00006"></a>00006 <span class="preprocessor">#include &lt;sstream&gt;</span>
+<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
+<a name="l00002"></a>00002 <span class="comment"> * Copyright Krzysztof Miernik 2012</span>
+<a name="l00003"></a>00003 <span class="comment"> * k.a.miernik@gmail.com </span>
+<a name="l00004"></a>00004 <span class="comment"> *</span>
+<a name="l00005"></a>00005 <span class="comment"> * Distributed under GNU General Public Licence v3</span>
+<a name="l00006"></a>00006 <span class="comment"> */</span>
 <a name="l00007"></a>00007 
-<a name="l00008"></a>00008 <span class="preprocessor">#define DBG(x) std::cout &lt;&lt; &quot;#&quot; &lt;&lt; #x &lt;&lt; &quot; = &quot; &lt;&lt; (x) &lt;&lt; std::endl;</span>
-<a name="l00009"></a>00009 <span class="preprocessor"></span>
-<a name="l00010"></a>00010 <span class="keyword">namespace </span>debug {
-<a name="l00033"></a><a class="code" href="classdebug_1_1Counter.html">00033</a>     <span class="keyword">class </span><a class="code" href="classdebug_1_1Counter.html" title="Counter for simple debugging.">Counter</a> {
-<a name="l00034"></a>00034         <span class="keyword">public</span>:
-<a name="l00036"></a><a class="code" href="classdebug_1_1Counter.html#a26a95e22970d5e4199a4bf767ae0f3a3">00036</a>             <a class="code" href="classdebug_1_1Counter.html#a26a95e22970d5e4199a4bf767ae0f3a3" title="Ctor, text message passed as an option.">Counter</a>(<span class="keyword">const</span> std::string&amp; text = <span class="stringliteral">&quot;&quot;</span>) : <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a>(text) {
-<a name="l00037"></a>00037                 ++<a class="code" href="classdebug_1_1Counter.html#ace5aa2e477ddfbae6dafcac02871b5c6" title="Counter number.">counter_</a>;
-<a name="l00038"></a>00038                 <a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603" title="Sub index of counter, incremented by each call of add() and set.">index_</a> = 0;
-<a name="l00039"></a>00039                 <a class="code" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show</a>(); 
-<a name="l00040"></a>00040             }
-<a name="l00041"></a>00041 
-<a name="l00043"></a><a class="code" href="classdebug_1_1Counter.html#a9ba3b1be58a115fb1d90202b2a279799">00043</a>             <span class="keywordtype">void</span> <a class="code" href="classdebug_1_1Counter.html#a9ba3b1be58a115fb1d90202b2a279799" title="Adds one to subindex, then calls show().">add</a>() {
-<a name="l00044"></a>00044                 ++<a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603" title="Sub index of counter, incremented by each call of add() and set.">index_</a>;
-<a name="l00045"></a>00045                 <a class="code" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show</a>();
-<a name="l00046"></a>00046             }
-<a name="l00047"></a>00047             
-<a name="l00052"></a><a class="code" href="classdebug_1_1Counter.html#a39623b5fec140d8a0b72bc6426fc3a4f">00052</a>             <span class="keywordtype">void</span> <span class="keyword">set</span>(std::stringstream&amp; text, <span class="keywordtype">bool</span> clear = <span class="keyword">true</span>) {
-<a name="l00053"></a>00053                 ++<a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603" title="Sub index of counter, incremented by each call of add() and set.">index_</a>;
-<a name="l00054"></a>00054                 <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a> = text.str();
-<a name="l00055"></a>00055                 <a class="code" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show</a>();
-<a name="l00056"></a>00056 
-<a name="l00057"></a>00057                 <span class="keywordflow">if</span> (clear) {
-<a name="l00058"></a>00058                     text.str(<span class="stringliteral">&quot;&quot;</span>);
-<a name="l00059"></a>00059                     <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a> = <span class="stringliteral">&quot;&quot;</span>;
-<a name="l00060"></a>00060                 }
-<a name="l00061"></a>00061             }
-<a name="l00062"></a>00062 
-<a name="l00067"></a><a class="code" href="classdebug_1_1Counter.html#a5956442ffc960d59456d478020ece716">00067</a>             <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> std::string&amp; text, <span class="keywordtype">bool</span> clear = <span class="keyword">true</span>) {
-<a name="l00068"></a>00068                 ++<a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603" title="Sub index of counter, incremented by each call of add() and set.">index_</a>;
-<a name="l00069"></a>00069                 <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a> = text;
-<a name="l00070"></a>00070                 <a class="code" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show</a>();
-<a name="l00071"></a>00071 
-<a name="l00072"></a>00072                 <span class="keywordflow">if</span> (clear)
-<a name="l00073"></a>00073                     <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a> = <span class="stringliteral">&quot;&quot;</span>;
-<a name="l00074"></a>00074             }
-<a name="l00075"></a>00075 
-<a name="l00077"></a><a class="code" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a">00077</a>             <span class="keywordtype">void</span> <a class="code" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show</a>()<span class="keyword"> const </span>{ 
-<a name="l00078"></a>00078                 std::cout &lt;&lt; <span class="stringliteral">&quot;#C: &quot;</span> &lt;&lt; <a class="code" href="classdebug_1_1Counter.html#ace5aa2e477ddfbae6dafcac02871b5c6" title="Counter number.">counter_</a> &lt;&lt; <span class="stringliteral">&quot;.&quot;</span> &lt;&lt; <a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603" title="Sub index of counter, incremented by each call of add() and set.">index_</a> 
-<a name="l00079"></a>00079                           &lt;&lt; <span class="stringliteral">&quot; : &quot;</span> &lt;&lt; <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a> &lt;&lt; std::endl;
-<a name="l00080"></a>00080             }
-<a name="l00081"></a>00081             ~<a class="code" href="classdebug_1_1Counter.html" title="Counter for simple debugging.">Counter</a>() {
-<a name="l00082"></a>00082                 std::cout &lt;&lt; <span class="stringliteral">&quot;#C: &quot;</span> &lt;&lt; <a class="code" href="classdebug_1_1Counter.html#ace5aa2e477ddfbae6dafcac02871b5c6" title="Counter number.">counter_</a> &lt;&lt; <span class="stringliteral">&quot; &quot;</span>
-<a name="l00083"></a>00083                           &lt;&lt; <span class="stringliteral">&quot; destructed &quot;</span> &lt;&lt; std::endl;
-<a name="l00084"></a>00084             }
-<a name="l00085"></a>00085         <span class="keyword">private</span>:
-<a name="l00087"></a><a class="code" href="classdebug_1_1Counter.html#ace5aa2e477ddfbae6dafcac02871b5c6">00087</a>             <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classdebug_1_1Counter.html#ace5aa2e477ddfbae6dafcac02871b5c6" title="Counter number.">counter_</a>;
-<a name="l00088"></a>00088 
-<a name="l00091"></a><a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603">00091</a>             <span class="keywordtype">int</span> <a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603" title="Sub index of counter, incremented by each call of add() and set.">index_</a>;
-<a name="l00092"></a>00092 
-<a name="l00096"></a><a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5">00096</a>             std::string <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a>;
-<a name="l00097"></a>00097     };
-<a name="l00098"></a>00098 }
+<a name="l00008"></a>00008 <span class="preprocessor">#ifndef DEBUGH</span>
+<a name="l00009"></a>00009 <span class="preprocessor"></span><span class="preprocessor">#define DEBUGH</span>
+<a name="l00010"></a>00010 <span class="preprocessor"></span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;string&gt;</span>
+<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;iostream&gt;</span>
+<a name="l00013"></a>00013 <span class="preprocessor">#include &lt;sstream&gt;</span>
+<a name="l00014"></a>00014 
+<a name="l00015"></a>00015 <span class="preprocessor">#define DBG(x) std::cout &lt;&lt; &quot;#&quot; &lt;&lt; #x &lt;&lt; &quot; = &quot; &lt;&lt; (x) &lt;&lt; std::endl;</span>
+<a name="l00016"></a>00016 <span class="preprocessor"></span>
+<a name="l00017"></a>00017 <span class="keyword">namespace </span>debug {
+<a name="l00040"></a><a class="code" href="classdebug_1_1Counter.html">00040</a>     <span class="keyword">class </span><a class="code" href="classdebug_1_1Counter.html" title="Counter for simple debugging.">Counter</a> {
+<a name="l00041"></a>00041         <span class="keyword">public</span>:
+<a name="l00043"></a><a class="code" href="classdebug_1_1Counter.html#a26a95e22970d5e4199a4bf767ae0f3a3">00043</a>             <a class="code" href="classdebug_1_1Counter.html#a26a95e22970d5e4199a4bf767ae0f3a3" title="Ctor, text message passed as an option.">Counter</a>(<span class="keyword">const</span> std::string&amp; text = <span class="stringliteral">&quot;&quot;</span>) : <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a>(text) {
+<a name="l00044"></a>00044                 ++<a class="code" href="classdebug_1_1Counter.html#ace5aa2e477ddfbae6dafcac02871b5c6" title="Counter number.">counter_</a>;
+<a name="l00045"></a>00045                 <a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603" title="Sub index of counter, incremented by each call of add() and set.">index_</a> = 0;
+<a name="l00046"></a>00046                 <a class="code" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show</a>(); 
+<a name="l00047"></a>00047             }
+<a name="l00048"></a>00048 
+<a name="l00050"></a><a class="code" href="classdebug_1_1Counter.html#a9ba3b1be58a115fb1d90202b2a279799">00050</a>             <span class="keywordtype">void</span> <a class="code" href="classdebug_1_1Counter.html#a9ba3b1be58a115fb1d90202b2a279799" title="Adds one to subindex, then calls show().">add</a>() {
+<a name="l00051"></a>00051                 ++<a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603" title="Sub index of counter, incremented by each call of add() and set.">index_</a>;
+<a name="l00052"></a>00052                 <a class="code" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show</a>();
+<a name="l00053"></a>00053             }
+<a name="l00054"></a>00054             
+<a name="l00059"></a><a class="code" href="classdebug_1_1Counter.html#a39623b5fec140d8a0b72bc6426fc3a4f">00059</a>             <span class="keywordtype">void</span> <span class="keyword">set</span>(std::stringstream&amp; text, <span class="keywordtype">bool</span> clear = <span class="keyword">true</span>) {
+<a name="l00060"></a>00060                 ++<a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603" title="Sub index of counter, incremented by each call of add() and set.">index_</a>;
+<a name="l00061"></a>00061                 <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a> = text.str();
+<a name="l00062"></a>00062                 <a class="code" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show</a>();
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064                 <span class="keywordflow">if</span> (clear) {
+<a name="l00065"></a>00065                     text.str(<span class="stringliteral">&quot;&quot;</span>);
+<a name="l00066"></a>00066                     <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a> = <span class="stringliteral">&quot;&quot;</span>;
+<a name="l00067"></a>00067                 }
+<a name="l00068"></a>00068             }
+<a name="l00069"></a>00069 
+<a name="l00074"></a><a class="code" href="classdebug_1_1Counter.html#a5956442ffc960d59456d478020ece716">00074</a>             <span class="keywordtype">void</span> <span class="keyword">set</span>(<span class="keyword">const</span> std::string&amp; text, <span class="keywordtype">bool</span> clear = <span class="keyword">true</span>) {
+<a name="l00075"></a>00075                 ++<a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603" title="Sub index of counter, incremented by each call of add() and set.">index_</a>;
+<a name="l00076"></a>00076                 <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a> = text;
+<a name="l00077"></a>00077                 <a class="code" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show</a>();
+<a name="l00078"></a>00078 
+<a name="l00079"></a>00079                 <span class="keywordflow">if</span> (clear)
+<a name="l00080"></a>00080                     <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a> = <span class="stringliteral">&quot;&quot;</span>;
+<a name="l00081"></a>00081             }
+<a name="l00082"></a>00082 
+<a name="l00084"></a><a class="code" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a">00084</a>             <span class="keywordtype">void</span> <a class="code" href="classdebug_1_1Counter.html#ad77dafe5fdf484f6db838cf7af36834a" title="Prints to cout the counter number, index and message.">show</a>()<span class="keyword"> const </span>{ 
+<a name="l00085"></a>00085                 std::cout &lt;&lt; <span class="stringliteral">&quot;#C: &quot;</span> &lt;&lt; <a class="code" href="classdebug_1_1Counter.html#ace5aa2e477ddfbae6dafcac02871b5c6" title="Counter number.">counter_</a> &lt;&lt; <span class="stringliteral">&quot;.&quot;</span> &lt;&lt; <a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603" title="Sub index of counter, incremented by each call of add() and set.">index_</a> 
+<a name="l00086"></a>00086                           &lt;&lt; <span class="stringliteral">&quot; : &quot;</span> &lt;&lt; <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a> &lt;&lt; std::endl;
+<a name="l00087"></a>00087             }
+<a name="l00088"></a>00088             ~<a class="code" href="classdebug_1_1Counter.html" title="Counter for simple debugging.">Counter</a>() {
+<a name="l00089"></a>00089                 std::cout &lt;&lt; <span class="stringliteral">&quot;#C: &quot;</span> &lt;&lt; <a class="code" href="classdebug_1_1Counter.html#ace5aa2e477ddfbae6dafcac02871b5c6" title="Counter number.">counter_</a> &lt;&lt; <span class="stringliteral">&quot; &quot;</span>
+<a name="l00090"></a>00090                           &lt;&lt; <span class="stringliteral">&quot; destructed &quot;</span> &lt;&lt; std::endl;
+<a name="l00091"></a>00091             }
+<a name="l00092"></a>00092         <span class="keyword">private</span>:
+<a name="l00094"></a><a class="code" href="classdebug_1_1Counter.html#ace5aa2e477ddfbae6dafcac02871b5c6">00094</a>             <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classdebug_1_1Counter.html#ace5aa2e477ddfbae6dafcac02871b5c6" title="Counter number.">counter_</a>;
+<a name="l00095"></a>00095 
+<a name="l00098"></a><a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603">00098</a>             <span class="keywordtype">int</span> <a class="code" href="classdebug_1_1Counter.html#a39020b8dcfadc58948820a86d1805603" title="Sub index of counter, incremented by each call of add() and set.">index_</a>;
 <a name="l00099"></a>00099 
-<a name="l00100"></a>00100 <span class="preprocessor">#endif</span>
+<a name="l00103"></a><a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5">00103</a>             std::string <a class="code" href="classdebug_1_1Counter.html#abf3505139d12efde6203b37381f60de5" title="Optional text stored by counter.">text_</a>;
+<a name="l00104"></a>00104     };
+<a name="l00105"></a>00105 }
+<a name="l00106"></a>00106 
+<a name="l00107"></a>00107 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -157,7 +164,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Feb 1 2012 07:10:49 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 24 2012 23:10:30 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
