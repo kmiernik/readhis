@@ -8,6 +8,7 @@
 #ifndef DEBUGH
 #define DEBUGH
 
+#include <sys/time.h>
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -37,6 +38,42 @@ namespace debug {
      *  }
      *  
      */
+    /** Class for time measurements. */
+    class Timer {
+        public:
+            /** C'tor, gets clock at the moment of creation. */
+            Timer() {gettimeofday(&t,NULL);}
+
+            /** Resets timer to current time. */
+            void set_time() { gettimeofday(&t,NULL);}
+
+            /** Resetrs timer to given time.*/
+            void set_time(timeval& x) { t = x;}
+
+            /** Returns time in us. */
+            long get_us() { 
+                return (t.tv_sec * 1000000 + t.tv_usec);
+            }
+
+            /** Returns time in ms. */
+            long get_ms() { 
+                return (t.tv_sec * 1000 + 
+                        long(t.tv_usec / 1000.0 + 0.5) );
+            }
+
+            /** Returns time in s. */
+            long get_s() { return (t.tv_sec 
+                                    + long (t.tv_usec / 1.0e6 + 0.5) );
+            }
+
+            /** Difference between timer x and this timer in us.*/
+            long dt(Timer& x) { return x.get_us() - get_us();}
+
+        private:
+            /** Timestamp. */
+            timeval t;
+    };
+
     class Counter {
         public:
             /** Ctor, text message passed as an option. */

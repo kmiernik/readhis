@@ -14,6 +14,7 @@
 #include "Options.h"
 #include "HisDrrHisto.h"
 #include "Polygon.h"
+#include "Debug.h"
 
 using namespace std;
 
@@ -85,6 +86,8 @@ void HisDrrHisto::runInfoMode() {
 void HisDrrHisto::process1D() {
     // maxc + 1 because drr has bins numbered 0 to maxc 
     // but size then is maxc+ 1
+    debug::Timer tStart;
+
     histogram = new Histogram1D(info.minc[0], info.maxc[0] + 1,
                                 info.scaled[0], "");
 
@@ -120,6 +123,8 @@ void HisDrrHisto::process1D() {
         for (unsigned i = 0; i < sz; ++i)
             cout << h1->getX(i) << " " << (*h1)[i] << endl;
     }
+    debug::Timer tEnd;
+    cout << "# 1d histo total: " << tStart.dt(tEnd) << endl;
     delete histogram;
 }
 
@@ -131,7 +136,6 @@ void HisDrrHisto::process2D() {
 
     vector<unsigned> data;
     data.reserve( info.scaled[0] * info.scaled[1]);
-
 
     //Load data from his file
     getHistogram(data, info.hisID);
@@ -249,6 +253,7 @@ void HisDrrHisto::process2D() {
         cout << "#X  N  dN" << endl;
         for (unsigned i = 0; i < sz; ++i)
             cout << proj->getX(i) << " " << (*proj)[i] << " " << sqrt((*projErr)[i]) << endl;
+
 
         delete projErr;
         delete proj;

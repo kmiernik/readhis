@@ -14,11 +14,14 @@
 #include "HisDrr.h"
 #include "DrrBlock.h"
 #include "Exceptions.h"
+#include "Debug.h"
 
 using namespace std;
 
 HisDrr::HisDrr(fstream* drr, fstream* his) {
-    /* test of size of int and short */
+    /* test of size of int and short
+     * Potential portability issue.
+     * Should be done better that this. */
     if ( sizeof(unsigned short) != 2 || sizeof(unsigned int) != 4 ) {
         stringstream err;
         err << "HisDrr:-3: This program is intended to run with 'unsigned short' size 2 bytes and"
@@ -358,8 +361,11 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
         string msg = err.str();
         throw GenError(msg);
     }
-    
+
+   
+    // Return vector (see swap at the end)
     vector<unsigned int> r;
+
     if (hisFile->good()) {
         // Set position of pointer in file to the beginning
         hisFile->seekg(0, ios::beg);
@@ -369,9 +375,47 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
         unsigned int length = 1;
         for (int i = 0; i < hisList[index].hisDim; ++i)
             length = length * hisList[index].scaled[i];
-            
-        // Check if data exceedes size of unsigned int 
-        if ((unsigned short)(hisList[index].halfWords*2) > sizeof(unsigned int) ) {
+        
+        // Now this is check below
+        //        // Check if data exceedes size of unsigned int 
+        //        if ((unsigned short)(hisList[index].halfWords*2) > sizeof(unsigned int) ) {
+        //            stringstream err;
+        //            err << "HisDrr:13: Histograms with channel size " << hisList[index].halfWords*2
+        //                << " bytes long are not supported ";
+        //            string msg = err.str();
+        //            throw GenError(msg);
+        //        }
+        
+        // Since we know now the length of data, we can reserve space
+        // for vector avoiding unecessary data movement in memory
+        r.reserve(length);
+
+        // New version with direct read to array + assign to vector
+        //
+        // We read whole dataset to a array of calculated before length
+        // Then the array is assigned to a return vector
+        // Array is deleted
+        // Is approx. 4 times faster then old version
+        //
+        // We have to check if size (halfWords) of data matches used data type
+        // for array.
+        // This could be potential issue with portability
+        
+        if (hisList[index].halfWords * 2 == sizeof(unsigned short)) {
+
+            unsigned short* u = new unsigned short[length];
+            hisFile->read((char*)u, length * hisList[index].halfWords * 2);
+            r.assign(u, u + length);
+            delete []u;
+
+        } else if (hisList[index].halfWords * 2 == sizeof(unsigned int))  {
+
+            unsigned int* u = new unsigned int[length];
+            hisFile->read((char*)u, length * hisList[index].halfWords * 2);
+            r.assign(u, u + length);
+            delete []u;
+
+        } else {
             stringstream err;
             err << "HisDrr:13: Histograms with channel size " << hisList[index].halfWords*2
                 << " bytes long are not supported ";
@@ -379,19 +423,18 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
             throw GenError(msg);
         }
 
-        // Since we know now the length of data, we can reserve space
-        // for vector avoiding unecessary data movement in memory
-        r.reserve(length);
+        // Old push_back version 
         // We read histogram channels and push them to vector
         // Each channel has a length of equal to halfWords parameter
         // which is given in 2 bytes units
         // We cast this value on unsigned int, which is zeroed first
         // It is a safe cast then.
-        for (unsigned int i = 0; i < length; ++i) {
-            unsigned int u = 0;
-            hisFile->read((char*)&u, hisList[index].halfWords*2);
-            r.push_back(u);
-        }
+
+        //for (unsigned int i = 0; i < length; ++i) {
+        //unsigned int u = 0;
+        //hisFile->read((char*)&u, hisList[index].halfWords*2);
+        //r.push_back(u);
+        //}
     }
     // Return by value version
     //return r;
