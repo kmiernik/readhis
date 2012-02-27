@@ -142,7 +142,9 @@ void help() {
 
     helpItem("\tOption:\t--zero",
              "-z",
-             "Suppresses bins with zero counts in output (1D Histograms only).\
+             "Suppresses bins with zero counts in output. Notice that output\
+              format for 2D Histograms changes with -z on and off. Output\
+              with -z is no longer suitable for gnuplot pm3d map plotting.\
  ");
 
     helpItem("\tOption:\t--info",

@@ -115,11 +115,13 @@ void HisDrrHisto::process1D() {
     unsigned sz = h1->getnBinX();
     if (options_->getZeroSup()) {
         for (unsigned i = 0; i < sz; ++i)
-            if ((*h1)[i] == 0 )
-                cout << h1->getX(i) << " " << (*h1)[i] << " " << sqrt( (*h1)[i] ) << endl;
+            if ((*h1)[i] != 0 )
+                cout << h1->getX(i) << " " << (*h1)[i] << " " 
+                     << sqrt( (*h1)[i] ) << endl;
     } else {
         for (unsigned i = 0; i < sz; ++i)
-            cout << h1->getX(i) << " " << (*h1)[i] << endl;
+            cout << h1->getX(i) << " " << (*h1)[i] 
+                 << " " << sqrt( (*h1)[i] )    << endl;
     }
     delete histogram;
 }
@@ -342,14 +344,25 @@ void HisDrrHisto::process2D() {
         unsigned szY = h2->getnBinY();
 
         cout << "#X  Y  N" << endl;
-        for (unsigned x = 0; x < szX; ++x) {
-            for (unsigned y = 0; y < szY; ++y) {
-                cout << h2->getX(x) << " " << h2->getY(y)  
-                     << " " << (*h2)(x,y) << endl;
+        //Zero suppresion for 2d histo breaks file for gnuplot pm3d map
+        //But might be useful anyway 
+        if (options_->getZeroSup()) {
+            for (unsigned x = 0; x < szX; ++x) {
+                for (unsigned y = 0; y < szY; ++y) {
+                    if ((*h2)(x,y) != 0 )
+                        cout << h2->getX(x) << " " << h2->getY(y)  
+                             << " " << (*h2)(x,y) << endl;
+                }
             }
-            cout << endl;
+            for (unsigned x = 0; x < szX; ++x) {
+                for (unsigned y = 0; y < szY; ++y) {
+                    cout << h2->getX(x) << " " << h2->getY(y)  
+                        << " " << (*h2)(x,y) << endl;
+                }
+                cout << endl;
+            }
         }
-       
+
     } //end no gates
     //*******************************************************
     delete histogram;
