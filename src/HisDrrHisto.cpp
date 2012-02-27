@@ -86,8 +86,6 @@ void HisDrrHisto::runInfoMode() {
 void HisDrrHisto::process1D() {
     // maxc + 1 because drr has bins numbered 0 to maxc 
     // but size then is maxc+ 1
-    debug::Timer tStart;
-
     histogram = new Histogram1D(info.minc[0], info.maxc[0] + 1,
                                 info.scaled[0], "");
 
@@ -123,8 +121,6 @@ void HisDrrHisto::process1D() {
         for (unsigned i = 0; i < sz; ++i)
             cout << h1->getX(i) << " " << (*h1)[i] << endl;
     }
-    debug::Timer tEnd;
-    cout << "# 1d histo total: " << tStart.dt(tEnd) << endl;
     delete histogram;
 }
 
