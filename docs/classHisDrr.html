@@ -104,7 +104,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHisDrr.html#af3c0dd2f780a0a4d30711af99519443a">HisDrr</a> (fstream *drr, fstream *his)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor taking fstreams.  <a href="#af3c0dd2f780a0a4d30711af99519443a"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHisDrr.html#a5e91ec8595269e8cb1d7d1a8b5ed6501">HisDrr</a> (const string &amp;drr, const string &amp;his)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor taking names and opening fstreams.  <a href="#a5e91ec8595269e8cb1d7d1a8b5ed6501"></a><br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor taking file names and opening fstreams.  <a href="#a5e91ec8595269e8cb1d7d1a8b5ed6501"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHisDrr.html#a207f0b36c1559fb095c7fea6e5dea66a">HisDrr</a> (const string &amp;drr, const string &amp;his, const string &amp;input)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor creating and opening new his and drr using definition from input file.  <a href="#a207f0b36c1559fb095c7fea6e5dea66a"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHisDrr.html#a9f2c2edaf3265a6188c73301fd40e5a4">~HisDrr</a> ()</td></tr>
@@ -170,7 +170,8 @@ Private Attributes</h2></td></tr>
 <div class="memdoc">
 
 <p>Constructor taking fstreams. </p>
-<p>User is responsible of opening files, and passing fstreams creating them on heap (new). Ones is passed the <a class="el" href="classHisDrr.html" title="Class for handling histogram files.">HisDrr</a> takes the ownership to pointers. Dtor will close files and delete pointers. </p>
+<p>User is responsible of opening files, and passing fstreams created on the heap (new operator). Ones is passed the <a class="el" href="classHisDrr.html" title="Class for handling histogram files.">HisDrr</a> takes the ownership to pointers. Dtor will close files and delete pointers.</p>
+<p>This (bad) behaviour is forced by second and third version of c'tor where file names are passed, and fstreams are opened by <a class="el" href="classHisDrr.html" title="Class for handling histogram files.">HisDrr</a>, not by user. Probably it should be changed (in a future). </p>
 
 </div>
 </div>
@@ -199,7 +200,7 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Constructor taking names and opening fstreams. </p>
+<p>Constructor taking file names and opening fstreams. </p>
 
 </div>
 </div>
@@ -580,7 +581,7 @@ Private Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 27 2012 08:28:52 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 27 2012 08:52:49 for readhis by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5
 </small></address>

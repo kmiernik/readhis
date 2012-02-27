@@ -329,7 +329,11 @@ int main (int argc, char* argv[]) {
                     cout << "Run readhis --help for more information" << endl;
                     exit(1);
                 }
-                cout << "# Binning, X: " << b[0] << ", Y: " << b[1] << endl;
+                cout << "# Binning, X: " << b[0];
+                if ( b[1] != 0 )
+                    cout << ", Y: " << b[1] << endl;
+                else 
+                    cout << endl;
                 break;
             }
 
@@ -375,6 +379,7 @@ int main (int argc, char* argv[]) {
     string fileName;
     if (optind < argc) {
         fileName = argv[optind];
+        cout << "# File: " << fileName << endl;
     } else {
         cout << "Error: missing histogram file name" << endl;
         cout << "Run readhis --help for more information" << endl;

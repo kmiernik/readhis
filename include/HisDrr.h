@@ -42,12 +42,16 @@ struct SimpleDrrBlock {
 class HisDrr {
 public:
     /** Constructor taking fstreams. User is responsible of opening files, 
-     * and passing fstreams creating them on heap (new).
+     * and passing fstreams created on the heap (new operator).
      * Ones is passed the HisDrr takes the ownership to pointers.
-     * Dtor will close files and delete pointers.*/
+     * Dtor will close files and delete pointers.
+     * 
+     * This (bad) behaviour is forced by second and third version of c'tor where
+     * file names are passed, and fstreams are opened by HisDrr, not by 
+     * user. Probably it should be changed (in a future).*/
     HisDrr(fstream* drr, fstream* his);
 
-    /** Constructor taking names and opening fstreams. */
+    /** Constructor taking file names and opening fstreams. */
     HisDrr(const string &drr, const string &his);
 
     /** Constructor creating and opening new his and drr using definition from input file. */
