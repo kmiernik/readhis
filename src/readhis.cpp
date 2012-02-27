@@ -58,9 +58,11 @@ Status parseMultiArgs (char* arguments, int* argsArray,
         return error;
 }
 
-void helpItem(const string& name, const string& abbrev, const string& desc){
-    cout << "\tOption:\t" << name << endl;
-    cout << "\tShort: " << abbrev << endl;
+/** Displays and formats help output.*/
+void helpItem(const string& title, const string& abbrev, const string& desc){
+    cout << title << endl;
+    if (abbrev != "")
+        cout << "\tShort: " << abbrev << endl;
     cout << "\tDescription: " << endl; 
     stringstream ss(desc);
     string token;
@@ -96,70 +98,72 @@ void help() {
     cout << endl;
 
     cout << "OPTIONS:" << endl;
-    helpItem("--id", "-i", "Selects histogram id, required by all other\
+    helpItem("\tOption:\t--id", "-i", "Selects histogram id, required by all other\
  options unless stated otherwise." );
 
-    helpItem("--gx AND (x0,x1 OR filename OR filename,id)",
+    helpItem("\tOption:\t--gx AND (x0,x1 OR filename OR filename,id)",
              "-x",
              "For 2D histograms only, requires two integer arguments\
  separated by coma. Sets projection on Y axis (gate on X). starting\
  from column x0 to x1 (including both). If filename is given, the file\
  must be a text file defining polygon, using the following\
- format: <BR> #Comment line <BR> x0 y0 <BR> x1 y1 <BR> (...) <BR> <BR> at least\
- 3 points are required. <BR> If filename,id syntax is used, the file must be\
- a BAN (damm) file, and id is a damm banana id to be used.\
+ format: <BR> <BR> #Comment line <BR> x0 y0 <BR> x1 y1 <BR> (...) <BR> <BR>\
+ at least 3 points are required. <BR> If filename,id syntax is used,\
+ the file must be a BAN (damm) file, and id is a damm banana id to be used.\
+ For the purpose of polygon gates, the edges of polygon (including vertices)\
+ are assumed to be outside of the polygon.\
  ");
 
-    helpItem("--gy AND (y0,y1 OR filename OR filename,id)",
+    helpItem("\tOption:\t--gy AND (y0,y1 OR filename OR filename,id)",
              "-y",
              "As above, exept that projection is made on X axis\
  (gate on Y).");
 
-    helpItem("--bg AND x0,x1",
+    helpItem("\tOption:\t--bg AND x0,x1",
              "-b",
              "For 2D histograms only, only with --gx or --gy.\
  requires two integer arguments separated by coma. Sets gate for background\
  subtraction from channel containing x0 to x1 (including both).\
  ");
 
-    helpItem("--sbg AND x0,x1,x2,x3",
+    helpItem("\tOption:\t--sbg AND x0,x1,x2,x3",
              "-b",
              "For 2D histograms only, only with --gx or --gy.\
  Same as above exept that gate is split into two parts x0 to x1 and\
  x2 to x3.\
  ");
 
-    helpItem("--bin AND (bx OR bx,by)",
+    helpItem("\tOption:\t--bin AND (bx OR bx,by)",
              "-B",
              "Defines number of histogram bins to join. For 2D histogram\
  if only one argument is given by = bx is assumed. At least one bin size\
  must be > 1.\
  ");
 
-    helpItem("--zero",
+    helpItem("\tOption:\t--zero",
              "-z",
-             "Suppresses bins with zero counts in output (1D Histograms only)\
+             "Suppresses bins with zero counts in output (1D Histograms only).\
  ");
 
-    helpItem("--info",
+    helpItem("\tOption:\t--info",
              "-I",
              "Displays detailed information on histogram.\
  ");
 
-    helpItem("--list",
+    helpItem("\tOption:\t--list",
              "-l",
              "Does not require histogram id. Displays list of all histograms\
              present in a given file.\
  ");
 
-    helpItem("--List",
+    helpItem("\tOption:\t--List",
              "-L",
              "Does not require histogram id. As above except that displays\
              number of dimensions for each histogram and marks empty\
              histograms with 'E' letter next to id.\
  ");
 
-    helpItem("--help",
+    helpItem("\tOption:\t--help",
              "-h",
              "Shows this help.\
  ");

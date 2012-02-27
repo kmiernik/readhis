@@ -49,12 +49,16 @@ Polygon::Polygon(const std::string& polygonFileName) {
         throw GenError("Polygon must contain 3 or more vertices.");
 }
 
+/** Loads damm BAN file. Little messy, but works. Probably should be
+ * rewritten in future. Did not found good documentation on BAN file structure
+ * so far.
+ */
 Polygon::Polygon(const std::string& polygonFileName, int banId) {
     using namespace std;
 
     ifstream banf(polygonFileName.c_str());
     if (!banf.good()) {
-        throw IOError("Could not open polygon file.");
+        throw IOError("Could not open BAN file.");
     }
 
     string in;
@@ -74,17 +78,25 @@ Polygon::Polygon(const std::string& polygonFileName, int banId) {
             if (ban != banId)
                 continue;
 
-            // Axis projection in degrees (SKIP)
+            // Projection axis in degrees
+            // Stop if it's different then 0
             banf >> in;
+            double angle = atof(in.c_str());
+            if (angle != 0)
+                throw GenError("BAN projection axis different then 0 is not\
+                        supported.");
 
             // Number of points
             banf >> in;
             nPoints = atoi(in.c_str());
             
-            // TIT string (undefined number of tokens)
+            // TIT (title) string (undefined number of tokens)
+            // Probably defined lenght in bytes (40?) but no documentation
+            // found.
             banf >> in;
             if (in == "TIT") {
                 // Read the rest of the crap until points are present
+                // CXY is the string defining start of XY position of points
                 while (true) {
                     banf >> in;
                     if (in == "CXY")
@@ -99,7 +111,8 @@ Polygon::Polygon(const std::string& polygonFileName, int banId) {
                 double x;
                 double y;
                 banf >> in;
-                //Points are in pairs X Y, separated by CXY keywords
+                //Points are in pairs X Y, separated by CXY keywords every 15-th
+                //point
                 if (in != "CXY") {
                    x = atof(in.c_str());
                    banf >> in;
@@ -114,8 +127,8 @@ Polygon::Polygon(const std::string& polygonFileName, int banId) {
     banf.close();
     if (vertices_.size() < 3)
         throw GenError("BAN Polygon must contain 3 or more vertices.");
-
 }
+
 /**
  * Ray casting algotihm for Point in polygon problem.
  * ray starts from x=0, y=yp and goes to x=xp, y=yp
@@ -172,6 +185,7 @@ bool Polygon::pointIn(double xp, double yp) {
         return true;
 }
 
+/** Returns rectangle perpenticular to X and Y axis where polygon is located.*/
 bool Polygon::rectangle(double& xlow, double& ylow,
                         double& xhigh, double& yhigh) {
     unsigned sz = vertices_.size();

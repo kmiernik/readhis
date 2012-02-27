@@ -15,11 +15,16 @@
 /** Simple point object (x,y) carthesian coordinates.*/
 class Point {
     public:
+        /** c'tor */
         Point (double a, double b) {
             x = a;
             y = b;
         }
+
+        /** X coordinate (carthesian). */
         double x;
+
+        /** Y coordinate (carthesian). */
         double y;
 };
 

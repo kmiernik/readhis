@@ -43,7 +43,7 @@
  *       in case you want to save it to file.  
  *     
  * \section Options  
- * -	Option:	--id
+ * - Option:	--id
  *
  * 	Short: -i
  *
@@ -51,8 +51,8 @@
  * 	
  * 		Selects histogram id, required by all other options unless 
  * 		stated otherwise. 
- * 
- * -	Option:	--gx AND (x0,x1 OR filename OR filename,id)
+ *
+ * - Option:	--gx AND (x0,x1 OR filename OR filename,id)
  *
  * 	Short: -x
  *
