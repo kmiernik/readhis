@@ -29,7 +29,7 @@ Histogram::Histogram (double xMin,  double xMax,
 unsigned Histogram::getiX (double x) const { 
     if ( x > xMin_ && x < xMax_ ) 
         return (unsigned)( (x - xMin_) / binWidthX_ );
-    else if (x < xMin_)
+    else if (x <= xMin_)
         return 0;
     else
         return nBinX_ - 1;
@@ -365,7 +365,7 @@ void Histogram2D::set (unsigned ix, unsigned iy, long value) {
 unsigned Histogram2D::getiY (double y) const { 
     if ( y > yMin_ && y < yMax_ ) 
         return (unsigned)( (y - yMin_) / binWidthY_ );
-    else if (y < yMin_)
+    else if (y <= yMin_)
         return 0;
     else
         return nBinY_ - 1;
