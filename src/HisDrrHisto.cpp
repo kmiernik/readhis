@@ -347,18 +347,16 @@ void HisDrrHisto::process2D() {
         //Zero suppresion for 2d histo breaks file for gnuplot pm3d map
         //But might be useful anyway 
         if (options_->getZeroSup()) {
-            for (unsigned x = 0; x < szX; ++x) {
-                for (unsigned y = 0; y < szY; ++y) {
+            for (unsigned x = 0; x < szX; ++x) 
+                for (unsigned y = 0; y < szY; ++y)
                     if ((*h2)(x,y) != 0 )
                         cout << h2->getX(x) << " " << h2->getY(y)  
                              << " " << (*h2)(x,y) << endl;
-                }
-            }
+        } else {
             for (unsigned x = 0; x < szX; ++x) {
-                for (unsigned y = 0; y < szY; ++y) {
+                for (unsigned y = 0; y < szY; ++y)
                     cout << h2->getX(x) << " " << h2->getY(y)  
                         << " " << (*h2)(x,y) << endl;
-                }
                 cout << endl;
             }
         }

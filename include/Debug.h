@@ -16,28 +16,6 @@
 #define DBG(x) std::cout << "#" << #x << " = " << (x) << std::endl;
 
 namespace debug {
-    /**
-     * Counter for simple debugging.
-     * Shows message on any action. Main counter is static so you may
-     * create many instances across the code. The subindex helps to trace
-     * problematic brake points. The optional text may be passed as a 
-     * stringstream, so it's easy to pass variables etc.
-     *
-     * Example:
-     *  debug::Counter cnt;
-     *  stringstream ss;
-     *
-     *  //... some code
-     *
-     *  ss << "sz =  " << sz;
-     *  cnt.set(ss);
-     *
-     *  for (int i = 0; i < sz; ++i) {
-     *    cnt.add();
-     *  //... code
-     *  }
-     *  
-     */
     /** Class for time measurements. */
     class Timer {
         public:
@@ -74,6 +52,28 @@ namespace debug {
             timeval t;
     };
 
+    /**
+     * Counter for simple debugging.
+     * Shows message on any action. Main counter number is static so you may
+     * create many instances across the code. The subindex helps to trace
+     * problematic brake points. The optional text may be passed as a 
+     * stringstream, so it's easy to pass variables etc.
+     *
+     * Example:
+     *  debug::Counter cnt;
+     *  stringstream ss;
+     *
+     *  //... some code
+     *
+     *  ss << "sz =  " << sz;
+     *  cnt.set(ss);
+     *
+     *  for (int i = 0; i < sz; ++i) {
+     *    cnt.add();
+     *  //... code
+     *  }
+     *  
+     */
     class Counter {
         public:
             /** Ctor, text message passed as an option. */
