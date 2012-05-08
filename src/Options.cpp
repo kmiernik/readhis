@@ -141,9 +141,7 @@ bool Options::setBin (unsigned bx, unsigned by /*= 0*/, bool isBin /*=true*/) {
     if (bx < 1 || by < 1)
         return false;
 
-    bin_.clear();
     isBin_ = isBin;
-
     if (bx == 1 && by == 1)
        isBin_ = false; 
 

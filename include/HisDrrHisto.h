@@ -59,6 +59,18 @@ class HisDrrHisto : public HisDrr {
 
         /** Sub part of process for 2D histograms */
         void process2D();
+
+        /** Sub part of process2D, when gx XOR gy is used*/
+        void process2Dgate();
+
+        /** Sub part of process2D when --pg is used*/
+        void process2Dpolygate();
+
+        /** Sub part of process2D when gx and gy is used */
+        void process2Dcrop();
+
+        /** Sub part of process2D when no gates are present */
+        void process2Dnogates();
 };
 
 inline void HisDrrHisto::setOptions(const Options* options) { options_ = options; }
