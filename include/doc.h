@@ -120,6 +120,17 @@
  * 
  * -	Option:	--zero
  *
+ * 	Short: -B
+ *
+ * -	Option:	--every AND (nx OR nx,ny)
+ *
+ * 	Description: 
+ *
+ * 		Prints every n-th point in output (or nx-th and ny-th for 2D)
+ * 		For 2D histogram if only one argument is given ny = nx is assumed. 
+ * 
+ * -	Option:	--zero
+ *
  * 	Short: -z
  *
  * 	Description: 
