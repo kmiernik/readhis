@@ -110,16 +110,23 @@ void HisDrrHisto::process1D() {
             throw GenError("HisDrrHisto::process1D : Wrong binning size.");
 
     }
+
+    unsigned nth = 1;
+    if (options_->getEvery()) {
+        vector<unsigned> every;
+        options_->getEveryN(every);
+        nth = every[0];
+    }
     
     cout << "#X  N  dN" << endl;
     unsigned sz = h1->getnBinX();
     if (options_->getZeroSup()) {
-        for (unsigned i = 0; i < sz; ++i)
+        for (unsigned i = 0; i < sz; i += nth)
             if ((*h1)[i] != 0 )
                 cout << h1->getX(i) << " " << (*h1)[i] << " " 
                      << sqrt( (*h1)[i] ) << endl;
     } else {
-        for (unsigned i = 0; i < sz; ++i)
+        for (unsigned i = 0; i < sz; i += nth)
             cout << h1->getX(i) << " " << (*h1)[i] 
                  << " " << sqrt( (*h1)[i] )    << endl;
     }
@@ -146,15 +153,28 @@ void HisDrrHisto::process2D() {
     bool bg = options_->getBg();
     bool sbg = options_->getSBg();
     bool pg = options_->getPg();
+
+    unsigned nXth = 1;
+    unsigned nYth = 1;
+    if (options_->getEvery()) {
+        vector<unsigned> every;
+        options_->getEveryN(every);
+        nXth = every[0];
+        nYth = every[1];
+    }
     
-    if ( (gx || gy) && !pg ){
+    if ( (gx || gy) && !pg && !(gx && gy) ){
         // Resulting projection
         Histogram1D* proj;
         // Uncertainities are going to be stored in a separate histogram
         Histogram1D* projErr;
 
         vector<unsigned> gate;
-        options_->getGate(gate);
+        if (gx)
+            options_->getGateX(gate);
+        else if (gy)
+            options_->getGateY(gate);
+
         if (gate.size() < 2)
             throw GenError("process2D: Not enough gate points");
 
@@ -248,15 +268,20 @@ void HisDrrHisto::process2D() {
             if ((*projErr)[i] == 0)
                 (*projErr)[i] = 1;
 
-        cout << "#X  N  dN" << endl;
-        for (unsigned i = 0; i < sz; ++i)
-            cout << proj->getX(i) << " " << (*proj)[i] << " " << sqrt((*projErr)[i]) << endl;
+        unsigned nth = 1;
+        if (gx)
+            nth = nXth;
+        else
+            nth = nYth;
 
+        cout << "#X  N  dN" << endl;
+        for (unsigned i = 0; i < sz; i += nth)
+            cout << proj->getX(i) << " " << (*proj)[i] << " " << sqrt((*projErr)[i]) << endl;
 
         delete projErr;
         delete proj;
 
-    } else if ( (gx || gy) && pg ) {
+    } else if ( (gx || gy) && pg && !(gx && gy)) {
         // Polygon gate
         Polygon* polgate;
 
@@ -307,8 +332,14 @@ void HisDrrHisto::process2D() {
             }
         }
 
+        unsigned nth = 1;
+        if (gx)
+            nth = nXth;
+        else
+            nth = nYth;
+
         cout << "#X  N  dN" << endl;
-        for (unsigned i = 0; i < pSz; ++i) {
+        for (unsigned i = 0; i < pSz; i += nth) {
             cout << proj->getX(i) << " " << (*proj)[i];
             if ((*proj)[i] == 0)
                 cout << " " << 1 << endl;
@@ -318,6 +349,73 @@ void HisDrrHisto::process2D() {
                     
         delete proj;
         delete polgate;
+    } else if (gx && gy) {
+        // Double gate case
+        vector<unsigned> gateX;
+        vector<unsigned> gateY;
+        options_->getGateX(gateX);
+        options_->getGateY(gateY);
+        if (gateX.size() < 2 || gateY.size() < 2)
+            throw GenError("process2D: Not enough gate points");
+
+        unsigned nbinX = gateX[1] - gateX[0];
+        unsigned nbinY = gateY[1] - gateY[0];
+        
+        Histogram2D* h2crop = new Histogram2D(gateX[0], gateX[1],
+                                              gateY[0], gateY[1],
+                                              nbinX, nbinY,
+                                              "");
+
+        unsigned newX = 0;
+        for (unsigned x = gateX[0]; x < gateX[1]; ++x) {
+            unsigned newY = 0;
+            for (unsigned y = gateY[0]; y < gateY[1]; ++y) {
+                (*h2crop)(newX, newY) = (*h2)(x, y);
+                ++newY;
+            }
+            ++newX;
+        }
+
+        (*h2) =(*h2crop);
+        delete h2crop;
+
+        if (options_->getBin()) {
+            Histogram2D* h2b;
+            vector<unsigned> bin;
+            options_->getBinning(bin);
+
+            if ( !(bin[0] <= 1 && bin[1] <= 1) && 
+                  (bin[0] > 0  && bin[1] > 0 )      ) {
+                unsigned nbX = (unsigned)ceil(h2->getnBinX()/double(bin[0]));
+                unsigned nbY = (unsigned)ceil(h2->getnBinY()/double(bin[1]));
+                h2b = h2->rebin( h2->getxMin(), h2->getxMax(), 
+                                 h2->getyMin(), h2->getyMax(), 
+                                 nbX, nbY );
+                (*h2) =(*h2b);
+                delete h2b;
+            } else
+                throw GenError("HisDrrHisto::process2D : Wrong binning size.");
+        }
+
+        unsigned szX = h2->getnBinX();
+        unsigned szY = h2->getnBinY();
+
+        cout << "#X  Y  N" << endl;
+        //Zero suppresion for 2d histo breaks file for gnuplot pm3d map
+        if (options_->getZeroSup()) {
+            for (unsigned x = 0; x < szX; x += nXth) 
+                for (unsigned y = 0; y < szY; y += nYth)
+                    if ((*h2)(x,y) != 0 )
+                        cout << h2->getX(x) << " " << h2->getY(y)  
+                             << " " << (*h2)(x,y) << endl;
+        } else {
+            for (unsigned x = 0; x < szX; x += nXth) {
+                for (unsigned y = 0; y < szY; y += nYth)
+                    cout << h2->getX(x) << " " << h2->getY(y)  
+                        << " " << (*h2)(x,y) << endl;
+                cout << endl;
+            }
+        }
     } else {
         // No gates case
         
@@ -347,14 +445,14 @@ void HisDrrHisto::process2D() {
         //Zero suppresion for 2d histo breaks file for gnuplot pm3d map
         //But might be useful anyway 
         if (options_->getZeroSup()) {
-            for (unsigned x = 0; x < szX; ++x) 
-                for (unsigned y = 0; y < szY; ++y)
+            for (unsigned x = 0; x < szX; x += nXth) 
+                for (unsigned y = 0; y < szY; y += nYth)
                     if ((*h2)(x,y) != 0 )
                         cout << h2->getX(x) << " " << h2->getY(y)  
                              << " " << (*h2)(x,y) << endl;
         } else {
-            for (unsigned x = 0; x < szX; ++x) {
-                for (unsigned y = 0; y < szY; ++y)
+            for (unsigned x = 0; x < szX; x += nXth) {
+                for (unsigned y = 0; y < szY; y += nYth)
                     cout << h2->getX(x) << " " << h2->getY(y)  
                         << " " << (*h2)(x,y) << endl;
                 cout << endl;

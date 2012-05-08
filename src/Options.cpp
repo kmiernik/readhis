@@ -20,7 +20,13 @@ Options::Options() {
     isBg_ = false;
     isSBg_ = false;
     isPg_ = false;
+    isBin_ = false;
+    isEvery_ = false;
     polygonFile_ = "";
+    bin_.push_back(1);
+    bin_.push_back(1);
+    every_.push_back(1);
+    every_.push_back(1);
 }
 
 unsigned Options::getHisId () const { return hisId_; }
@@ -68,13 +74,12 @@ bool Options::getGx() const { return isGx_; }
 bool Options::setGx (unsigned g0, unsigned g1, bool isGx /*=true*/) {
     if (g0 > g1)
         return false;
-    g_.clear();
+    gx_.clear();
     isGx_ = isGx;
     if (isGx) {
-        isGy_ = false;
-        g_.resize(2, 0);
-        g_[0] = g0;
-        g_[1] = g1;
+        gx_.resize(2, 0);
+        gx_[0] = g0;
+        gx_[1] = g1;
     }
     return true;
 }
@@ -83,16 +88,13 @@ bool Options::getGy() const { return isGy_; }
 bool Options::setGy (unsigned g0, unsigned g1, bool isGy /*=true*/) {
     if (g0 > g1)
         return false;
-    g_.clear();
+    gy_.clear();
     isGy_ = isGy;
     if (isGy) {
-        isGx_ = false;
-        g_.resize(2, 0);
-        g_[0] = g0;
-        g_[1] = g1;
+        gy_.resize(2, 0);
+        gy_[0] = g0;
+        gy_[1] = g1;
     }
-    g_[0] = g0;
-    g_[1] = g1;
     return true;
 }
 
@@ -133,29 +135,59 @@ bool Options::setSBg (unsigned b0, unsigned b1,
 }
 bool Options::getBin() const { return isBin_; }
 bool Options::setBin (unsigned bx, unsigned by /*= 0*/, bool isBin /*=true*/) {
-    if (bx <= 1 && by <= 1)
+    if (by == 0)
+        by = bx;
+
+    if (bx < 1 || by < 1)
         return false;
 
     bin_.clear();
     isBin_ = isBin;
-    if (isBin) {
-        bin_.resize(2, 0);
+
+    if (bx == 1 && by == 1)
+       isBin_ = false; 
+
+    if (isBin_) {
         bin_[0] = bx;
-        if (by > 1)
-            bin_[1] = by;
-        else
-            bin_[1] = bx;
+        bin_[1] = by;
     }
     return true;
 }
 
-void Options::getGate(std::vector<unsigned>& rtn) const {
-    rtn.clear();
-    rtn.reserve(g_.size());
-    unsigned sz = g_.size();
-    for (unsigned i = 0; i < sz; ++i)
-        rtn.push_back(g_[i]);
+bool Options::getEvery() const { return isEvery_; }
+bool Options::setEvery (unsigned nx, unsigned ny /*= 0*/, bool isEvery /*=true*/) {
+    if (ny == 0)
+        ny = nx;
+
+    if (nx < 1 || ny < 1)
+        return false;
+
+    isEvery_ = isEvery;
+    if (nx == 1 && ny == 1)
+       isEvery_ = false; 
+
+    if (isEvery_) {
+        every_[0] = nx;
+        every_[1] = ny;
+    }
+    return true;
 }
+void Options::getGateX(std::vector<unsigned>& rtn) const {
+    rtn.clear();
+    rtn.reserve(gx_.size());
+    unsigned sz = gx_.size();
+    for (unsigned i = 0; i < sz; ++i)
+        rtn.push_back(gx_[i]);
+}
+
+void Options::getGateY(std::vector<unsigned>& rtn) const {
+    rtn.clear();
+    rtn.reserve(gy_.size());
+    unsigned sz = gy_.size();
+    for (unsigned i = 0; i < sz; ++i)
+        rtn.push_back(gy_[i]);
+}
+
 
 void Options::getBgGate(std::vector<unsigned>& rtn) const {
     rtn.clear();
@@ -171,6 +203,14 @@ void Options::getBinning(std::vector<unsigned>& rtn) const {
     unsigned sz = bin_.size();
     for (unsigned i = 0; i < sz; ++i)
         rtn.push_back(bin_[i]);
+}
+
+void Options::getEveryN(std::vector<unsigned>& rtn) const {
+    rtn.clear();
+    rtn.reserve(every_.size());
+    unsigned sz = every_.size();
+    for (unsigned i = 0; i < sz; ++i)
+        rtn.push_back(every_[i]);
 }
 
 void Options::setPolygon (std::string polygonFile, bool isGx, bool isPg /*=true*/) {

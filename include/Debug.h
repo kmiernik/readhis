@@ -29,23 +29,29 @@ namespace debug {
             void set_time(timeval& x) { t = x;}
 
             /** Returns time in us. */
-            long get_us() { 
+            long get_us() const { 
                 return (t.tv_sec * 1000000 + t.tv_usec);
             }
 
             /** Returns time in ms. */
-            long get_ms() { 
+            long get_ms() const { 
                 return (t.tv_sec * 1000 + 
                         long(t.tv_usec / 1000.0 + 0.5) );
             }
 
             /** Returns time in s. */
-            long get_s() { return (t.tv_sec 
+            long get_s() const { return (t.tv_sec 
                                     + long (t.tv_usec / 1.0e6 + 0.5) );
             }
 
-            /** Difference between timer x and this timer in us.*/
-            long dt(Timer& x) { return x.get_us() - get_us();}
+            /** Difference between this timer and timer x in us.*/
+            long dt(Timer& x) const { return get_us() - x.get_us();}
+
+            /** Difference between left and right timer in us.*/
+            long operator-(const Timer& right) const {
+                long result = get_us() - right.get_us();
+                return result;
+            }
 
         private:
             /** Timestamp. */

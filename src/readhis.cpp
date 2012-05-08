@@ -24,6 +24,7 @@ static struct option long_options[] = {
     {"bg",    required_argument, 0, 'b'},
     {"sbg",   required_argument, 0, 's'},
     {"bin",   required_argument, 0, 'B'},
+    {"every", required_argument, 0, 'e'},
     {"zero",  no_argument, 0,       'z'},
     {"info",  no_argument, 0,       'I'},
     {"list",  no_argument, 0,       'l'},
@@ -117,7 +118,10 @@ void help() {
     helpItem("\tOption:\t--gy AND (y0,y1 OR filename OR filename,id)",
              "-y",
              "As above, exept that projection is made on X axis\
- (gate on Y).");
+ (gate on Y).\
+ If both gx and gy are used the output would be 2D crop of histogram instead of\
+ projection.\
+ ");
 
     helpItem("\tOption:\t--bg AND x0,x1",
              "-b",
@@ -138,6 +142,12 @@ void help() {
              "Defines number of histogram bins to join. For 2D histogram\
  if only one argument is given by = bx is assumed. At least one bin size\
  must be > 1.\
+ ");
+
+    helpItem("\tOption:\t--every AND n OR nx,ny",
+             "-e",
+             "Output gives every n-th (or nx-th in X direction and ny-th in Y)\
+ point. At least one of ns should be larger then 1.\
  ");
 
     helpItem("\tOption:\t--zero",
@@ -181,7 +191,7 @@ int main (int argc, char* argv[]) {
         /* getopt_long stores the option index here. */
         int option_index = 0;
 
-        flag = getopt_long (argc, argv, "i:x:y:b:s:B:zIlLh",
+        flag = getopt_long (argc, argv, "i:x:y:b:s:B:e:zIlLh",
                         long_options, &option_index);
 
         /* Detect the end of the options. */
@@ -331,11 +341,29 @@ int main (int argc, char* argv[]) {
                     cout << "Run readhis --help for more information" << endl;
                     exit(1);
                 }
-                cout << "# Binning, X: " << b[0];
-                if ( b[1] != 0 )
-                    cout << ", Y: " << b[1] << endl;
-                else 
-                    cout << endl;
+                cout << "# Binning, X: " << b[0] << ", Y: " << b[1] << endl;
+                break;
+            }
+
+            case 'e': {
+                int e[2] = {0};
+                Status status = parseMultiArgs(optarg, e, 1, 1);
+                if (status == warning) {
+                    cout << "Warning: option --every with more then two arguments " << endl;
+                }
+                if (status == error) {
+                    cout << "Error: option --every requires one or two "  
+                         << "arguments separated by coma e.g 2,4 " << endl;
+                    cout << "Run readhis --help for more information" << endl;
+                    exit(1);
+                }
+                cout << "#-> " << e[0] << " " << e[1] << endl;
+                if ( !(options->setEvery(e[0], e[1])) ) {
+                    cout << "Error: wrong arguments for --every option" << endl;
+                    cout << "Run readhis --help for more information" << endl;
+                    exit(1);
+                }
+                cout << "# Every, X: " << e[0] << ", Y: " << e[1] << endl;
                 break;
             }
 

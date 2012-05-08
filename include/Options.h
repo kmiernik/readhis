@@ -84,16 +84,28 @@ class Options {
         bool getBin() const;
 
         /** Sets binning size. If only b0 is passed, the b1 is equal to b0.*/
-        bool setBin (unsigned b0, unsigned b1 = 0, bool isBin = true);
+        bool setBin (unsigned bx, unsigned by = 0, bool isBin = true);
 
-        /** Returns by reference vector containing gates.*/
-        void getGate(std::vector<unsigned>& rtn) const;
+        /** Returns by reference vector containing binning size.*/
+        void getBinning(std::vector<unsigned>& rtn) const;
+
+        /** Returns by reference vector containing X gates.*/
+        void getGateX(std::vector<unsigned>& rtn) const;
+
+        /** Returns by reference vector containing Y gates.*/
+        void getGateY(std::vector<unsigned>& rtn) const;
 
         /** Returns by reference vector containing background gates.*/
         void getBgGate(std::vector<unsigned>& rtn) const;
 
-        /** Returns by reference vector containing binning size.*/
-        void getBinning(std::vector<unsigned>& rtn) const;
+        /** Returns true if every flag is set.*/
+        bool getEvery() const;
+
+        /** Sets every size. If only nx is passed, the ny is equal to nx.*/
+        bool setEvery (unsigned nx, unsigned ny = 0, bool isEvery = true);
+
+        /** Returns by reference vector containing every vector.*/
+        void getEveryN(std::vector<unsigned>& rtn) const;
 
         /** Sets polygon gate defined in polygonFile.
          * If isGx is set true, projection will be made on Y axis (gate on X)
@@ -148,14 +160,23 @@ class Options {
         /** --bin flag. Binning mode.*/ 
         bool isBin_;
 
-        /** For --gx or --gy. Stores gates. */
-        std::vector<unsigned> g_;
+        /** --every flag. Every n-th point.*/ 
+        bool isEvery_;
+
+        /** For --gx. Stores gates. */
+        std::vector<unsigned> gx_;
+
+        /** For --gy. Stores gates. */
+        std::vector<unsigned> gy_;
 
         /** For --bg or --sbg. Stores background gates */
         std::vector<unsigned> b_;
 
         /** For --bin. Stores binning size.*/
         std::vector<unsigned> bin_;
+
+        /** For --every. Stores every size.*/
+        std::vector<unsigned> every_;
 
         /** For --pol (polygon gate). */
         bool isPg_;
