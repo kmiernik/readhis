@@ -346,7 +346,6 @@ void HisDrr::loadDrr() {
     }
 }
 
-// Return by reference version
 void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
     // First we search if histogram id exists
     int index = -1;
@@ -361,7 +360,6 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
         string msg = err.str();
         throw GenError(msg);
     }
-
    
     // Return vector (see swap at the end)
     vector<unsigned int> r;
@@ -375,16 +373,6 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
         unsigned int length = 1;
         for (int i = 0; i < hisList[index].hisDim; ++i)
             length = length * hisList[index].scaled[i];
-        
-        // Now this is check below
-        //        // Check if data exceedes size of unsigned int 
-        //        if ((unsigned short)(hisList[index].halfWords*2) > sizeof(unsigned int) ) {
-        //            stringstream err;
-        //            err << "HisDrr:13: Histograms with channel size " << hisList[index].halfWords*2
-        //                << " bytes long are not supported ";
-        //            string msg = err.str();
-        //            throw GenError(msg);
-        //        }
         
         // Since we know now the length of data, we can reserve space
         // for vector avoiding unecessary data movement in memory
@@ -422,24 +410,7 @@ void HisDrr::getHistogram(vector<unsigned int> &rtn, int id) {
             string msg = err.str();
             throw GenError(msg);
         }
-
-        // Old push_back version 
-        // We read histogram channels and push them to vector
-        // Each channel has a length of equal to halfWords parameter
-        // which is given in 2 bytes units
-        // We cast this value on unsigned int, which is zeroed first
-        // It is a safe cast then.
-
-        //for (unsigned int i = 0; i < length; ++i) {
-        //unsigned int u = 0;
-        //hisFile->read((char*)&u, hisList[index].halfWords*2);
-        //r.push_back(u);
-        //}
     }
-    // Return by value version
-    //return r;
-    
-    // Return by reference version
     rtn.swap(r);
 }
 
