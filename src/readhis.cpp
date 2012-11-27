@@ -165,14 +165,16 @@ void help() {
     helpItem("\tOption:\t--list",
              "-l",
              "Does not require histogram id. Displays list of all histograms\
-             present in a given file.\
+             present in a given file, showing their numbers, number of\
+             dimensions and title.\
  ");
 
     helpItem("\tOption:\t--List",
              "-L",
-             "Does not require histogram id. As above except that displays\
-             number of dimensions for each histogram and marks empty\
-             histograms with 'E' letter next to id.\
+             "Does not require histogram id. As above except that\
+             marks empty/non-empty histograms with 'Y/N'.\
+             Warning! It is a slow operation to test emptiness of a large\
+             histograms!\
  ");
 
     helpItem("\tOption:\t--help",

@@ -7,6 +7,7 @@
 
 #include <string> 
 #include <cmath> 
+#include <iomanip>
 #include "DrrBlock.h"
 #include "HisDrr.h"
 #include "Histogram.h"
@@ -27,35 +28,44 @@ HisDrrHisto::HisDrrHisto(const string drr, const string his,
 void HisDrrHisto::runListMode(bool more) {
     vector<int> list;
     getHisList(list);
-    unsigned numOfHis = list.size();
-    for (unsigned i = 0; i < numOfHis; ++i) {
+    cout.setf(ios::left, ios::adjustfield);
+    cout << setw (12) << "# Histogram"
+         << setw (7)  << "Empty?"
+         << setw (4)  << "Dim"
+         << setw (50) << "Title"
+         << endl;
+    for (vector<int>::iterator itl = list.begin();
+            itl != list.end();
+            ++itl) {
+        char emptiness = '?';
+        info = getHistogramInfo(*itl);
         if (more) {
             vector<unsigned int> d;
-            getHistogram(d, list[i]);
-            info = getHistogramInfo(list[i]);
-            unsigned sz = d.size();
+            getHistogram(d, *itl);
             bool empty = true;
-            for (unsigned j = 0; j < sz; ++j)
-                if (d[j] > 0) {
+            for (vector<unsigned int>::iterator it = d.begin();
+                    it != d.end();
+                    ++it) {
+                if (*it > 0) {
                     empty = false;
                     break;
                 }
+            }
             if (empty)
-                cout << "E" << list[i] << "E(" << info.hisDim << ")";
+                emptiness = 'Y';
             else
-                cout << list[i] << "(" << info.hisDim << ")";
-                //Removed because when redirected to file, looks ugly
-                //cout << "\033[1;34m" << list[i] << "\033[0m" << "(" << info.hisDim << ")";
-        } else {
-            cout << list[i];
+                emptiness = 'N';
         }
-        
-        cout << ", ";
-        if ((i+1) % 8 == 0)
-            cout << endl;
-
+        // Removes junk characters at the end of the info.title 
+        string title(info.title, sizeof(info.title) / sizeof(char));
+        cout << setw (12) << info.hisID
+             << setw (7)  << emptiness
+             << setw (4)  << info.hisDim
+             << setw (50) << title
+             << endl;
     }
     cout << endl;
+    cout.setf(ios::internal, ios::adjustfield);
 }
 
 void HisDrrHisto::runInfoMode() {
