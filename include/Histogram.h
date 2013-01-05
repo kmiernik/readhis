@@ -293,6 +293,11 @@ class Histogram2D : public Histogram {
                             double yMin, double yMax,
                             unsigned nBinX, unsigned nBinY) const;
 
+        /** "Width" rebinning version, see Histogram1D::rebin comment */
+        Histogram2D* rebin (double xMin, double xMax,
+                            double yMin, double yMax,
+                            double binWX, double binWY) const;
+
         /** lhs lstogram will be overwritten by rhs. */
         virtual Histogram2D& operator=(const Histogram2D&);
 

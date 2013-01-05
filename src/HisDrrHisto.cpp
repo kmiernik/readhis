@@ -112,7 +112,6 @@ void HisDrrHisto::process1D() {
         vector<unsigned> bin;
         options_->getBinning(bin);
         if (bin[0] > 1) {
-            //unsigned nbX = (unsigned)ceil(h1->getnBinX()/double(bin[0]));
             double binW = h1->getBinWidthX() * bin[0];
             h1b = h1->rebin(h1->getxMin(), h1->getxMax(), binW);
             (*h1) = (*h1b);
@@ -216,7 +215,6 @@ void HisDrrHisto::process2Dgate() {
         vector<unsigned> bin;
         options_->getBinning(bin);
         if (gx && bin[1] > 1) {
-            //unsigned nbX = (unsigned)ceil(proj->getnBinX()/double(bin[1]));
             double binW = proj->getBinWidthX() * bin[1];
 
             projBin = proj->rebin(proj->getxMin(),
@@ -234,7 +232,6 @@ void HisDrrHisto::process2Dgate() {
             throw GenError("HisDrrHisto::process1D : Wrong binning size.");
 
         if (gy && bin[0] > 1) {
-            //unsigned nbX = (unsigned)ceil(proj->getnBinX()/double(bin[0]));
             double binW = proj->getBinWidthX() * bin[0];
             projBin = proj->rebin(proj->getxMin(),
                                   proj->getxMax(), 
@@ -394,12 +391,12 @@ void HisDrrHisto::process2Dcrop() {
 
         if ( !(bin[0] <= 1 && bin[1] <= 1) && 
                 (bin[0] > 0  && bin[1] > 0 )      ) {
-            unsigned nbX = (unsigned)ceil(h2->getnBinX()/double(bin[0]));
-            unsigned nbY = (unsigned)ceil(h2->getnBinY()/double(bin[1]));
-            h2b = h2->rebin( h2->getxMin(), h2->getxMax(), 
-                                h2->getyMin(), h2->getyMax(), 
-                                nbX, nbY );
-            (*h2) =(*h2b);
+            double binWX = h2->getBinWidthX() * bin[0];
+            double binWY = h2->getBinWidthY() * bin[1];
+            h2b = h2->rebin(h2->getxMin(), h2->getxMax(), 
+                               h2->getyMin(), h2->getyMax(), 
+                               binWX, binWY);
+            (*h2) = (*h2b);
             delete h2b;
         } else
             throw GenError("HisDrrHisto::process2D : Wrong binning size.");
@@ -448,12 +445,12 @@ void HisDrrHisto::process2Dnogates() {
 
         if ( !(bin[0] <= 1 && bin[1] <= 1) && 
                 (bin[0] > 0  && bin[1] > 0 )      ) {
-            unsigned nbX = (unsigned)ceil(h2->getnBinX()/double(bin[0]));
-            unsigned nbY = (unsigned)ceil(h2->getnBinY()/double(bin[1]));
-            h2b = h2->rebin( h2->getxMin(), h2->getxMax(), 
-                                h2->getyMin(), h2->getyMax(), 
-                                nbX, nbY );
-            (*h2) =(*h2b);
+            double binWX = h2->getBinWidthX() * bin[0];
+            double binWY = h2->getBinWidthY() * bin[1];
+            h2b = h2->rebin(h2->getxMin(), h2->getxMax(), 
+                               h2->getyMin(), h2->getyMax(), 
+                               binWX, binWY);
+            (*h2) = (*h2b);
             delete h2b;
         } else
             throw GenError("HisDrrHisto::process2D : Wrong binning size.");

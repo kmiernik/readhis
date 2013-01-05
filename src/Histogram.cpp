@@ -231,57 +231,8 @@ Histogram1D* Histogram1D::rebin (double xMin, double xMax,
         throw GenError("Histogram1D::rebin_width: bin width must be greater then 0");
 
     unsigned nBinX = unsigned((xMax - xMin) / binW) + 1;
-    xMax = xMin + (nBinX + 1) * binW;
-
-    double underflow = 0.0;
-    double overflow = 0.0;
-    unsigned sz = values_.size();
-    vector<double> values;
-    values.resize(nBinX, 0.0);
-    
-    for (unsigned i = 0; i < sz; i++) {
-        // We find low and high edge of old bin
-        // we find which new bins it goes
-        // each new bin will get number of counts proportional
-        // to area of old bin fitting into new one
-        
-        // Auxillary points to calculate area per new bin:
-        // xlow, bin0_high, bin1_high, ..., xhigh
-        // each bin gets
-        // bin0 -> (bin0h - xlow) / dx, 
-        // bin1 -> (bin1h - bin0h) / dx,
-        // ...
-        
-        // auxillary points
-        vector<double> p;
-        p.push_back(getXlow(i));
-
-        int b0 = (getXlow(i) - xMin) / binW;
-        int b1 = (getXhigh(i) - xMin) / binW;
-        for (int b = b0; b < b1; ++b)
-            p.push_back( (b + 1) * binW + xMin );
-
-        p.push_back(getXhigh(i));
-
-        // p contains at least two points (xlow, xhigh)
-        for (unsigned j = 0; j < p.size() - 1; ++j) {
-            double area = (p[j+1] - p[j]) / binWidthX_ * get(i);
-            int ix = b0 + j;
-            if (ix < 0)
-                underflow += area;
-            else if (ix > (int)(nBinX - 1))
-                overflow += area;
-            else 
-                values[ix] += area;
-        }
-    }
-
-    Histogram1D* rebinned = new Histogram1D(xMin, xMax, nBinX, "");
-    rebinned->setDataRaw(values);
-    rebinned->underflow_ = underflow;
-    rebinned->overflow_ = overflow;
-
-    return rebinned;
+    xMax = xMin + nBinX * binW;
+    return rebin(xMin, xMax, nBinX);
 }
 
 Histogram1D& Histogram1D::operator=(const Histogram1D& right){
@@ -552,6 +503,20 @@ Histogram2D* Histogram2D::rebin ( double xMin, double xMax,
     rebinned->overflow_ = overflow_;
 
     return rebinned;
+}
+
+
+Histogram2D* Histogram2D::rebin ( double xMin, double xMax,
+                                  double yMin, double yMax,
+                                  double binWX, double binWY) const {
+    if (binWX <= 0 || binWY <= 0)
+        throw GenError("Histogram2D::rebin: bin width must be greater then 0");
+
+    unsigned nBinX = unsigned((xMax - xMin) / binWX) + 1;
+    xMax = xMin + nBinX * binWX;
+    unsigned nBinY = unsigned((yMax - yMin) / binWY) + 1;
+    yMax = yMin + nBinY * binWY;
+    return rebin(xMin, xMax, yMin, yMax, nBinX, nBinY);
 }
 
 Histogram2D& Histogram2D::operator=(const Histogram2D& right){
