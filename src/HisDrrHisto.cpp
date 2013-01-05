@@ -112,9 +112,10 @@ void HisDrrHisto::process1D() {
         vector<unsigned> bin;
         options_->getBinning(bin);
         if (bin[0] > 1) {
-            unsigned nbX = (unsigned)ceil(h1->getnBinX()/double(bin[0]));
-            h1b = h1->rebin(h1->getxMin(), h1->getxMax(), nbX );
-            (*h1) =(*h1b);
+            //unsigned nbX = (unsigned)ceil(h1->getnBinX()/double(bin[0]));
+            double binW = h1->getBinWidthX() * bin[0];
+            h1b = h1->rebin(h1->getxMin(), h1->getxMax(), binW);
+            (*h1) = (*h1b);
             delete h1b;
         } else if (bin[0] <= 0)
             throw GenError("HisDrrHisto::process1D : Wrong binning size.");
@@ -215,16 +216,17 @@ void HisDrrHisto::process2Dgate() {
         vector<unsigned> bin;
         options_->getBinning(bin);
         if (gx && bin[1] > 1) {
-            unsigned nbX = (unsigned)ceil(proj->getnBinX()/double(bin[1]));
+            //unsigned nbX = (unsigned)ceil(proj->getnBinX()/double(bin[1]));
+            double binW = proj->getBinWidthX() * bin[1];
 
             projBin = proj->rebin(proj->getxMin(),
-                                    proj->getxMax(),
-                                    nbX );
+                                  proj->getxMax(),
+                                  binW);
             projErrBin = projErr->rebin(projErr->getxMin(),
                                         projErr->getxMax(), 
-                                        nbX );
-            (*proj) =(*projBin);
-            (*projErr) =(*projErrBin);
+                                        binW);
+            (*proj) = (*projBin);
+            (*projErr) = (*projErrBin);
             
             delete projBin;
             delete projErrBin;
@@ -232,15 +234,16 @@ void HisDrrHisto::process2Dgate() {
             throw GenError("HisDrrHisto::process1D : Wrong binning size.");
 
         if (gy && bin[0] > 1) {
-            unsigned nbX = (unsigned)ceil(proj->getnBinX()/double(bin[0]));
+            //unsigned nbX = (unsigned)ceil(proj->getnBinX()/double(bin[0]));
+            double binW = proj->getBinWidthX() * bin[0];
             projBin = proj->rebin(proj->getxMin(),
-                                    proj->getxMax(), 
-                                    nbX );
+                                  proj->getxMax(), 
+                                  binW);
             projErrBin = projErr->rebin(projErr->getxMin(),
                                         projErr->getxMax(), 
-                                        nbX );
-            (*proj) =(*projBin);
-            (*projErr) =(*projErrBin);
+                                        binW);
+            (*proj) = (*projBin);
+            (*projErr) = (*projErrBin);
             
             delete projBin;
             delete projErrBin;

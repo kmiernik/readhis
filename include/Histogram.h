@@ -179,6 +179,14 @@ class Histogram1D : public Histogram {
          *  number of bins then anyway). */
         Histogram1D* rebin (double xMin, double xMax, unsigned nBinX) const;
 
+        /** Returns rebinned histogram as above, however with the new 
+         * bin width specified instead of number of bins. As a result the xMax
+         * of a new histograms may be different (last bin is enlarged to keep
+         * its size equal to the other bins).
+         * Other comments found above apply here as well.
+         */
+        Histogram1D* rebin (double xMin, double xMax, double binW) const;
+
         /** lhs lstogram will be overwritten by rhs. */
         virtual Histogram1D& operator=(const Histogram1D&);
 
